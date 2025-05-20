@@ -40,7 +40,7 @@ const TabNavigator = () => {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen name="Home" component={DashboardScreen} />
       <Tab.Screen
         name="Take Picture"
         component={TakePicScreen}
@@ -50,9 +50,10 @@ const TabNavigator = () => {
               <FontAwesome name="camera" size={size} color={color} />
             </LinearGradient>
           ),
+          tabBarLabel: () => null,
         }}
       />
-      <Tab.Screen name="Home" component={DashboardScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
     </Tab.Navigator>
   );
 };
@@ -69,6 +70,7 @@ export default function App() {
 }
 const backgroundColor = "#2a2e30";
 const textColor = "#ffffff";
+
 //linear gradient colors
 const gradientColors = ["#8b43f1", "#d395ff"];
 
