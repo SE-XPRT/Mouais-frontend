@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
+  Image,
   StyleSheet,
   SafeAreaView,
 } from "react-native";
@@ -16,7 +17,7 @@ const LoginScreen: React.FC = () => {
       <View style={styles.logoContainer}>
         <View style={styles.logoCircle}>
           <Text style={styles.logoText}>
-            <Text>BG{"\n"}METER</Text>
+            <Image style={styles.logo} source={require("../assets/logo.png")} />
           </Text>
         </View>
         <Text style={styles.title}>Connecte-toi !</Text>
@@ -24,20 +25,25 @@ const LoginScreen: React.FC = () => {
 
       {/* Social Icons */}
       <View style={styles.socialRow}>
-        <FontAwesome name="apple" size={28} color="#555" />
-        <FontAwesome name="google" size={28} color="#555" />
-        <FontAwesome name="instagram" size={28} color="#555" />
-        <FontAwesome name="windows" size={28} color="#555" />
-        <FontAwesome name="facebook" size={28} color="#555" />
+        <FontAwesome name="apple" size={28} color="#40a0ed" />
+        <FontAwesome name="google" size={28} color="#e34133" />
+        <FontAwesome name="instagram" size={28} color="#7864cc" />
+        <FontAwesome name="windows" size={28} color="#40a0ed" />
+        <FontAwesome name="facebook" size={28} color="#3d4eaf" />
       </View>
 
       <Text style={styles.subtitle}>ou connecte-toi avec ton email !</Text>
 
       {/* Email Login */}
       <View style={styles.form}>
-        <TextInput placeholder="Email" style={styles.input} />
+        <TextInput
+          placeholder="Email"
+          placeholderTextColor="#ccc"
+          style={styles.input}
+        />
         <TextInput
           placeholder="Password"
+          placeholderTextColor="#ccc"
           secureTextEntry
           style={styles.input}
         />
@@ -64,7 +70,7 @@ const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#2a2e30",
     paddingHorizontal: 20,
     justifyContent: "center",
   },
@@ -99,7 +105,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     textAlign: "center",
-    color: "#555",
+    color: "#ffffff",
     fontSize: 14,
     marginBottom: 10,
   },
@@ -114,9 +120,10 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     fontSize: 14,
     marginBottom: 10,
+    color: "#fff",
   },
   loginButton: {
-    backgroundColor: "#555",
+    backgroundColor: "#ffac25",
     paddingVertical: 12,
     borderRadius: 5,
     alignItems: "center",
@@ -130,10 +137,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
     textDecorationLine: "underline",
-    color: "#555",
+    color: "#ffffff",
   },
   signupButton: {
-    backgroundColor: "#333",
+    backgroundColor: "#d395ff",
     paddingVertical: 10,
     borderRadius: 5,
     marginTop: 10,
@@ -148,7 +155,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 15,
     fontStyle: "italic",
-    color: "#666",
+    color: "#ffffff",
   },
 });
 

@@ -5,13 +5,19 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import Header from "./components/Header";
 import DashboardScreen from "./screens/dashboardScreen";
 import SettingsScreen from "./screens/settingsScreen";
 import TakePicScreen from "./screens/takePicScreen";
+<<<<<<< HEAD
 import InfosScreen from "./screens/infosScreen";
+=======
+import LoginScreen from "./screens/loginScreen";
+>>>>>>> dbfa1d9567133bfa8c168f968a95d8b2c10f14b5
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
+
 
 const TabNavigator = () => {
   return (
@@ -68,7 +74,7 @@ const TabNavigator = () => {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator screenOptions={{ header: () => <Header /> }}>
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen name="Home" component={DashboardScreen} />
         <Stack.Screen name="Settings" component={SettingsScreen} />
