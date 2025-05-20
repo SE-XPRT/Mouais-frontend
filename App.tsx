@@ -18,20 +18,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = "";
-
-          if (route.name === "Home") {
-            iconName = "home";
-          } else if (route.name === "Take Picture") {
-            iconName = "camera";
-          } else if (route.name === "Infos") {
-            iconName = "user";
-          }
-
-          return <FontAwesome name={iconName} size={size} color={color} />;
-        },
+      screenOptions={{
         tabBarActiveTintColor: "#2196f3",
         tabBarInactiveTintColor: "#ffffff",
         tabBarStyle: {
@@ -40,14 +27,21 @@ const TabNavigator = () => {
           elevation: 0,
           shadowColor: "transparent",
         },
-        headerShown: false,
-      })}
+      }}
     >
-      <Tab.Screen name="Home" component={DashboardScreen} />
+      <Tab.Screen
+        name="Home"
+        component={DashboardScreen}
+        options={{
+          header: () => <Header />,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
+        }}
+      />
       <Tab.Screen
         name="Take Picture"
         component={TakePicScreen}
         options={{
+          header: () => <Header />,
           tabBarIcon: ({ color, size }) => (
             <LinearGradient
               colors={gradientColors}
@@ -62,22 +56,31 @@ const TabNavigator = () => {
           tabBarLabel: () => null,
         }}
       />
-
-      <Tab.Screen name="Infos" component={InfosScreen} />
+      <Tab.Screen
+        name="Infos"
+        component={InfosScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="user" size={size} color={color} />,
+        }}
+      />
     </Tab.Navigator>
   );
 };
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ header: () => <Header /> }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+<<<<<<< HEAD
         <Stack.Screen name="Home" component={DashboardScreen} />
         <Stack.Screen
           name="Infos"
           component={InfosScreen}
           options={{ headerShown: false }}
         />
+=======
+>>>>>>> e6f3c732484f5070cc8e77af4f2513229e86cb6e
       </Stack.Navigator>
     </NavigationContainer>
   );
