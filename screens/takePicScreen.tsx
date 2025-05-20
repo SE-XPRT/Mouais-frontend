@@ -3,9 +3,12 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { icon } from "@fortawesome/fontawesome-svg-core";
+
+
 const handleCapture = async () => {
   console.log("takepic");
 };
+
 export default function TakePicScreen() {
   return (
     <View style={styles.container}>
