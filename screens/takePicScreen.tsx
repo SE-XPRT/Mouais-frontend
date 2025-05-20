@@ -4,21 +4,17 @@ import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { icon } from "@fortawesome/fontawesome-svg-core";
 
-
-const handleCapture = async () => {
-  console.log("takepic");
-};
-
 export default function TakePicScreen() {
+  const navigation = useNavigation();
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
         <View style={styles.icons}>
           <FontAwesome name="upload" size={100} color="#fff" />
         </View>
-        <View style={styles.icons}>
+        <TouchableOpacity style={styles.icons} onPress={() => navigation.navigate('SnapScreen')}>
           <FontAwesome name="camera" size={100} color="#fff" />
-        </View>
+        </TouchableOpacity>
       </View>
       <Text style={styles.text}>Envie de personnaliser ton expérience ?</Text>
       <TouchableOpacity style={styles.createProfilButton}>
