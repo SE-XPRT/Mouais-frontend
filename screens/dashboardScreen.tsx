@@ -15,7 +15,7 @@ export default function DashboardScreen() {
   const userName = "Juju";
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Text style={styles.greetings}>
         Salut <Text style={styles.userName}>{userName}</Text>, prêt à tester ton{" "}
         <Text style={styles.aura}>aura</Text> ?
@@ -54,7 +54,7 @@ export default function DashboardScreen() {
 
         <Text style={styles.coinInfo}>Il te reste 3 coins</Text>
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
@@ -90,11 +90,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     width: "90%",
     alignItems: "center",
-    elevation: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 10,
+    elevation: 0,
+    borderBottomWidth: 4,
+    borderRightWidth: 4,
+    borderColor: "#d1d9e6",
   },
   cardWrapper: {
     flexDirection: "row",

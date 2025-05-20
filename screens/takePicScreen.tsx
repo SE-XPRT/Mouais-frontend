@@ -4,8 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { icon } from "@fortawesome/fontawesome-svg-core";
 
-
-const handleCapture = async () => {
+const handleCapture = async ({ navigation }) => {
   console.log("takepic");
 };
 
