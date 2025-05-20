@@ -4,20 +4,27 @@ import {
   TouchableOpacity,
   View,
   Text,
+  SafeAreaView,
 } from "react-native";
 import { CameraView, CameraType, FlashMode, Camera } from "expo-camera";
 import { useDispatch } from "react-redux";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { useIsFocused } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SnapScreen() {
-    const isFocused = useIsFocused();
+  const navigation = useNavigation();
+  const isFocused = useIsFocused();
 
   const cameraRef = useRef<CameraView | null>(null);
 
   const [hasPermission, setHasPermission] = useState(false);
   const [facing, setFacing] = useState<CameraType>("back");
   const [flashStatus, setFlashStatus] = useState<FlashMode>("off");
+
+  useEffect(() => {
+    console.log("Navigation state: ", navigation.getState());
+  }, []);
 
   useEffect(() => {
     (async () => {
@@ -30,7 +37,96 @@ export default function SnapScreen() {
     return <View />;
   }
 
-    return (
+  const nav = () => {
+    navigation.navigate("TabNavigator", {
+      screen: "Take Picture",
+    });
+  }
 
-    )
+
+  const toggleCameraFacing = () => {
+    setFacing((current: CameraType) => (current === "back" ? "front" : "back"));
+  };
+
+  const toggleFlashStatus = () => {
+    setFlashStatus((current: FlashMode) => (current === "off" ? "on" : "off"));
+  };
+
+  const takePicture = async () => {
+    const photo: any = await cameraRef.current?.takePictureAsync({
+      quality: 0.3,
+    });
+  };
+
+  return (
+    <CameraView
+      style={styles.camera}
+      facing={facing}
+      flash={flashStatus}
+      ref={(ref: any) => (cameraRef.current = ref)}
+    >
+      <TouchableOpacity
+        style={[styles.settingButton, styles.flashButton]}
+        onPress={toggleFlashStatus}
+      >
+        <FontAwesome
+          name="flash"
+          size={25}
+          color={flashStatus === "on" ? "#e8be4b" : "white"}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={[styles.settingButton, styles.goBackButton]}
+        onPress={nav}
+      >
+        <FontAwesome name="chevron-left" size={35} color="white" />
+      </TouchableOpacity>
+      <View style={styles.snapContainer}>
+        <TouchableOpacity style={styles.snapButton} onPress={takePicture}>
+          <FontAwesome name="circle-thin" size={95} color="white" />
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity
+        style={[styles.settingButton, styles.facingButton]}
+        onPress={toggleCameraFacing}
+      >
+        <FontAwesome name="rotate-right" size={35} color="white" />
+      </TouchableOpacity>
+    </CameraView>
+  );
 }
+
+const styles = StyleSheet.create({
+  camera: {
+    flex: 1,
+    justifyContent: "flex-end",
+  },
+  settingButton: {
+    width: 40,
+    aspectRatio: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  snapContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "flex-end",
+    marginBottom: 100,
+    gap: 50,
+  },
+  facingButton: {
+    position: "absolute",
+    right: "20%",
+    bottom: "14.5%",
+  },
+  flashButton: {
+    position: "absolute",
+    top: 50,
+    right: 30,
+  },
+  goBackButton: {
+    position: "absolute",
+    left: "20%",
+    bottom: "14.5%",
+  },
+});
