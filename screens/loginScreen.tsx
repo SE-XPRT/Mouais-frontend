@@ -9,10 +9,12 @@ import {
   SafeAreaView,
   Alert,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "@react-native-vector-icons/fontawesome";
 
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
+  const navigation = useNavigation();
   //stockage de l'email
   const [email, setEmail] = useState("");
   //stockage du mot de passe
@@ -99,7 +101,14 @@ const LoginScreen: React.FC = () => {
         </Text>
       </TouchableOpacity>
 
-      <Text style={styles.guestMode}>Commencer en mode invité</Text>
+      <Text
+        style={styles.guestMode}
+        onPress={() => {
+          navigation.navigate("Home");
+        }}
+      >
+        Commencer en mode invité
+      </Text>
     </SafeAreaView>
   );
 };
