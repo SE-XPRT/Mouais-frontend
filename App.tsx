@@ -91,8 +91,8 @@ const backgroundColor = "#2a2e30";
 const textColor = "#ffffff";
 
 //linear gradient colors
-const gradientColors = ["#8b43f1", "#d395ff"];
-const gradientColors2 = ["#eeeaec", "#ff0084"];
+const gradientColors: [string, string] = ["#8b43f1", "#d395ff"];
+const gradientColors2: [string, string] = ["#eeeaec", "#ff0084"];
 
 const styles = StyleSheet.create({
   container: {
