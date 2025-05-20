@@ -9,15 +9,11 @@ import Header from "./components/Header";
 import DashboardScreen from "./screens/dashboardScreen";
 import SettingsScreen from "./screens/settingsScreen";
 import TakePicScreen from "./screens/takePicScreen";
-<<<<<<< HEAD
 import InfosScreen from "./screens/infosScreen";
-=======
 import LoginScreen from "./screens/loginScreen";
->>>>>>> dbfa1d9567133bfa8c168f968a95d8b2c10f14b5
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
-
 
 const TabNavigator = () => {
   return (
