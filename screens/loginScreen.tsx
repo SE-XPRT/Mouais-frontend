@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,10 +7,43 @@ import {
   Image,
   StyleSheet,
   SafeAreaView,
+  Alert,
 } from "react-native";
 import FontAwesome from "@react-native-vector-icons/fontawesome";
 
+//Définition du composant principal
 const LoginScreen: React.FC = () => {
+  //stockage de l'email
+  const [email, setEmail] = useState("");
+  //stockage du mot de passe
+  const [password, setPassword] = useState("");
+  //fonction qui sera appellée quand on clique sur "connexion"
+  const handleSignin = async () => {
+    //envoi d'une requete POST au back
+    //console.log("Connexion en cours...");
+    console.log(email, password);
+    const response = await fetch("http://localhost:3000/users/signin", {
+      method: "POST", // Méthode HTTP
+      headers: {
+        "Content-Type": "application/json", // On précise qu'on envoie du JSON
+      },
+      body: JSON.stringify({
+        email,
+        password, // On envoie les données
+      }),
+    });
+    // On récupère la réponse du back
+    const data = await response.json();
+
+    // Si la réponse est OK
+    if (data.result) {
+      Alert.alert("Connexion réussie ✅", `Token: ${data.token}`);
+    } else {
+      // Sinon, afficher l'erreur retournée par le backend
+      Alert.alert("Erreur ❌", data.error);
+    }
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Logo */}
@@ -40,14 +73,18 @@ const LoginScreen: React.FC = () => {
           placeholder="Email"
           placeholderTextColor="#ccc"
           style={styles.input}
+          value={email}
+          onChangeText={setEmail}
         />
         <TextInput
           placeholder="Password"
           placeholderTextColor="#ccc"
           secureTextEntry
           style={styles.input}
+          value={password}
+          onChangeText={setPassword}
         />
-        <TouchableOpacity style={styles.loginButton}>
+        <TouchableOpacity style={styles.loginButton} onPress={handleSignin}>
           <Text style={styles.loginButtonText}>C’est parti ! ➤</Text>
         </TouchableOpacity>
       </View>
