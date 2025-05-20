@@ -13,7 +13,6 @@ export default function TakePicScreen() {
       <View style={styles.iconContainer}>
         <View style={styles.icons}>
           <FontAwesome
-            style={styles.icon}
             name="upload"
             size={100}
             color="#fff"
@@ -21,7 +20,6 @@ export default function TakePicScreen() {
         </View>
         <View style={styles.icons}>
           <FontAwesome
-            style={styles.icon}
             name="camera"
             size={100}
             color="#fff"
