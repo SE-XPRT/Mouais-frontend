@@ -34,7 +34,9 @@ const TabNavigator = () => {
         component={DashboardScreen}
         options={{
           header: () => <Header />,
-          tabBarIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="home" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -61,7 +63,9 @@ const TabNavigator = () => {
         component={InfosScreen}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => <FontAwesome name="user" size={size} color={color} />,
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="user" size={size} color={color} />
+          ),
         }}
       />
     </Tab.Navigator>
@@ -72,6 +76,12 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="Home" component={DashboardScreen} />
+        <Stack.Screen
+          name="Infos"
+          component={InfosScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
