@@ -1,18 +1,15 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
-
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
-import { useEffect } from "react";
+import FontAwesome from "@react-native-vector-icons/fontawesome";
+import { StyleSheet, Text, View } from "react-native";
+
 import DashboardScreen from "./screens/dashboardScreen";
 import SettingsScreen from "./screens/settingsScreen";
+import TakePicScreen from "./screens/takePicScreen";
 
 export default function App() {
   const Tab = createBottomTabNavigator();
-  const navigation = useNavigation();
 
   return (
     <NavigationContainer>
@@ -23,6 +20,8 @@ export default function App() {
 
             if (route.name === "Home") {
               iconName = "home";
+            } else if (route.name === "Take Picture") {
+              iconName = "camera";
             } else if (route.name === "Settings") {
               iconName = "user";
             }
@@ -36,6 +35,7 @@ export default function App() {
       >
         <Tab.Screen name="Home" component={DashboardScreen} />
         <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="Take Picture" component={TakePicScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
