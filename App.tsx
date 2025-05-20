@@ -5,9 +5,12 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import Header from "./components/Header";
 import DashboardScreen from "./screens/dashboardScreen";
 import SettingsScreen from "./screens/settingsScreen";
 import TakePicScreen from "./screens/takePicScreen";
+import InfosScreen from "./screens/infosScreen";
+import LoginScreen from "./screens/loginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -15,20 +18,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = "";
-
-          if (route.name === "Home") {
-            iconName = "home";
-          } else if (route.name === "Take Picture") {
-            iconName = "camera";
-          } else if (route.name === "Settings") {
-            iconName = "user";
-          }
-
-          return <FontAwesome name={iconName} size={size} color={color} />;
-        },
+      screenOptions={{
         tabBarActiveTintColor: "#2196f3",
         tabBarInactiveTintColor: "#ffffff",
         tabBarStyle: {
@@ -37,22 +27,43 @@ const TabNavigator = () => {
           elevation: 0,
           shadowColor: "transparent",
         },
-        headerShown: false,
-      })}
+      }}
     >
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen
+        name="Home"
+        component={DashboardScreen}
+        options={{
+          header: () => <Header />,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
+        }}
+      />
       <Tab.Screen
         name="Take Picture"
         component={TakePicScreen}
         options={{
+          header: () => <Header />,
           tabBarIcon: ({ color, size }) => (
-            <LinearGradient colors={gradientColors} style={styles.iconPic}>
+            <LinearGradient
+              colors={gradientColors}
+              style={[
+                styles.iconPic,
+                { borderWidth: 2, borderColor: gradientColors2[0] },
+              ]}
+            >
               <FontAwesome name="camera" size={size} color={color} />
             </LinearGradient>
           ),
+          tabBarLabel: () => null,
         }}
       />
-      <Tab.Screen name="Home" component={DashboardScreen} />
+      <Tab.Screen
+        name="Infos"
+        component={InfosScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="user" size={size} color={color} />,
+        }}
+      />
     </Tab.Navigator>
   );
 };
@@ -61,16 +72,17 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        <Stack.Screen name="Home" component={DashboardScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
+//all colors
 const backgroundColor = "#2a2e30";
 const textColor = "#ffffff";
+
 //linear gradient colors
 const gradientColors = ["#8b43f1", "#d395ff"];
+const gradientColors2 = ["#eeeaec", "#ff0084"];
 
 const styles = StyleSheet.create({
   container: {
