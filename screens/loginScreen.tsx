@@ -104,7 +104,10 @@ const LoginScreen: React.FC = () => {
       <Text
         style={styles.guestMode}
         onPress={() => {
-          navigation.navigate("Home");
+          navigation.reset({
+            index: 0,
+            routes: [{ name: "TabNavigator" }],
+          });
         }}
       >
         Commencer en mode invité

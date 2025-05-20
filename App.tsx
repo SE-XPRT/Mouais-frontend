@@ -9,7 +9,6 @@ import Header from "./components/Header";
 import DashboardScreen from "./screens/dashboardScreen";
 import SettingsScreen from "./screens/settingsScreen";
 import TakePicScreen from "./screens/takePicScreen";
-import SnapScreen from "./screens/snapscreen";
 import InfosScreen from "./screens/infosScreen";
 import LoginScreen from "./screens/loginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -84,7 +83,6 @@ export default function App() {
           component={InfosScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="SnapScreen" component={SnapScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
