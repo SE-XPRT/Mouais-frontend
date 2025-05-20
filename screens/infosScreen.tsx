@@ -14,9 +14,12 @@ export default function InfosScreen() {
       <Text style={styles.text}>[Nom d'utilisateur]</Text>
       <View style={styles.container2}>
         <Text style={styles.section}>Mes informations</Text>
-        <Text style={styles.section}>Mes informations de paiement</Text>
-        <Text style={styles.section}>Confidentialité</Text>
-        <Text style={styles.section}>Newsletter</Text>
+        <Text style={styles.section}>Nom : [Nom]</Text>
+        <Text style={styles.section}>Prénom : [Prénom]</Text>
+        <Text style={styles.section}>
+          Date de naissance : [Date de naissance]
+        </Text>
+        <Text style={styles.section}>Email : [Email]</Text>
       </View>
     </View>
   );
@@ -27,6 +30,10 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#2a2e30",
     alignItems: "center",
+    overflowY: "hidden",
+    flexDirection: "column",
+    justifyContent: "space-around",
+    paddingTop: "10%",
   },
   container2: {
     flex: 1,
@@ -42,7 +49,10 @@ const styles = StyleSheet.create({
   section: {
     fontSize: 20,
     color: textColor,
-    backgroundColor: backgroundColor,
+    backgroundColor: gradientColors[0],
+    padding: 10,
+    width: "80%",
+    fontWeight: "bold",
   },
   userIcon: {
     borderRadius: 50,
