@@ -8,6 +8,14 @@ import {
   Button,
 } from "react-native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
+import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type RootStackParamList = {
+  Login: undefined;
+  // Ajoutez ici d'autres routes si nécessaire
+};
+
 const FontAwesome = _FontAwesome as React.ElementType;
 const Header: React.FC = () => {
   const [showPersonalize, setShowPersonalize] = React.useState(false);
@@ -17,7 +25,8 @@ const Header: React.FC = () => {
     console.log("Menu opened");
     setShowPersonalize((prev) => !prev);
   };
-
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
     <View style={styles.header}>
       <Image style={styles.logo} source={require("../assets/logo.png")} />
@@ -82,6 +91,23 @@ const Header: React.FC = () => {
             }}
           >
             <Text style={{ color: "#fff", fontSize: 16 }}>Mes badges</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.Button}
+            onPress={() => {
+              console.log("Button clicked");
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>Mes badges</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.Button}
+            onPress={() => {
+              navigation.navigate("Login");
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>Deconnexion</Text>
           </TouchableOpacity>
         </View>
       )}

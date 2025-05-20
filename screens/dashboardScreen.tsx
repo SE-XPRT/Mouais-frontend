@@ -114,11 +114,15 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: "#d1d9e6",
-    shadowOffset: { width: -4, height: -4 },
-    shadowOpacity: 1,
+
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
     shadowRadius: 6,
-    elevation: 8,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    elevation: 2,
   },
   cardText: {
     color: "black",

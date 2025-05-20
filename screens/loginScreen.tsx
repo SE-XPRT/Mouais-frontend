@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import {
   View,
   Text,
@@ -10,11 +11,40 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import FontAwesome from "@react-native-vector-icons/fontawesome";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+
+type RootStackParamList = {
+  TabNavigator: undefined;
+  // ajoutez ici d'autres routes si nécessaire
+};
+import _FontAwesome from "@react-native-vector-icons/fontawesome";
+
+const FontAwesome = _FontAwesome as React.ElementType;
 
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const [placeholderEmail, setPlaceholderEmail] =
+    useState("Entrez votre email");
+  const [placeholderPassword, setPlaceholderPassword] = useState(
+    "Entrez votre mot de passe"
+  );
+  const [signinOrSignup, setSigninOrSignup] = useState<"signin" | "signup">(
+    "signin"
+  );
+
+  const changeAuthentification = () => {
+    if (signinOrSignup === "signin") {
+      setSigninOrSignup("signup");
+      setPlaceholderEmail("Entrez votre email(inscription)");
+      setPlaceholderPassword("Entrez votre mot de passe (inscription)");
+    } else {
+      setSigninOrSignup("signin");
+      setPlaceholderEmail("Entrez votre email (connexion)");
+      setPlaceholderPassword("Entrez votre mot de passe (connexion)");
+    }
+  };
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   //stockage de l'email
   const [email, setEmail] = useState("");
   //stockage du mot de passe
@@ -24,25 +54,49 @@ const LoginScreen: React.FC = () => {
     //envoi d'une requete POST au back
     //console.log("Connexion en cours...");
     console.log(email, password);
-    const response = await fetch("http://localhost:3000/users/signin", {
-      method: "POST", // Méthode HTTP
-      headers: {
-        "Content-Type": "application/json", // On précise qu'on envoie du JSON
-      },
-      body: JSON.stringify({
-        email,
-        password, // On envoie les données
-      }),
-    });
-    // On récupère la réponse du back
-    const data = await response.json();
+    try {
+      const response = await fetch(
+        `http://192.168.1.117:3000/users/${signinOrSignup}`,
+        {
+          method: "POST", // Méthode HTTP
+          headers: {
+            "Content-Type": "application/json", // On précise qu'on envoie du JSON
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }), // On envoie l'email et le mot de passe
+        }
+      );
+      console.log(response);
 
-    // Si la réponse est OK
-    if (data.result) {
-      Alert.alert("Connexion réussie ✅", `Token: ${data.token}`);
-    } else {
-      // Sinon, afficher l'erreur retournée par le backend
-      Alert.alert("Erreur ❌", data.error);
+      if (!response.ok) {
+        throw new Error("Erreur réseau ou serveur");
+      }
+
+      // On récupère la réponse du back
+      const data = await response.json();
+
+      // Si la réponse est OK
+      if (data.result) {
+        // Alert.alert("Connexion réussie ✅", `Token: ${data.token}`);
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "TabNavigator" }],
+        });
+      } else {
+        // Sinon, afficher l'erreur retournée par le backend
+        // Alert.alert("Erreur ❌", data.error);
+        setEmail("");
+        setPassword("");
+        setPlaceholderEmail("Moauis ressaie ton email");
+        setPlaceholderPassword("Et ton mot de passe aussi !");
+      }
+    } catch (error: any) {
+      // Alert.alert(
+      //   "Erreur de connexion",
+      //   error.message || "Une erreur est survenue."
+      // );
     }
   };
 
@@ -50,11 +104,10 @@ const LoginScreen: React.FC = () => {
     <SafeAreaView style={styles.container}>
       {/* Logo */}
       <View style={styles.logoContainer}>
-        <View style={styles.logoCircle}>
-          <Text style={styles.logoText}>
-            <Image style={styles.logo} source={require("../assets/logo.png")} />
-          </Text>
-        </View>
+        <Text style={styles.logoText}>
+          <Image style={styles.logo} source={require("../assets/logo.png")} />
+        </Text>
+
         <Text style={styles.title}>Connecte-toi !</Text>
       </View>
 
@@ -72,35 +125,44 @@ const LoginScreen: React.FC = () => {
       {/* Email Login */}
       <View style={styles.form}>
         <TextInput
-          placeholder="Email"
-          placeholderTextColor="#ccc"
+          placeholder={placeholderEmail}
+          placeholderTextColor="#333"
           style={styles.input}
           value={email}
           onChangeText={setEmail}
         />
         <TextInput
-          placeholder="Password"
-          placeholderTextColor="#ccc"
+          placeholder={placeholderPassword}
+          placeholderTextColor="#333"
           secureTextEntry
           style={styles.input}
           value={password}
           onChangeText={setPassword}
         />
-        <TouchableOpacity style={styles.loginButton} onPress={handleSignin}>
-          <Text style={styles.loginButtonText}>C’est parti ! ➤</Text>
+        <View style={{ marginTop: 10 }}>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={() => handleSignin()}
+          >
+            <Text style={styles.loginButtonText}>C’est parti ! ➤</Text>
+          </TouchableOpacity>
+        </View>
+
+        <TouchableOpacity>
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.signupButton}
+          onPress={changeAuthentification}
+        >
+          <Text style={styles.signupButtonText}>
+            {signinOrSignup === "signin"
+              ? "Pas encore de compte ? Crée-en un !"
+              : "Déjà un compte ? Connecte-toi !"}
+          </Text>
         </TouchableOpacity>
       </View>
-
-      <TouchableOpacity>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.signupButton}>
-        <Text style={styles.signupButtonText}>
-          Pas encore de compte ? Inscris toi vite !
-        </Text>
-      </TouchableOpacity>
-
       <Text
         style={styles.guestMode}
         onPress={() => {
@@ -123,6 +185,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     justifyContent: "center",
   },
+  logo: {
+    width: 300,
+    height: 100,
+    marginBottom: 20,
+    position: "absolute",
+    top: 25,
+    borderRadius: 100,
+  },
   logoContainer: {
     alignItems: "center",
     marginBottom: 20,
@@ -130,9 +200,7 @@ const styles = StyleSheet.create({
   logoCircle: {
     width: 100,
     height: 100,
-    borderRadius: 50,
-    borderColor: "#aaa",
-    borderWidth: 1,
+
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
@@ -143,14 +211,24 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   title: {
+    color: "#fff",
     fontWeight: "bold",
-    fontSize: 22,
+    fontSize: 25,
   },
   socialRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginVertical: 20,
     paddingHorizontal: 20,
+    backgroundColor: "#ffffff",
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: "#ffffff",
+    shadowOpacity: 0.25,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
   },
   subtitle: {
     textAlign: "center",
@@ -162,14 +240,22 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   input: {
-    borderColor: "#aaa",
-    borderWidth: 1,
+    backgroundColor: "#e5e2e2", //#e5e2e2
     borderRadius: 5,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    fontSize: 14,
     marginBottom: 10,
-    color: "#fff",
+
+    marginTop: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.4,
+    shadowRadius: 6,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    elevation: 6,
   },
   loginButton: {
     backgroundColor: "#ffac25",

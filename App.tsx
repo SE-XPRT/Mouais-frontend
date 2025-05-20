@@ -7,7 +7,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Header from "./components/Header";
 import DashboardScreen from "./screens/dashboardScreen";
-import SettingsScreen from "./screens/settingsScreen";
+import SnapScreen from "./screens/snapscreen";
 import TakePicScreen from "./screens/takePicScreen";
 import InfosScreen from "./screens/infosScreen";
 import LoginScreen from "./screens/loginScreen";
@@ -76,6 +76,12 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Snap" component={SnapScreen} />
+        <Stack.Screen
+          name="TakePic"
+          component={TakePicScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen name="Home" component={DashboardScreen} />
         <Stack.Screen

@@ -1,19 +1,33 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import { icon } from "@fortawesome/fontawesome-svg-core";
+import SnapScreen from "../screens/snapscreen";
+type RootStackParamList = {
+  TakePic: undefined;
+  Snap: undefined;
+  // add other routes here if needed
+};
 
 export default function TakePicScreen() {
-  const navigation = useNavigation();
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
         <View style={styles.icons}>
           <FontAwesome name="upload" size={100} color="#fff" />
         </View>
-        <TouchableOpacity style={styles.icons} onPress={() => navigation.navigate('SnapScreen')}>
+        <TouchableOpacity
+          style={styles.icons}
+          onPress={() => {
+            navigation.navigate("Snap");
+          }}
+        >
           <FontAwesome name="camera" size={100} color="#fff" />
         </TouchableOpacity>
       </View>
