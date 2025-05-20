@@ -1,55 +1,96 @@
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import FontAwesome from "@react-native-vector-icons/fontawesome";
+import _FontAwesome from "@react-native-vector-icons/fontawesome";
+const FontAwesome = _FontAwesome as React.ElementType;
 import { StyleSheet, Text, View } from "react-native";
-
+import { LinearGradient } from "expo-linear-gradient";
 import DashboardScreen from "./screens/dashboardScreen";
 import SettingsScreen from "./screens/settingsScreen";
 import TakePicScreen from "./screens/takePicScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName = "";
+
+          if (route.name === "Home") {
+            iconName = "home";
+          } else if (route.name === "Take Picture") {
+            iconName = "camera";
+          } else if (route.name === "Settings") {
+            iconName = "user";
+          }
+
+          return <FontAwesome name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: "#2196f3",
+        tabBarInactiveTintColor: "#ffffff",
+        tabBarStyle: {
+          backgroundColor: "#2a2e30",
+          borderTopWidth: 0,
+          elevation: 0,
+          shadowColor: "transparent",
+        },
+        headerShown: false,
+      })}
+    >
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+      <Tab.Screen
+        name="Take Picture"
+        component={TakePicScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <LinearGradient colors={gradientColors} style={styles.iconPic}>
+              <FontAwesome name="camera" size={size} color={color} />
+            </LinearGradient>
+          ),
+        }}
+      />
+      <Tab.Screen name="Home" component={DashboardScreen} />
+    </Tab.Navigator>
+  );
+};
 export default function App() {
-  const Tab = createBottomTabNavigator();
-
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            let iconName = "";
-
-            if (route.name === "Home") {
-              iconName = "home";
-            } else if (route.name === "Take Picture") {
-              iconName = "camera";
-            } else if (route.name === "Settings") {
-              iconName = "user";
-            }
-
-            return <FontAwesome name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: "#2196f3",
-          tabBarInactiveTintColor: "gray",
-          headerShown: false,
-        })}
-      >
-        <Tab.Screen name="Home" component={DashboardScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
-        <Tab.Screen name="Take Picture" component={TakePicScreen} />
-      </Tab.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="Home" component={DashboardScreen} />
+        <Stack.Screen name="Settings" component={SettingsScreen} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
+const backgroundColor = "#2a2e30";
+const textColor = "#ffffff";
+//linear gradient colors
+const gradientColors = ["#8b43f1", "#d395ff"];
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: backgroundColor,
     alignItems: "center",
     justifyContent: "center",
   },
   text: {
     fontSize: 20,
     color: "#333",
+  },
+
+  iconPic: {
+    borderRadius: 50,
+    padding: 15,
+    display: "flex",
+    width: 60,
+    height: 60,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
