@@ -9,7 +9,6 @@ const handleCapture = async () => {
 export default function TakePicScreen() {
   return (
     <View style={styles.container}>
-      <Image style={styles.logo} source={require("../assets/logo.png")} />
       <View style={styles.iconContainer}>
         <View style={styles.icons}>
           <FontAwesome
@@ -60,7 +59,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   iconContainer: {
-    marginTop: 200,
+    marginTop: 180,
     marginBottom: 50,
     flexDirection: "row",
     justifyContent: "space-around",
