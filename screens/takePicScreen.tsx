@@ -12,31 +12,19 @@ export default function TakePicScreen() {
       <Image style={styles.logo} source={require("../assets/logo.png")} />
       <View style={styles.iconContainer}>
         <View style={styles.icons}>
-          <FontAwesome
-            name="upload"
-            size={100}
-            color="#fff"
-          />
+          <FontAwesome name="upload" size={100} color="#fff" />
         </View>
         <View style={styles.icons}>
-          <FontAwesome
-            name="camera"
-            size={100}
-            color="#fff"
-          />
+          <FontAwesome name="camera" size={100} color="#fff" />
         </View>
       </View>
       <Text style={styles.text}>Envie de personnaliser ton expérience ?</Text>
-      <TouchableOpacity
-          style={styles.createProfilButton}
-        >
-      <Text style={styles.text}>Crée ton profil ici !</Text>
-        </TouchableOpacity>
-      <TouchableOpacity
-          style={styles.coinsButton}
-        >
-      <Text style={styles.text}>Coins : 0 / 3 </Text>
-        </TouchableOpacity>
+      <TouchableOpacity style={styles.createProfilButton}>
+        <Text style={styles.text}>Crée ton profil ici !</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.coinsButton}>
+        <Text style={styles.text}>Coins : 0 / 3 </Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -75,10 +63,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   createProfilButton: {
-    marginTop: 40,  
+    marginTop: 40,
     backgroundColor: "#d395ff",
     borderRadius: 8,
-    padding: 10,  
+    padding: 10,
     width: "80%",
     alignItems: "center",
     justifyContent: "center",

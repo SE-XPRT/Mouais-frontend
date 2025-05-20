@@ -8,6 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import DashboardScreen from "./screens/dashboardScreen";
 import SettingsScreen from "./screens/settingsScreen";
 import TakePicScreen from "./screens/takePicScreen";
+import InfosScreen from "./screens/infosScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -23,7 +24,7 @@ const TabNavigator = () => {
             iconName = "home";
           } else if (route.name === "Take Picture") {
             iconName = "camera";
-          } else if (route.name === "Settings") {
+          } else if (route.name === "Infos") {
             iconName = "user";
           }
 
@@ -46,14 +47,21 @@ const TabNavigator = () => {
         component={TakePicScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <LinearGradient colors={gradientColors} style={styles.iconPic}>
+            <LinearGradient
+              colors={gradientColors}
+              style={[
+                styles.iconPic,
+                { borderWidth: 2, borderColor: gradientColors2[0] },
+              ]}
+            >
               <FontAwesome name="camera" size={size} color={color} />
             </LinearGradient>
           ),
           tabBarLabel: () => null,
         }}
       />
-      <Tab.Screen name="Settings" component={SettingsScreen} />
+
+      <Tab.Screen name="Infos" component={InfosScreen} />
     </Tab.Navigator>
   );
 };
@@ -68,11 +76,13 @@ export default function App() {
     </NavigationContainer>
   );
 }
+//all colors
 const backgroundColor = "#2a2e30";
 const textColor = "#ffffff";
 
 //linear gradient colors
 const gradientColors = ["#8b43f1", "#d395ff"];
+const gradientColors2 = ["#eeeaec", "#ff0084"];
 
 const styles = StyleSheet.create({
   container: {

@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 export default function DashboardScreen() {
-  const navigation = useNavigation({ navigation });
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
