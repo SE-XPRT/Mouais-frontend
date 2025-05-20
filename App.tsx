@@ -9,33 +9,16 @@ import Header from "./components/Header";
 import DashboardScreen from "./screens/dashboardScreen";
 import SettingsScreen from "./screens/settingsScreen";
 import TakePicScreen from "./screens/takePicScreen";
-<<<<<<< HEAD
 import InfosScreen from "./screens/infosScreen";
-=======
 import LoginScreen from "./screens/loginScreen";
->>>>>>> dbfa1d9567133bfa8c168f968a95d8b2c10f14b5
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-
 const TabNavigator = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = "";
-
-          if (route.name === "Home") {
-            iconName = "home";
-          } else if (route.name === "Take Picture") {
-            iconName = "camera";
-          } else if (route.name === "Infos") {
-            iconName = "user";
-          }
-
-          return <FontAwesome name={iconName} size={size} color={color} />;
-        },
+      screenOptions={{
         tabBarActiveTintColor: "#2196f3",
         tabBarInactiveTintColor: "#ffffff",
         tabBarStyle: {
@@ -44,14 +27,21 @@ const TabNavigator = () => {
           elevation: 0,
           shadowColor: "transparent",
         },
-        headerShown: false,
-      })}
+      }}
     >
-      <Tab.Screen name="Home" component={DashboardScreen} />
+      <Tab.Screen
+        name="Home"
+        component={DashboardScreen}
+        options={{
+          header: () => <Header />,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="home" size={size} color={color} />,
+        }}
+      />
       <Tab.Screen
         name="Take Picture"
         component={TakePicScreen}
         options={{
+          header: () => <Header />,
           tabBarIcon: ({ color, size }) => (
             <LinearGradient
               colors={gradientColors}
@@ -66,18 +56,22 @@ const TabNavigator = () => {
           tabBarLabel: () => null,
         }}
       />
-
-      <Tab.Screen name="Infos" component={InfosScreen} />
+      <Tab.Screen
+        name="Infos"
+        component={InfosScreen}
+        options={{
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => <FontAwesome name="user" size={size} color={color} />,
+        }}
+      />
     </Tab.Navigator>
   );
 };
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ header: () => <Header /> }}>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        <Stack.Screen name="Home" component={DashboardScreen} />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
