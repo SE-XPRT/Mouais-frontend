@@ -1,12 +1,90 @@
 import React from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Button,
+} from "react-native";
+import _FontAwesome from "@react-native-vector-icons/fontawesome";
+const FontAwesome = _FontAwesome as React.ElementType;
 const Header: React.FC = () => {
+  const [showPersonalize, setShowPersonalize] = React.useState(false);
+
+  const openMenu = () => {
+    // Handle menu opening
+    console.log("Menu opened");
+    setShowPersonalize((prev) => !prev);
+  };
+
   return (
     <View style={styles.header}>
       <Image style={styles.logo} source={require("../assets/logo.png")} />
-      <FontAwesome style={styles.menu} name="bars" size={40} color="#fff" />
+
+      <FontAwesome
+        style={styles.menu}
+        name="bars"
+        size={40}
+        color="#fff"
+        onPress={openMenu}
+      />
+
+      {/* Dropdown menu */}
+      {showPersonalize && (
+        <View style={styles.menuContainer}>
+          <Text style={{ fontSize: 20, color: "#fff", marginBottom: 8 }}>
+            Bienvenue !
+          </Text>
+
+          <TouchableOpacity
+            style={styles.Button}
+            onPress={() => {
+              console.log("Button clicked");
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>Mon Compte</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.Button}
+            onPress={() => {
+              console.log("Button clicked");
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>
+              Mes notifications
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.Button}
+            onPress={() => {
+              console.log("Button clicked");
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>
+              Mes filtres & favoris
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.Button}
+            onPress={() => {
+              console.log("Button clicked");
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>
+              Mon album photos
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.Button}
+            onPress={() => {
+              console.log("Button clicked");
+            }}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>Mes badges</Text>
+          </TouchableOpacity>
+        </View>
+      )}
     </View>
   );
 };
@@ -29,6 +107,27 @@ const styles = StyleSheet.create({
     right: 16,
     top: 50,
     color: "#fff",
+  },
+  Button: {
+    backgroundColor: "#555",
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 8,
+  },
+  menuContainer: {
+    position: "absolute",
+    top: 100,
+    width: "100%",
+    right: 16,
+    backgroundColor: "#333",
+    borderRadius: 8,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+    zIndex: 10,
   },
 });
 

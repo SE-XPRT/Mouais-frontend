@@ -1,7 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
+import _FontAwesome from "@react-native-vector-icons/fontawesome";
+const FontAwesome = _FontAwesome as React.ElementType;
 import { icon } from "@fortawesome/fontawesome-svg-core";
 
 export default function TakePicScreen() {
