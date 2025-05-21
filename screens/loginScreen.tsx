@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-
 import {
   View,
   Text,
@@ -19,7 +18,7 @@ import Constants from "expo-constants";
 type RootStackParamList = {
   TabNavigator: undefined;
   // ajoutez ici d'autres routes si nécessaire
-};  
+};
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
@@ -59,19 +58,16 @@ const LoginScreen: React.FC = () => {
     //console.log("Connexion en cours...");
     console.log(email, password);
     try {
-      const response = await fetch(
-        `${API_URL}/users/${signinOrSignup}`,
-        {
-          method: "POST", // Méthode HTTP
-          headers: {
-            "Content-Type": "application/json", // On précise qu'on envoie du JSON
-          },
-          body: JSON.stringify({
-            email,
-            password,
-          }), // On envoie l'email et le mot de passe
-        }
-      );
+      const response = await fetch(`${API_URL}/users/${signinOrSignup}`, {
+        method: "POST", // Méthode HTTP
+        headers: {
+          "Content-Type": "application/json", // On précise qu'on envoie du JSON
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }), // On envoie l'email et le mot de passe
+      });
       console.log(response);
 
       if (!response.ok) {
