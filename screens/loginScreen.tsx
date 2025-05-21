@@ -16,9 +16,8 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
 type RootStackParamList = {
   TabNavigator: undefined;
-  //Définition des routes autorisées dans cette stack.
-  //TabNavigator est le nom d'une route définie ailleurs, qui n'attend aucun paramètre (undefined).
-};
+  // ajoutez ici d'autres routes si nécessaire
+}; 
 
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
