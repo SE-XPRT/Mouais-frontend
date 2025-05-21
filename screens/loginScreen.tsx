@@ -12,27 +12,36 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+//Le type TypeScript NativeStackNavigationProp garantit que vous appelez des routes qui existent bien.
 
 type RootStackParamList = {
   TabNavigator: undefined;
-  // ajoutez ici d'autres routes si nécessaire
+  //Définition des routes autorisées dans cette stack.
+  //TabNavigator est le nom d'une route définie ailleurs, qui n'attend aucun paramètre (undefined).
 };
-import _FontAwesome from "@react-native-vector-icons/fontawesome";
 
+import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
+//On le cast en React.ElementType pour lever une erreur de typage.
 
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
   const [placeholderEmail, setPlaceholderEmail] =
     useState("Entrez votre email");
+  //Ce champ est utilisé pour personnaliser dynamiquement le placeholder du champ email.
   const [placeholderPassword, setPlaceholderPassword] = useState(
     "Entrez votre mot de passe"
   );
+  //Ce champ est utilisé pour personnaliser dynamiquement le placeholder du champ password.
+
   const [signinOrSignup, setSigninOrSignup] = useState<"signin" | "signup">(
     "signin"
   );
+  //Variable de type littéral "signin" ou "signup" (TypeScript).
+  //Cela permet de basculer entre le mode connexion ou création de compte.
 
   const changeAuthentification = () => {
+    //Alterner entre les deux modes signin et signup
     if (signinOrSignup === "signin") {
       setSigninOrSignup("signup");
       setPlaceholderEmail("Entrez votre email(inscription)");
@@ -43,6 +52,9 @@ const LoginScreen: React.FC = () => {
       setPlaceholderPassword("Entrez votre mot de passe (connexion)");
     }
   };
+
+  //On utilise la navigation de React Navigation.
+  //Avec TypeScript, on précise que les routes disponibles sont celles définies dans RootStackParamList
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   //stockage de l'email
@@ -56,7 +68,7 @@ const LoginScreen: React.FC = () => {
     console.log(email, password);
     try {
       const response = await fetch(
-        `http://192.168.1.117:3000/users/${signinOrSignup}`,
+        `http://192.168.1.108:3000/users/${signinOrSignup}`,
         {
           method: "POST", // Méthode HTTP
           headers: {
@@ -89,7 +101,7 @@ const LoginScreen: React.FC = () => {
         // Alert.alert("Erreur ❌", data.error);
         setEmail("");
         setPassword("");
-        setPlaceholderEmail("Moauis ressaie ton email");
+        setPlaceholderEmail("Moauis reessaie ton email");
         setPlaceholderPassword("Et ton mot de passe aussi !");
       }
     } catch (error: any) {
