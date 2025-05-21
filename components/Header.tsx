@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 100,
+    width: 200,
     height: 100,
     marginBottom: 20,
     position: "absolute",

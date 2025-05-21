@@ -7,8 +7,10 @@ import {
   TouchableOpacity,
   Dimensions,
   TextInput,
+  ScrollView,
 } from "react-native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
+import { useSelector } from "react-redux";
 const FontAwesome = _FontAwesome as React.ElementType;
 const backgroundColor = "#2a2a30"; // couleur sombre corrigée
 const textColor = "#fff";
@@ -20,6 +22,7 @@ const valueColor = "#232526";
 const screenHeight = Dimensions.get("window").height;
 
 export default function InfosScreen() {
+  const email = useSelector((state: any) => state.users.value.email);
   const [editMode, setEditMode] = useState(false);
   const [editStyle, setEditStyle] = useState({
     backgroundColor: "#fff",
@@ -32,7 +35,7 @@ export default function InfosScreen() {
     });
   };
   return (
-    <View style={styles.bg}>
+    <ScrollView contentContainerStyle={styles.bg}>
       <View style={styles.container}>
         <View style={styles.avatarContainer}>
           <Image
@@ -101,7 +104,7 @@ export default function InfosScreen() {
                 backgroundColor: editStyle.backgroundColor,
               }}
               editable={editMode}
-              placeholder="Email"
+              placeholder={email}
             />
           </View>
         </View>{" "}
@@ -116,7 +119,7 @@ export default function InfosScreen() {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -128,100 +131,99 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    padding: 14,
+    justifyContent: "flex-start",
+    padding: 20,
+    paddingTop: 60,
   },
   avatarContainer: {
     alignItems: "center",
-    marginBottom: 32,
+    marginBottom: 30,
   },
   userIcon: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 110,
+    height: 110,
+    borderRadius: 55,
     borderWidth: 3,
     borderColor: "#fff",
     backgroundColor: accentColor,
-    marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 6,
+    marginBottom: 10,
+    shadowColor: accentColor,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 10,
   },
   username: {
-    fontSize: 22,
+    fontSize: 24,
     color: "#fff",
     fontWeight: "bold",
-    letterSpacing: 1,
-    textShadowColor: "#0002",
+    letterSpacing: 1.2,
+    textShadowColor: "#0005",
     textShadowOffset: { width: 0, height: 2 },
     textShadowRadius: 4,
   },
   card: {
-    height: screenHeight * 0.4,
     width: "100%",
     borderRadius: 20,
     padding: 24,
     backgroundColor: cardBg,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
+    shadowOpacity: 0.1,
+    shadowRadius: 10,
     elevation: 8,
     borderWidth: 1,
     borderColor: cardBorder,
+    marginBottom: 30,
   },
   cardTitle: {
     fontSize: 20,
     fontWeight: "bold",
     color: accentColor,
-    marginBottom: 5,
     alignSelf: "center",
+    marginBottom: 16,
     letterSpacing: 1,
   },
   infoRow: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 14,
+    marginBottom: 12,
   },
   label: {
     fontSize: 16,
     color: labelColor,
-    width: 80,
+    width: 90,
     fontWeight: "600",
   },
   value: {
     fontSize: 16,
     color: valueColor,
     fontWeight: "500",
-    flexShrink: 1,
-    width: "90%",
-    marginRight: 8,
-    padding: 5,
-    margin: 5,
-    borderRadius: 10,
-    borderBottomWidth: 1,
-    borderRightWidth: 1,
-    borderColor: "gray",
-    elevation: 3,
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    backgroundColor: "#f8f8f8",
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: "#ccc",
   },
   ButtonContainer: {
-    marginTop: 20,
-    flexDirection: "column",
-    gap: 5,
-    display: "flex",
     width: "100%",
-    justifyContent: "center",
     alignItems: "center",
+    gap: 14,
   },
   Button: {
-    marginTop: 40,
     backgroundColor: accentColor,
-    borderRadius: 8,
-    padding: 10,
-    width: "80%",
+    borderRadius: 12,
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    width: "85%",
     alignItems: "center",
-    justifyContent: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    elevation: 5,
+    marginBottom: 10,
   },
 });

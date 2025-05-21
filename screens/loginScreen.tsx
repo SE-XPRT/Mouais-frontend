@@ -15,6 +15,9 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
 
+import { useDispatch } from "react-redux";
+import { updateToken, updateEmail } from "../reducers/user";
+import { useSelector } from "react-redux";
 type RootStackParamList = {
   TabNavigator: undefined;
   // ajoutez ici d'autres routes si nécessaire
@@ -26,6 +29,16 @@ const FontAwesome = _FontAwesome as React.ElementType;
 
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
+  const dispatch = useDispatch();
+  // Replace 'RootState' with the actual type of your Redux root state if different
+  interface RootState {
+    users: {
+      email: {
+        values: string;
+      };
+    };
+  }
+  const emailData = useSelector((state: any) => state.users.value.email);
   const [placeholderEmail, setPlaceholderEmail] =
     useState("Entrez votre email");
   const [placeholderPassword, setPlaceholderPassword] = useState(
@@ -80,6 +93,8 @@ const LoginScreen: React.FC = () => {
       // Si la réponse est OK
       if (data.result) {
         // Alert.alert("Connexion réussie ✅", `Token: ${data.token}`);
+        dispatch(updateToken(data.token));
+        dispatch(updateEmail(data.email));
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigator" }],
@@ -93,10 +108,10 @@ const LoginScreen: React.FC = () => {
         setPlaceholderPassword("Et ton mot de passe aussi !");
       }
     } catch (error: any) {
-      // Alert.alert(
-      //   "Erreur de connexion",
-      //   error.message || "Une erreur est survenue."
-      // );
+      Alert.alert(
+        "Erreur de connexion",
+        error.message || "Une erreur est survenue."
+      );
     }
   };
 
