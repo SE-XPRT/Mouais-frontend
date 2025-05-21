@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-
 import {
   View,
   Text,
@@ -17,7 +16,7 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
 
 import { useDispatch } from "react-redux";
-import { updateToken, updateEmail } from "../reducers/user";
+import { updateToken, updateEmail } from "../reducers/users";
 import { useSelector } from "react-redux";
 type RootStackParamList = {
   TabNavigator: undefined;
