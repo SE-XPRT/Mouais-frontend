@@ -5,7 +5,7 @@ const initialState: UserState = {
 };
 
 export const userSlice = createSlice({
-  name: "user",
+  name: "users",
   initialState,
   reducers: {
     updateEmail: (state: UserState, action: PayloadAction<string>) => {
