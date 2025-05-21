@@ -1,40 +1,90 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 
+type DashboardParams = {
+  Dashboard: { token: string };
+};
+
 export default function DashboardScreen() {
   const navigation = useNavigation();
-  const userName = "Juju";
+  const route = useRoute<RouteProp<DashboardParams, "Dashboard">>();
+  const token = route.params?.token; // récupération du token depuis la route GET/ dashboard/:token A REMPLACER PAR LE REDUCER UNE FOIS TERMINE
+
+  const [userName, setUserName] = useState("");
+  const [averageScore, setAverageScore] = useState<number | null>(null);
+  const [bestScore, setBestScore] = useState<number | null>(null);
+  const [badgeNames, setBadgeNames] = useState<string[]>([]);
+  const [coins, setCoins] = useState<number>(0);
+  const [photo, setPhoto] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!token) return;
+
+    fetch(`${API_URL}/dashboard/${token}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.result) {
+          setUserName(data.userName);
+          setAverageScore(data.averageScore);
+          setBestScore(data.bestScore);
+          setBadgeNames(data.badgeNames);
+          setCoins(data.coins);
+        }
+      })
+      .catch((err) => console.error("Erreur dashboard:", err));
+  }, [token]);
+
+  fetch(`${API_URL}/photos/${token}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.result && data.photo?.url) {
+        setPhoto(data.photo.url);
+      }
+    });
 
   return (
     <View style={styles.container}>
       <Text style={styles.greetings}>
-        Salut <Text style={styles.userName}>{userName}</Text>, prêt à tester ton{" "}
-        <Text style={styles.aura}>aura</Text> ?
+        Salut <Text style={styles.userName}>{userName || "toi"}</Text>, prêt à
+        tester ton <Text style={styles.aura}>aura</Text> ?
       </Text>
 
       <View style={styles.cardGrid}>
         <View style={styles.cardWrapper}>
           <View style={styles.card}>
             <FontAwesome name="trophy" size={40} color="#29ffc6" />
-            <Text style={styles.cardText}>Tes badges</Text>
+            <Text style={styles.cardText}>
+              Tes badges ({badgeNames.length})
+            </Text>
           </View>
 
           <View style={styles.card}>
             <FontAwesome name="thumbs-up" size={40} color="#ffac25" />
-            <Text style={styles.cardText}>Ton best score</Text>
+            <Text style={styles.cardText}>
+              Ton score moyen
+              {averageScore !== null ? averageScore.toFixed(2) : "-"}
+            </Text>
           </View>
 
           <View style={styles.card}>
             <FontAwesome name="image" size={40} color="#8b43f1" />
             <Text style={styles.cardText}>Ta best photo</Text>
+            {photo ? (
+              <Image source={{ uri: photo }} style={styles.image} />
+            ) : (
+              <Text style={styles.cardText}>Chargement de la photo...</Text>
+            )}
           </View>
 
           <View style={styles.card}>
-            <FontAwesome name="bitcoin" size={40} color="#ff0084" />
-            <Text style={styles.cardText}>Tes coins</Text>
+            <FontAwesome name="star" size={40} color="#ff0084" />
+            <Text style={styles.cardText}>
+              Ta best score
+              {bestScore !== null ? bestScore : "-"}
+            </Text>
           </View>
         </View>
 
@@ -46,7 +96,7 @@ export default function DashboardScreen() {
           <Text style={styles.buttonText}>BUY PREMIUM</Text>
         </TouchableOpacity>
 
-        <Text style={styles.coinInfo}>Il te reste 3 coins</Text>
+        <Text style={styles.coinInfo}>Il te reste {coins} coins</Text>
       </View>
     </View>
   );
@@ -124,6 +174,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     textAlign: "center",
     fontFamily: "Playpen Sans",
+  },
+  image: {
+    width: "100%",
+    height: 200,
+    borderRadius: 12,
+    marginTop: 8,
   },
   pinkButton: {
     backgroundColor: "#ff0084",

@@ -14,7 +14,7 @@ import LoginScreen from "./screens/loginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import user from "./reducers/user";
+import user from "./reducers/users";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
