@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
+import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
+import Constants from "expo-constants";
 const FontAwesome = _FontAwesome as React.ElementType;
 import Constants from "expo-constants";
 
