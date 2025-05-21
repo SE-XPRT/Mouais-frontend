@@ -12,9 +12,15 @@ import TakePicScreen from "./screens/takePicScreen";
 import InfosScreen from "./screens/infosScreen";
 import LoginScreen from "./screens/loginScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { configureStore } from "@reduxjs/toolkit";
+import { Provider } from "react-redux";
+import user from "./reducers/user";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+const store = configureStore({
+  reducer: { user },
+});
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -73,24 +79,26 @@ const TabNavigator = () => {
 };
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Snap" component={SnapScreen} />
-        <Stack.Screen
-          name="TakePic"
-          component={TakePicScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        <Stack.Screen name="Home" component={DashboardScreen} />
-        <Stack.Screen
-          name="Infos"
-          component={InfosScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="Snap" component={SnapScreen} />
+          <Stack.Screen
+            name="TakePic"
+            component={TakePicScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen name="TabNavigator" component={TabNavigator} />
+          <Stack.Screen name="Home" component={DashboardScreen} />
+          <Stack.Screen
+            name="Infos"
+            component={InfosScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 //all colors
