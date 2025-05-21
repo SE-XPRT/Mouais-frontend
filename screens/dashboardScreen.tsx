@@ -3,10 +3,12 @@ import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
 import { useNavigation, useRoute, RouteProp } from "@react-navigation/native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
+import Constants from "expo-constants";
 
 type DashboardParams = {
   Dashboard: { token: string };
 };
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
 export default function DashboardScreen() {
   const navigation = useNavigation();
@@ -37,13 +39,13 @@ export default function DashboardScreen() {
       .catch((err) => console.error("Erreur dashboard:", err));
   }, [token]);
 
-  fetch(`${API_URL}/photos/${token}`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.result && data.photo?.url) {
-        setPhoto(data.photo.url);
-      }
-    });
+  // fetch(`${API_URL}/photos/${token}`)
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     if (data.result && data.photo?.url) {
+  //       setPhoto(data.photo.url);
+  //     }
+  //   });
 
   return (
     <View style={styles.container}>
