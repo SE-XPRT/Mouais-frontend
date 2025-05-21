@@ -12,10 +12,11 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
+import Constants from "expo-constants";
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
 type RootStackParamList = {
   TabNavigator: undefined;
-  // add autre route ici si besoin
 };
 
 export default function SnapScreen() {
@@ -27,10 +28,6 @@ export default function SnapScreen() {
   const [hasPermission, setHasPermission] = useState(false);
   const [facing, setFacing] = useState<CameraType>("back");
   const [flashStatus, setFlashStatus] = useState<FlashMode>("off");
-
-  useEffect(() => {
-    console.log("Navigation state: ", navigation.getState());
-  }, []);
 
   useEffect(() => {
     (async () => {
@@ -55,6 +52,19 @@ export default function SnapScreen() {
     const photo: any = await cameraRef.current?.takePictureAsync({
       quality: 0.3,
     });
+    if(photo) {
+    await fetch(`${API_URL}/photos/upload`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          imageUrl: photo.uri,
+          userToken: "1",
+        }),
+    })
+
+    } 
   };
 
   return (
@@ -88,7 +98,7 @@ export default function SnapScreen() {
         }}
       >
         <TouchableOpacity onPress={() => navigation.navigate("TabNavigator")}>
-          <FontAwesome name="chevron-left" size={40} color="white" />
+          <FontAwesome name="chevron-left" size={35} color="white" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.snapButton}
@@ -133,10 +143,6 @@ const styles = StyleSheet.create({
     top: 50,
     right: 30,
   },
-  goBackButton: {
-    left: "20%",
-    bottom: "14.5%",
-  },
   snapButton: {
     width: 95,
     aspectRatio: 1,
@@ -153,6 +159,5 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
-    elevation: 5,
   },
 });
