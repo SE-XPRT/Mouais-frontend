@@ -18,7 +18,7 @@ import Constants from "expo-constants";
 type RootStackParamList = {
   TabNavigator: undefined;
   // ajoutez ici d'autres routes si nécessaire
-};
+}; 
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
