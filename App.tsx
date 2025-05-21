@@ -19,7 +19,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { user },
+  reducer: { users: user },
 });
 const TabNavigator = () => {
   return (

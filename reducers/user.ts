@@ -1,18 +1,28 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+type UserState = {
+  value: {
+    token: string | null;
+    email: string | null;
+  };
+};
 
 const initialState: UserState = {
-  value: { email: null },
+  value: { token: null, email: null },
 };
 
 export const userSlice = createSlice({
-  name: "user",
+  name: "users",
   initialState,
   reducers: {
     updateEmail: (state: UserState, action: PayloadAction<string>) => {
       state.value.email = action.payload;
     },
+    updateToken: (state: UserState, action: PayloadAction<string>) => {
+      state.value.token = action.payload;
+    },
   },
 });
 
-export const { updateEmail } = userSlice.actions;
+export const { updateEmail, updateToken } = userSlice.actions;
 export default userSlice.reducer;
