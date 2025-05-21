@@ -6,10 +6,10 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import { icon } from "@fortawesome/fontawesome-svg-core";
 import SnapScreen from "../screens/snapscreen";
+
 type RootStackParamList = {
   TakePic: undefined;
   Snap: undefined;
-  // add other routes here if needed
 };
 
 export default function TakePicScreen() {

@@ -88,7 +88,7 @@ export default function SnapScreen() {
         }}
       >
         <TouchableOpacity onPress={() => navigation.navigate("TabNavigator")}>
-          <FontAwesome name="chevron-left" size={40} color="white" />
+          <FontAwesome name="chevron-left" size={35} color="white" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.snapButton}
@@ -133,10 +133,6 @@ const styles = StyleSheet.create({
     top: 50,
     right: 30,
   },
-  goBackButton: {
-    left: "20%",
-    bottom: "14.5%",
-  },
   snapButton: {
     width: 95,
     aspectRatio: 1,
@@ -153,6 +149,5 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.5,
     shadowRadius: 3.84,
-    elevation: 5,
   },
 });
