@@ -12,12 +12,15 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import _FontAwesome from "@react-native-vector-icons/fontawesome";
+import Constants from "expo-constants";
 
 type RootStackParamList = {
   TabNavigator: undefined;
   // ajoutez ici d'autres routes si nécessaire
 };
-import _FontAwesome from "@react-native-vector-icons/fontawesome";
+
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
 const FontAwesome = _FontAwesome as React.ElementType;
 
@@ -56,7 +59,7 @@ const LoginScreen: React.FC = () => {
     console.log(email, password);
     try {
       const response = await fetch(
-        `http://192.168.1.117:3000/users/${signinOrSignup}`,
+        `${API_URL}/users/${signinOrSignup}`,
         {
           method: "POST", // Méthode HTTP
           headers: {
