@@ -1,11 +1,5 @@
-import React from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;

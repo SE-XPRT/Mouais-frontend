@@ -56,7 +56,7 @@ const LoginScreen: React.FC = () => {
     console.log(email, password);
     try {
       const response = await fetch(
-        `http://192.168.1.117:3000/users/${signinOrSignup}`,
+        `http://192.168.1.17:3000/users/${signinOrSignup}`,
         {
           method: "POST", // Méthode HTTP
           headers: {
@@ -89,7 +89,7 @@ const LoginScreen: React.FC = () => {
         // Alert.alert("Erreur ❌", data.error);
         setEmail("");
         setPassword("");
-        setPlaceholderEmail("Moauis ressaie ton email");
+        setPlaceholderEmail("Mouais rééssaie ton email");
         setPlaceholderPassword("Et ton mot de passe aussi !");
       }
     } catch (error: any) {
