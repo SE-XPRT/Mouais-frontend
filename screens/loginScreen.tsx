@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 
 import {
@@ -13,51 +12,40 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
-//Le type TypeScript NativeStackNavigationProp garantit que vous appelez des routes qui existent bien.
+import _FontAwesome from "@react-native-vector-icons/fontawesome";
+import Constants from "expo-constants";
 
 type RootStackParamList = {
   TabNavigator: undefined;
   // ajoutez ici d'autres routes si nécessaire
 };  
 
-import _FontAwesome from "@react-native-vector-icons/fontawesome";
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
+
 const FontAwesome = _FontAwesome as React.ElementType;
-//On le cast en React.ElementType pour lever une erreur de typage.
 
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
-  const [connectOrSignUp, setConnectOrSignUp] = useState("Connecte-toi");
   const [placeholderEmail, setPlaceholderEmail] =
     useState("Entrez votre email");
-  //Ce champ est utilisé pour personnaliser dynamiquement le placeholder du champ email.
   const [placeholderPassword, setPlaceholderPassword] = useState(
     "Entrez votre mot de passe"
   );
-  //Ce champ est utilisé pour personnaliser dynamiquement le placeholder du champ password.
-
   const [signinOrSignup, setSigninOrSignup] = useState<"signin" | "signup">(
     "signin"
   );
-  //Variable de type littéral "signin" ou "signup" (TypeScript).
-  //Cela permet de basculer entre le mode connexion ou création de compte.
 
   const changeAuthentification = () => {
-    //Alterner entre les deux modes signin et signup
     if (signinOrSignup === "signin") {
       setSigninOrSignup("signup");
       setPlaceholderEmail("Entrez votre email(inscription)");
       setPlaceholderPassword("Entrez votre mot de passe (inscription)");
-      setConnectOrSignUp("Inscris-toi");
     } else {
       setSigninOrSignup("signin");
       setPlaceholderEmail("Entrez votre email (connexion)");
       setPlaceholderPassword("Entrez votre mot de passe (connexion)");
-      setConnectOrSignUp("Connecte-toi");
     }
   };
-
-  //On utilise la navigation de React Navigation.
-  //Avec TypeScript, on précise que les routes disponibles sont celles définies dans RootStackParamList
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   //stockage de l'email
@@ -70,16 +58,19 @@ const LoginScreen: React.FC = () => {
     //console.log("Connexion en cours...");
     console.log(email, password);
     try {
-      const response = await fetch(`${API_URL}/users/${signinOrSignup}`, {
-        method: "POST", // Méthode HTTP
-        headers: {
-          "Content-Type": "application/json", // On précise qu'on envoie du JSON
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }), // On envoie l'email et le mot de passe
-      });
+      const response = await fetch(
+        `${API_URL}/users/${signinOrSignup}`,
+        {
+          method: "POST", // Méthode HTTP
+          headers: {
+            "Content-Type": "application/json", // On précise qu'on envoie du JSON
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }), // On envoie l'email et le mot de passe
+        }
+      );
       console.log(response);
 
       if (!response.ok) {
@@ -101,7 +92,7 @@ const LoginScreen: React.FC = () => {
         // Alert.alert("Erreur ❌", data.error);
         setEmail("");
         setPassword("");
-        setPlaceholderEmail("Mouais rééssaie ton email");
+        setPlaceholderEmail("Moauis ressaie ton email");
         setPlaceholderPassword("Et ton mot de passe aussi !");
       }
     } catch (error: any) {
@@ -120,7 +111,7 @@ const LoginScreen: React.FC = () => {
           <Image style={styles.logo} source={require("../assets/logo.png")} />
         </Text>
 
-        <Text style={styles.title}>{connectOrSignUp} !</Text>
+        <Text style={styles.title}>Connecte-toi !</Text>
       </View>
 
       {/* Social Icons */}
@@ -132,7 +123,7 @@ const LoginScreen: React.FC = () => {
         <FontAwesome name="facebook" size={28} color="#3d4eaf" />
       </View>
 
-      <Text style={styles.subtitle}>ou {connectOrSignUp} avec ton email !</Text>
+      <Text style={styles.subtitle}>ou connecte-toi avec ton email !</Text>
 
       {/* Email Login */}
       <View style={styles.form}>
