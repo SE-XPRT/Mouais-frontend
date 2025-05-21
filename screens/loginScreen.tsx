@@ -26,6 +26,7 @@ const FontAwesome = _FontAwesome as React.ElementType;
 
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
+  const [connectOrSignUp, setConnectOrSignUp] = useState("Connecte-toi");
   const [placeholderEmail, setPlaceholderEmail] =
     useState("Entrez votre email");
   //Ce champ est utilisé pour personnaliser dynamiquement le placeholder du champ email.
@@ -46,10 +47,12 @@ const LoginScreen: React.FC = () => {
       setSigninOrSignup("signup");
       setPlaceholderEmail("Entrez votre email(inscription)");
       setPlaceholderPassword("Entrez votre mot de passe (inscription)");
+      setConnectOrSignUp("Inscris-toi");
     } else {
       setSigninOrSignup("signin");
       setPlaceholderEmail("Entrez votre email (connexion)");
       setPlaceholderPassword("Entrez votre mot de passe (connexion)");
+      setConnectOrSignUp("Connecte-toi");
     }
   };
 
@@ -117,7 +120,7 @@ const LoginScreen: React.FC = () => {
           <Image style={styles.logo} source={require("../assets/logo.png")} />
         </Text>
 
-        <Text style={styles.title}>Connecte-toi !</Text>
+        <Text style={styles.title}>{connectOrSignUp} !</Text>
       </View>
 
       {/* Social Icons */}
@@ -129,7 +132,7 @@ const LoginScreen: React.FC = () => {
         <FontAwesome name="facebook" size={28} color="#3d4eaf" />
       </View>
 
-      <Text style={styles.subtitle}>ou connecte-toi avec ton email !</Text>
+      <Text style={styles.subtitle}>ou {connectOrSignUp} avec ton email !</Text>
 
       {/* Email Login */}
       <View style={styles.form}>

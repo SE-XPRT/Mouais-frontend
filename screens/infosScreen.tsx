@@ -1,5 +1,13 @@
-import React from "react";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  TextInput,
+} from "react-native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 const backgroundColor = "#2a2a30"; // couleur sombre corrigée
@@ -9,8 +17,20 @@ const cardBg = "#fff";
 const cardBorder = "#e0e0e0";
 const labelColor = "#888";
 const valueColor = "#232526";
+const screenHeight = Dimensions.get("window").height;
 
 export default function InfosScreen() {
+  const [editMode, setEditMode] = useState(false);
+  const [editStyle, setEditStyle] = useState({
+    backgroundColor: "#fff",
+  });
+  const editTextInput = () => {
+    setEditMode(!editMode);
+    setEditStyle({
+      backgroundColor:
+        editStyle.backgroundColor === "#fff" ? "#f0f0f0" : "#fff",
+    });
+  };
   return (
     <View style={styles.bg}>
       <View style={styles.container}>
@@ -22,48 +42,69 @@ export default function InfosScreen() {
           <Text style={styles.username}>[Nom d'utilisateur]</Text>
         </View>
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>Mes informations</Text>
-          <View style={styles.infoRow}>
-            <Text style={styles.label}>Nom :</Text>
-            <Text style={styles.value}>[Nom]</Text>
+          <View
+            style={{
+              alignItems: "center",
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: "row",
+              marginBottom: 15,
+            }}
+          >
+            <Text style={styles.cardTitle}>Mes informations</Text>
             <FontAwesome
               name="edit"
               size={20}
               color={accentColor}
-              style={{ marginLeft: "auto" }}
+              onPress={() => editTextInput()}
+            />
+          </View>
+
+          <View style={styles.infoRow}>
+            <Text style={styles.label}>Nom :</Text>
+            <TextInput
+              style={{
+                ...styles.value,
+                backgroundColor: editStyle.backgroundColor,
+              }}
+              editable={editMode}
+              placeholder="Nom"
             />
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>Prénom :</Text>
-            <Text style={styles.value}>[Prénom]</Text>
-            <FontAwesome
-              name="edit"
-              size={20}
-              color={accentColor}
-              style={{ marginLeft: "auto" }}
+            <TextInput
+              style={{
+                ...styles.value,
+                backgroundColor: editStyle.backgroundColor,
+              }}
+              editable={editMode}
+              placeholder="Prénom"
             />
           </View>
           <View style={styles.infoRow}>
-            <Text style={styles.label}>Date de naissance :</Text>
-            <Text style={styles.value}>[Date de naissance]</Text>
-            <FontAwesome
-              name="edit"
-              size={20}
-              color={accentColor}
-              style={{ marginLeft: "auto" }}
+            <Text style={styles.label}>Age</Text>
+            <TextInput
+              style={{
+                ...styles.value,
+                backgroundColor: editStyle.backgroundColor,
+              }}
+              editable={editMode}
+              placeholder="Age"
             />
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>Email :</Text>
-            <Text style={styles.value}>[Email]</Text>
-            <FontAwesome
-              name="edit"
-              size={20}
-              color={accentColor}
-              style={{ marginLeft: "auto" }}
+            <TextInput
+              style={{
+                ...styles.value,
+                backgroundColor: editStyle.backgroundColor,
+              }}
+              editable={editMode}
+              placeholder="Email"
             />
           </View>
-        </View>
+        </View>{" "}
         <View style={styles.ButtonContainer}>
           <TouchableOpacity style={styles.Button} onPress={() => {}}>
             <Text style={{ color: "#fff", fontSize: 16 }}>
@@ -88,7 +129,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-    padding: 24,
+    padding: 14,
   },
   avatarContainer: {
     alignItems: "center",
@@ -118,6 +159,7 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
   },
   card: {
+    height: screenHeight * 0.4,
     width: "100%",
     borderRadius: 20,
     padding: 24,
@@ -134,7 +176,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: accentColor,
-    marginBottom: 20,
+    marginBottom: 5,
     alignSelf: "center",
     letterSpacing: 1,
   },
@@ -146,7 +188,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     color: labelColor,
-    width: 140,
+    width: 80,
     fontWeight: "600",
   },
   value: {
@@ -154,11 +196,20 @@ const styles = StyleSheet.create({
     color: valueColor,
     fontWeight: "500",
     flexShrink: 1,
+    width: "90%",
+    marginRight: 8,
+    padding: 5,
+    margin: 5,
+    borderRadius: 10,
+    borderBottomWidth: 1,
+    borderRightWidth: 1,
+    borderColor: "gray",
+    elevation: 3,
   },
   ButtonContainer: {
     marginTop: 20,
     flexDirection: "column",
-    gap: 10,
+    gap: 5,
     display: "flex",
     width: "100%",
     justifyContent: "center",
