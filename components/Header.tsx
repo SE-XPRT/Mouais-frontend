@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   Button,
+  Dimensions,
 } from "react-native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { useNavigation } from "@react-navigation/native";
@@ -15,7 +16,14 @@ type RootStackParamList = {
   Login: undefined;
   // Ajoutez ici d'autres routes si nécessaire
 };
-
+const screenHeight = Dimensions.get("window").height;
+const backgroundColor = "#2a2a30"; // couleur sombre corrigée
+const textColor = "#fff";
+const accentColor = "#8b43f1";
+const cardBg = "#fff";
+const cardBorder = "#e0e0e0";
+const labelColor = "#888";
+const valueColor = "#232526";
 const FontAwesome = _FontAwesome as React.ElementType;
 const Header: React.FC = () => {
   const [showPersonalize, setShowPersonalize] = React.useState(false);
@@ -135,12 +143,14 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   Button: {
-    backgroundColor: "#555",
+    backgroundColor: accentColor,
     padding: 10,
     borderRadius: 5,
     marginBottom: 8,
   },
   menuContainer: {
+    gap: 20,
+    height: screenHeight,
     position: "absolute",
     top: 100,
     width: "100%",
