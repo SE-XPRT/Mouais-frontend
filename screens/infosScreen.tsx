@@ -107,7 +107,7 @@ export default function InfosScreen() {
               placeholder={email}
             />
           </View>
-        </View>{" "}
+        </View>
         <View style={styles.ButtonContainer}>
           <TouchableOpacity style={styles.Button} onPress={() => {}}>
             <Text style={{ color: "#fff", fontSize: 16 }}>
