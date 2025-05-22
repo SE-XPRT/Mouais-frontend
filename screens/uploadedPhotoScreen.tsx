@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Image, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
 type UploadedPhotoScreenRouteProp = {
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#2a2e30",
   },
   image: {
-    width: 300,
-    height: 300,
+    width:  Dimensions.get("window").width - 40,
+    height: Dimensions.get("window").height - 200,
     borderRadius: 20,
     marginBottom: 30,
   },
