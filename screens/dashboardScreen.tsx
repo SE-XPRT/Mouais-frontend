@@ -4,6 +4,7 @@ import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import Constants from "expo-constants";
+import { useSelector } from "react-redux";
 
 type DashboardParams = {
   Dashboard: { token: string };
@@ -13,9 +14,14 @@ const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 export default function DashboardScreen() {
   const navigation = useNavigation();
   const route = useRoute<RouteProp<DashboardParams, "Dashboard">>();
-  const token = route.params?.token; // récupération du token depuis la route GET/ dashboard/:token A REMPLACER PAR LE REDUCER UNE FOIS TERMINE
+  const token = route.params?.token;
 
-  const [userName, setUserName] = useState("");
+  // Récupérer le pseudo depuis le store Redux
+  const storedPseudo = useSelector(
+    (state: { users: { value: { pseudo: string } } }) =>
+      state.users.value.pseudo
+  );
+
   const [averageScore, setAverageScore] = useState<number | null>(null);
   const [bestScore, setBestScore] = useState<number | null>(null);
   const [badgeNames, setBadgeNames] = useState<string[]>([]);
@@ -29,7 +35,6 @@ export default function DashboardScreen() {
       .then((res) => res.json())
       .then((data) => {
         if (data.result) {
-          setUserName(data.userName);
           setAverageScore(data.averageScore);
           setBestScore(data.bestScore);
           setBadgeNames(data.badgeNames);
@@ -50,8 +55,8 @@ export default function DashboardScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.greetings}>
-        Salut <Text style={styles.userName}>{userName || "toi"}</Text>, prêt à
-        tester ton <Text style={styles.aura}>aura</Text> ?
+        Salut <Text style={styles.userName}>{storedPseudo || "toi"}</Text>, prêt
+        à tester ton <Text style={styles.aura}>aura</Text> ?
       </Text>
 
       <View style={styles.cardGrid}>

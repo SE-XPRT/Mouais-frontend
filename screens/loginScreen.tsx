@@ -32,9 +32,9 @@ const FontAwesome = _FontAwesome as React.ElementType;
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
   const dispatch = useDispatch();
-  //test modal à supprimer
+
   const [modalVisible, setModalVisible] = useState(false);
-  // Replace 'RootState' with the actual type of your Redux root state if different
+
   interface RootState {
     users: {
       email: {
@@ -294,8 +294,15 @@ const LoginScreen: React.FC = () => {
       </Text>
       {/* test modal à supprimer */}
       <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Text>Ouvrir la modale</Text>
+        <Text style={styles.modalButtonText}>Ouvrir la modale</Text>
       </TouchableOpacity>
+
+      {/* Ajout du composant ModalBadge */}
+      <ModalBadge
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        message="Tu as débloqué un badge ! 🎉"
+      />
     </SafeAreaView>
   );
 };
@@ -435,6 +442,14 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  modalButtonText: {
+    color: "#fff",
+    textAlign: "center",
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: "#8b43f1",
+    borderRadius: 8,
   },
 });
 
