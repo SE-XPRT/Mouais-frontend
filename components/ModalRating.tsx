@@ -7,10 +7,12 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import AppButton from "./AppButton";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faCoins } from "@fortawesome/free-solid-svg-icons";
 const FontAwesome = _FontAwesome as React.ElementType;
 
-// ProgressBar réutilisable
 function ProgressBar({ percent }: { percent: number }) {
   return (
     <View style={styles.progressBarBackground}>
@@ -69,6 +71,18 @@ export default function ModalRating() {
               <ProgressBar percent={0.5} />
             </View>
           </View>
+          <View style={styles.buttonContainer}>
+            <AppButton
+              title="Retante ta chance"
+              color="#d395ff"
+              textColor="#fff"
+            />
+            <AppButton title="Conseils" color="#FF0084" textColor="#fff" />
+          </View>
+          <View style={styles.coinsLeft}>
+            <FontAwesomeIcon icon={faCoins} size={30} color="#000" />
+            <Text style={styles.coinsLeftText}>Il te reste 2 coins</Text>
+          </View>
         </View>
       </View>
     </Modal>
@@ -102,14 +116,12 @@ const styles = StyleSheet.create({
     left: 30,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "center",
     marginBottom: 20,
     gap: 3,
   },
   gaugesContainer: {
     width: "100%",
     gap: 30,
-    paddingHorizontal: 20,
   },
   gauge: {
     width: "100%",
@@ -130,8 +142,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2a2e30",
   },
   progressBarBackground: {
-    flex: 1,
-    maxWidth: "60%",
+    width: "60%",
     height: 40,
     backgroundColor: "#eee",
     borderRadius: 50,
@@ -143,6 +154,28 @@ const styles = StyleSheet.create({
     borderRadius: 50,
   },
   gaugeText: {
+    fontSize: 20,
+  },
+  buttonContainer: {
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
+    gap: 10,
+    marginTop: 50,
+  },
+  coinsLeft: {
+    width: "80%",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 30,
+    gap: 10,
+    borderWidth:1,
+    padding: 10,
+    borderRadius: 20,
+    marginBottom: "-20%",
+},
+  coinsLeftText: {
     fontSize: 20,
   },
 });
