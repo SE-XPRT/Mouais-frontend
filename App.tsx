@@ -17,12 +17,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider, useDispatch } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import usersReducer, { loadStoredData } from "./reducers/users";
+import users, { loadStoredData } from "./reducers/users";
+import filters from "./reducers/filters";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { users: usersReducer },
+  reducer: { users, filters },
 });
 
 // Composant pour charger les données sauvegardées
