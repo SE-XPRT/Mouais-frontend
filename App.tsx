@@ -15,12 +15,17 @@ import UploadedPhotoScreen from "./screens/uploadedPhotoScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import user from "./reducers/users";
+import users from "./reducers/users";
+import filters from "./reducers/filters";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { users: user },
+  reducer: {
+    users,
+    filters,
+  },
 });
 const TabNavigator = () => {
   return (
