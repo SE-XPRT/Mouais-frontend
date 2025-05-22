@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import AppButton from "./AppButton";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -24,6 +25,7 @@ function ProgressBar({ percent }: { percent: number }) {
 
 export default function ModalRating() {
   const [modalVisible, setModalVisible] = useState(true);
+  const navigation = useNavigation<any>();
   const rating = [];
   for (let i = 0; i < 3; i++) {
     rating.push(<FontAwesome key={i} name="star" size={30} color="#ffac25" />);
@@ -78,6 +80,7 @@ export default function ModalRating() {
                 title="Retante ta chance"
                 color="#d395ff"
                 textColor="#fff"
+                onPress={() => navigation.navigate("TakePic")}
               />
               <AppButton title="Conseils" color="#FF0084" textColor="#fff" />
             </View>
@@ -86,44 +89,37 @@ export default function ModalRating() {
               <Text style={styles.coinsLeftText}>Il te reste 2 coins</Text>
             </View>
             <View style={styles.adviceContainer}>
-                <Text style={styles.adviceTitle}>
-                    Détails :
-                </Text>
+              <Text style={styles.adviceTitle}>Récupitulatif :</Text>
               <Text style={styles.adviceText}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                laboris nisi ut aliquip ex ea commodo consequat. Duis aute
-                irure dolor in reprehenderit in voluptate velit esse cillum
-                dolore eu fugiat nulla pariatur. Excepteur sint occaecat
-                cupidatat non proident, sunt in culpa qui officia deserunt
-                mollit anim id est laborum.
-               
-                </Text>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
+                enim ad minim veniam, quis nostrud exercitation ullamco laboris
+                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
+                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+                sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </Text>
             </View>
           </ScrollView>
         </View>
@@ -242,10 +238,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: "center",
   },
-  adviceTitle:{
+  adviceTitle: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 10,
-  }
+  },
 });
