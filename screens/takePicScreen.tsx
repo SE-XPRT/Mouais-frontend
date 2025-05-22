@@ -4,24 +4,42 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
-import { icon } from "@fortawesome/fontawesome-svg-core";
-import SnapScreen from "../screens/snapscreen";
+import * as ImagePicker from "expo-image-picker";
 
 type RootStackParamList = {
   TakePic: undefined;
   Snap: undefined;
+  UploadedPhoto: { imageUri: string };
 };
 
 export default function TakePicScreen() {
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const pickImage = async () => {
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      alert("Permission d'accéder à la galerie refusée !");
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: "images",
+      allowsEditing: false,
+      quality: 1,
+    });
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      // Redirige vers UploadedPhotoScreen avec l'URI de l'image
+      navigation.navigate("UploadedPhoto", { imageUri: result.assets[0].uri });
+    }
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.iconContainer}>
-        <View style={styles.icons}>
+        <TouchableOpacity style={styles.icons} onPress={pickImage}>
           <FontAwesome name="upload" size={100} color="#fff" />
-        </View>
+        </TouchableOpacity>
         <TouchableOpacity
           style={styles.icons}
           onPress={() => {

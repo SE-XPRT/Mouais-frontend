@@ -11,6 +11,7 @@ import SnapScreen from "./screens/snapscreen";
 import TakePicScreen from "./screens/takePicScreen";
 import InfosScreen from "./screens/infosScreen";
 import LoginScreen from "./screens/loginScreen";
+import UploadedPhotoScreen from "./screens/uploadedPhotoScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { configureStore } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
@@ -89,6 +90,7 @@ export default function App() {
             component={TakePicScreen}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="UploadedPhoto" component={UploadedPhotoScreen} />
           <Stack.Screen name="TabNavigator" component={TabNavigator} />
           <Stack.Screen name="Home" component={DashboardScreen} />
           <Stack.Screen
