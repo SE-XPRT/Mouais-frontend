@@ -1,22 +1,94 @@
-import React from "react";
-import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-
+import React, { useEffect, useRef, useState } from "react";
+import {
+  Modal,
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Animated,
+} from "react-native";
+import ConfettiCannon from "react-native-confetti-cannon";
+import { Audio } from "expo-av";
 type SimpleModalProps = {
   visible: boolean;
   onClose: () => void;
 };
+type ModalBadgeProps = {
+  visible: boolean; // Détermine si la modale est visible
+  onClose: () => void; // Fonction appelée quand on ferme la modale
+  message?: string; // Message affiché dans la modale (optionnel)
+};
+const ModalBadge: React.FC<ModalBadgeProps> = ({
+  visible,
+  onClose,
+  message = "Tu as débloqué un badge ! 🎉", // Message par défaut
+}) => {
+  const scaleAnim = useRef(new Animated.Value(0)).current; // Valeur animée pour effet scale
+  const [showModal, setShowModal] = useState(visible); // État interne pour l'affichage réel
+  const [confettiShot, setConfettiShot] = useState(false); // Contrôle des confettis (1 seule fois)
+  useEffect(() => {
+    // Fonction pour jouer un son lors de l'ouverture
+    const playSound = async () => {
+      try {
+        const { sound } = await Audio.Sound.createAsync(
+          require("../assets/badge-coin-win.mp3") // fichier son
+        );
+        await sound.playAsync();
+      } catch (err) {
+        console.log("Erreur lors de la lecture du son :", err);
+      }
+    };
 
-const SimpleModal: React.FC<SimpleModalProps> = ({ visible, onClose }) => {
+    if (visible) {
+      setShowModal(true); // Affiche la modale
+      setConfettiShot(false); // Réactive les confettis
+
+      // Animation de zoom avant
+      Animated.spring(scaleAnim, {
+        toValue: 1,
+        useNativeDriver: true,
+        friction: 5,
+        tension: 100,
+      }).start();
+
+      playSound(); // 🔊 Joue le son
+    } else {
+      // Animation de zoom arrière
+      Animated.spring(scaleAnim, {
+        toValue: 0,
+        useNativeDriver: true,
+        friction: 5,
+        tension: 100,
+      }).start(() => setShowModal(false)); // Cache la modale après l'animation
+    }
+  }, [visible]);
+
+  // Ne rend rien si la modale est fermée
+  if (!showModal) return null;
   return (
-    <Modal transparent={true} animationType="fade" visible={visible}>
+    <Modal transparent animationType="fade" visible={showModal}>
       <View style={styles.overlay}>
-        <View style={styles.modalContainer}>
-          <Text style={styles.title}>Ceci est une modale simple</Text>
+        {/* 🎉 Confettis une seule fois */}
+        {!confettiShot && (
+          <ConfettiCannon
+            count={80}
+            origin={{ x: 200, y: 0 }}
+            fadeOut
+            explosionSpeed={300}
+            onAnimationEnd={() => setConfettiShot(true)}
+          />
+        )}
 
-          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-            <Text style={styles.closeText}>Fermer</Text>
+        {/* Contenu animé avec effet scale */}
+        <Animated.View
+          style={[styles.modalContainer, { transform: [{ scale: scaleAnim }] }]}
+        >
+          <Text style={styles.message}>{message}</Text>
+
+          <TouchableOpacity style={styles.button} onPress={onClose}>
+            <Text style={styles.buttonText}>Fermer</Text>
           </TouchableOpacity>
-        </View>
+        </Animated.View>
       </View>
     </Modal>
   );
@@ -25,30 +97,32 @@ const SimpleModal: React.FC<SimpleModalProps> = ({ visible, onClose }) => {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.3)", // Fond assombri
+    backgroundColor: "rgba(0,0,0,0.5)", // Fond noir semi-transparent
     justifyContent: "center",
     alignItems: "center",
   },
   modalContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    padding: 20,
     width: "80%",
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    padding: 20,
     alignItems: "center",
   },
-  title: {
+  message: {
     fontSize: 18,
+    textAlign: "center",
     marginBottom: 20,
   },
-  closeButton: {
-    paddingVertical: 10,
+  button: {
+    backgroundColor: "#333",
     paddingHorizontal: 20,
-    backgroundColor: "#ccc",
-    borderRadius: 5,
+    paddingVertical: 10,
+    borderRadius: 8,
   },
-  closeText: {
-    color: "#000",
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
   },
 });
 
-export default SimpleModal;
+export default ModalBadge;
