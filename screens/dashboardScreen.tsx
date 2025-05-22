@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 type DashboardParams = {
   Dashboard: { token: string };
 };
-const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? ""; // pour aller chercher l'info dans le fichier app.config.js qui elle va chercher la variable d'environnement.
 
 export default function DashboardScreen() {
   const navigation = useNavigation();
