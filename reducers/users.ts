@@ -1,28 +1,53 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-type UserState = {
+const initialState = {
   value: {
-    token: string | null;
-    email: string | null;
-  };
+    email: "",
+    token: "",
+    pseudo: "",
+  },
 };
 
-const initialState: UserState = {
-  value: { token: null, email: null },
-};
-
-export const userSlice = createSlice({
+export const usersSlice = createSlice({
   name: "users",
   initialState,
   reducers: {
-    updateEmail: (state: UserState, action: PayloadAction<string>) => {
+    updateEmail: (state, action) => {
       state.value.email = action.payload;
+      // Sauvegarder l'email dans AsyncStorage
+      AsyncStorage.setItem("userEmail", action.payload);
     },
-    updateToken: (state: UserState, action: PayloadAction<string>) => {
+    updateToken: (state, action) => {
       state.value.token = action.payload;
+      // Sauvegarder le token dans AsyncStorage
+      AsyncStorage.setItem("userToken", action.payload);
+    },
+    updatePseudo: (state, action) => {
+      state.value.pseudo = action.payload;
+      // On ne sauvegarde plus le pseudo dans AsyncStorage
+    },
+    logout: (state) => {
+      state.value.email = "";
+      state.value.token = "";
+      state.value.pseudo = "";
+      // On ne supprime plus le pseudo de AsyncStorage car il n'y est plus stocké
+      AsyncStorage.multiRemove(["userEmail", "userToken"]);
+    },
+    // Nouveau reducer pour charger les données sauvegardées
+    loadStoredData: (state, action) => {
+      state.value.email = action.payload.email || "";
+      state.value.token = action.payload.token || "";
+      state.value.pseudo = "";
     },
   },
 });
 
-export const { updateEmail, updateToken } = userSlice.actions;
-export default userSlice.reducer;
+export const {
+  updateEmail,
+  updateToken,
+  updatePseudo,
+  logout,
+  loadStoredData,
+} = usersSlice.actions;
+export default usersSlice.reducer;

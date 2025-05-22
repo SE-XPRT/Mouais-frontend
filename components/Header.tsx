@@ -13,6 +13,7 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";
 import { updateToken, updateEmail } from "../reducers/users";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type RootStackParamList = {
   Login: undefined;
@@ -117,6 +118,7 @@ const Header: React.FC = () => {
             onPress={() => {
               dispatch(updateToken(""));
               dispatch(updateEmail(""));
+              AsyncStorage.removeItem("userData");
               navigation.navigate("Login");
             }}
           >
@@ -133,6 +135,8 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#2a2e30",
     alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "rgba(255,255,255,0.1)",
   },
   logo: {
     width: 200,
@@ -146,29 +150,43 @@ const styles = StyleSheet.create({
     right: 16,
     top: 50,
     color: "#fff",
+    backgroundColor: accentColor,
+    padding: 10,
+    borderRadius: 8,
   },
   Button: {
     backgroundColor: accentColor,
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 8,
+    paddingVertical: 16,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    marginBottom: 14,
+    borderWidth: 2,
+    borderColor: "rgba(255,255,255,0.25)",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+    elevation: 8,
+    alignItems: "center",
+    justifyContent: "center",
   },
   menuContainer: {
-    gap: 20,
-    height: screenHeight,
+    gap: 12,
     position: "absolute",
-    top: 100,
-    width: "100%",
-    right: 16,
-    backgroundColor: "#333",
-    borderRadius: 8,
-    padding: 16,
+    top: 85,
+    width: "92%",
+    right: 15,
+    backgroundColor: "#25272c",
+    borderRadius: 14,
+    padding: 24,
     shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
-    zIndex: 10,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.35,
+    shadowRadius: 8,
+    elevation: 10,
+    zIndex: 1000,
+    borderWidth: 1.5,
+    borderColor: "rgba(255,255,255,0.2)",
   },
 });
 

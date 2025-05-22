@@ -1,3 +1,4 @@
+import React, { useEffect } from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -13,15 +14,66 @@ import InfosScreen from "./screens/infosScreen";
 import LoginScreen from "./screens/loginScreen";
 import UploadedPhotoScreen from "./screens/uploadedPhotoScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Provider, useDispatch } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
-import { Provider } from "react-redux";
-import user from "./reducers/users";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import usersReducer, { loadStoredData } from "./reducers/users";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { users: user },
+  reducer: { users: usersReducer },
 });
+
+// Composant pour charger les données sauvegardées
+const AppContent = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadStoredUserData = async () => {
+      try {
+        const storedEmail = await AsyncStorage.getItem("userEmail");
+        const storedToken = await AsyncStorage.getItem("userToken");
+
+        if (storedEmail && storedToken) {
+          dispatch(
+            loadStoredData({
+              email: storedEmail,
+              token: storedToken,
+            })
+          );
+        }
+      } catch (error) {
+        console.error("Erreur lors du chargement des données:", error);
+      }
+    };
+
+    loadStoredUserData();
+  }, []);
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Snap" component={SnapScreen} />
+        <Stack.Screen
+          name="TakePic"
+          component={TakePicScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="UploadedPhoto" component={UploadedPhotoScreen} />
+        <Stack.Screen name="TabNavigator" component={TabNavigator} />
+        <Stack.Screen name="Home" component={DashboardScreen} />
+        <Stack.Screen
+          name="Infos"
+          component={InfosScreen}
+          options={{ headerShown: false }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
+
 const TabNavigator = () => {
   return (
     <Tab.Navigator
@@ -78,28 +130,11 @@ const TabNavigator = () => {
     </Tab.Navigator>
   );
 };
+
 export default function App() {
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Snap" component={SnapScreen} />
-          <Stack.Screen
-            name="TakePic"
-            component={TakePicScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen name="UploadedPhoto" component={UploadedPhotoScreen} />
-          <Stack.Screen name="TabNavigator" component={TabNavigator} />
-          <Stack.Screen name="Home" component={DashboardScreen} />
-          <Stack.Screen
-            name="Infos"
-            component={InfosScreen}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AppContent />
     </Provider>
   );
 }

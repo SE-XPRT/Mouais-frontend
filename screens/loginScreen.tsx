@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   View,
@@ -18,9 +18,8 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
 //test modal import à supprimer
 import ModalBadge from "../components/ModalBadge";
-import { useDispatch } from "react-redux";
-import { updateToken, updateEmail } from "../reducers/users";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { updateToken, updateEmail, logout } from "../reducers/users";
 type RootStackParamList = {
   TabNavigator: undefined;
   // ajoutez ici d'autres routes si nécessaire
@@ -45,73 +44,130 @@ const LoginScreen: React.FC = () => {
   }
   const emailData = useSelector((state: any) => state.users.value.email);
   const tokenData = useSelector((state: any) => state.users.value.token);
-  const [placeholderEmail, setPlaceholderEmail] =
-    useState("Entrez votre email");
-  const [placeholderPassword, setPlaceholderPassword] = useState(
-    "Entrez votre mot de passe"
-  );
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const [signinOrSignup, setSigninOrSignup] = useState<"signin" | "signup">(
     "signin"
   );
 
-  const changeAuthentification = () => {
-    if (signinOrSignup === "signin") {
-      setSigninOrSignup("signup");
-      setPlaceholderEmail("Entrez votre email(inscription)");
-      setPlaceholderPassword("Entrez votre mot de passe (inscription)");
-    } else {
-      setSigninOrSignup("signin");
-      setPlaceholderEmail("Entrez votre email (connexion)");
-      setPlaceholderPassword("Entrez votre mot de passe (connexion)");
+  // Regex pour la validation
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^.{5,}$/;
+
+  const validateEmail = (email: string) => {
+    if (!email) {
+      setEmailError("L'email est requis");
+      return false;
     }
+    if (!emailRegex.test(email)) {
+      setEmailError("Format d'email invalide");
+      return false;
+    }
+    setEmailError("");
+    return true;
   };
+
+  const validatePassword = (password: string) => {
+    if (!password) {
+      setPasswordError("Le mot de passe est requis");
+      return false;
+    }
+    if (!passwordRegex.test(password)) {
+      setPasswordError("Le mot de passe doit contenir au moins 5 caractères");
+      return false;
+    }
+    setPasswordError("");
+    return true;
+  };
+
+  const changeAuthentification = () => {
+    setSigninOrSignup(signinOrSignup === "signin" ? "signup" : "signin");
+    // Réinitialiser les erreurs lors du changement de mode
+    setEmailError("");
+    setPasswordError("");
+  };
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-  //stockage de l'email
-  const [email, setEmail] = useState("");
-  //stockage du mot de passe
-  const [password, setPassword] = useState("");
-  //fonction qui sera appellée quand on clique sur "connexion"
+
+  const token = useSelector((state: any) => state.users.value.token);
+
+  // Fonction de déconnexion
+  const handleLogout = async () => {
+    try {
+      // Appeler le backend pour la déconnexion si nécessaire
+      if (token) {
+        await fetch(`${API_URL}/users/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token }),
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+    } finally {
+      // Nettoyer le store Redux et AsyncStorage
+      dispatch(logout());
+      // Réinitialiser les états locaux
+      setEmail("");
+      setPassword("");
+      setEmailError("");
+      setPasswordError("");
+    }
+  };
+
+  // Rediriger vers TabNavigator si l'utilisateur est déjà connecté
+  useEffect(() => {
+    if (token) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "TabNavigator" }],
+      });
+    }
+  }, [token]);
+
   const handleSignin = async () => {
-    //envoi d'une requete POST au back
-    //console.log("Connexion en cours...");
-    console.log(email, password);
+    // Valider les champs avant l'envoi
+    const isEmailValid = validateEmail(email);
+    const isPasswordValid = validatePassword(password);
+
+    if (!isEmailValid || !isPasswordValid) {
+      return;
+    }
+
     try {
       const response = await fetch(`${API_URL}/users/${signinOrSignup}`, {
-        method: "POST", // Méthode HTTP
+        method: "POST",
         headers: {
-          "Content-Type": "application/json", // On précise qu'on envoie du JSON
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email,
           password,
-        }), // On envoie l'email et le mot de passe
+        }),
       });
-      console.log(response);
 
       if (!response.ok) {
         throw new Error("Erreur réseau ou serveur");
       }
 
-      // On récupère la réponse du back
       const data = await response.json();
 
-      // Si la réponse est OK
       if (data.result) {
-        // Alert.alert("Connexion réussie ✅", `Token: ${data.token}`);
         dispatch(updateToken(data.token));
-        dispatch(updateEmail(data.email));
+        dispatch(updateEmail(email));
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigator" }],
         });
       } else {
-        // Sinon, afficher l'erreur retournée par le backend
-        // Alert.alert("Erreur ❌", data.error);
         setEmail("");
         setPassword("");
-        setPlaceholderEmail("Moauis ressaie ton email");
-        setPlaceholderPassword("Et ton mot de passe aussi !");
+        Alert.alert("Erreur", data.error || "Erreur de connexion");
       }
     } catch (error: any) {
       Alert.alert(
@@ -158,37 +214,55 @@ const LoginScreen: React.FC = () => {
         <FontAwesome name="facebook" size={28} color="#3d4eaf" />
       </View>
 
-      <Text style={styles.subtitle}>ou connecte-toi avec ton email !</Text>
+      <Text style={styles.subtitle}>
+        {signinOrSignup === "signin"
+          ? "Connecte-toi avec ton email !"
+          : "Crée ton compte avec ton email !"}
+      </Text>
 
-      {/* Email Login */}
       <View style={styles.form}>
-        <TextInput
-          placeholder={placeholderEmail}
-          placeholderTextColor="#333"
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          placeholder={placeholderPassword}
-          placeholderTextColor="#333"
-          secureTextEntry
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-        />
-        <View style={{ marginTop: 10 }}>
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={() => handleSignin()}
-          >
-            <Text style={styles.loginButtonText}>C’est parti ! ➤</Text>
-          </TouchableOpacity>
+        <View>
+          <TextInput
+            placeholder="Entrez votre email"
+            placeholderTextColor="#333"
+            style={[styles.input, emailError ? styles.inputError : null]}
+            value={email}
+            onChangeText={(text) => {
+              setEmail(text);
+              if (emailError) validateEmail(text);
+            }}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
+          {emailError ? (
+            <Text style={styles.errorText}>{emailError}</Text>
+          ) : null}
         </View>
 
-        <TouchableOpacity>
-          <Text style={styles.forgotPassword}>Forgot Password?</Text>
-        </TouchableOpacity>
+        <View>
+          <TextInput
+            placeholder="Entrez votre mot de passe"
+            placeholderTextColor="#333"
+            secureTextEntry
+            style={[styles.input, passwordError ? styles.inputError : null]}
+            value={password}
+            onChangeText={(text) => {
+              setPassword(text);
+              if (passwordError) validatePassword(text);
+            }}
+          />
+          {passwordError ? (
+            <Text style={styles.errorText}>{passwordError}</Text>
+          ) : null}
+        </View>
+
+        <View style={{ marginTop: 10 }}>
+          <TouchableOpacity style={styles.loginButton} onPress={handleSignin}>
+            <Text style={styles.loginButtonText}>
+              {signinOrSignup === "signin" ? "Se connecter" : "S'inscrire"} ➤
+            </Text>
+          </TouchableOpacity>
+        </View>
 
         <TouchableOpacity
           style={styles.signupButton}
@@ -200,11 +274,12 @@ const LoginScreen: React.FC = () => {
               : "Déjà un compte ? Connecte-toi !"}
           </Text>
         </TouchableOpacity>
-        {/* test modal à supprimer */}
-        <ModalBadge
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-        />
+
+        {token && (
+          <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
+            <Text style={styles.logoutButtonText}>Se déconnecter</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <Text
         style={styles.guestMode}
@@ -338,6 +413,28 @@ const styles = StyleSheet.create({
     marginTop: 15,
     fontStyle: "italic",
     color: "#ffffff",
+  },
+  inputError: {
+    borderColor: "#ff4757",
+    borderWidth: 1,
+  },
+  errorText: {
+    color: "#ff4757",
+    fontSize: 12,
+    marginTop: 4,
+    marginLeft: 4,
+  },
+  logoutButton: {
+    backgroundColor: "#ff4757",
+    paddingVertical: 12,
+    borderRadius: 5,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  logoutButtonText: {
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
