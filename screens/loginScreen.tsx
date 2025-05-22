@@ -9,12 +9,14 @@ import {
   StyleSheet,
   SafeAreaView,
   Alert,
+  Button,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
-
+//test modal import à supprimer
+import SimpleModal from "../components/ModalBadge";
 import { useDispatch } from "react-redux";
 import { updateToken, updateEmail } from "../reducers/users";
 import { useSelector } from "react-redux";
@@ -30,6 +32,8 @@ const FontAwesome = _FontAwesome as React.ElementType;
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
   const dispatch = useDispatch();
+  //test modal à supprimer
+  const [modalVisible, setModalVisible] = useState(false);
   // Replace 'RootState' with the actual type of your Redux root state if different
   interface RootState {
     users: {
@@ -177,6 +181,11 @@ const LoginScreen: React.FC = () => {
               : "Déjà un compte ? Connecte-toi !"}
           </Text>
         </TouchableOpacity>
+        {/* test modal à supprimer */}
+        <SimpleModal
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+        />
       </View>
       <Text
         style={styles.guestMode}
@@ -189,6 +198,10 @@ const LoginScreen: React.FC = () => {
       >
         Commencer en mode invité
       </Text>
+      {/* test modal à supprimer */}
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
+        <Text>Ouvrir la modale</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
