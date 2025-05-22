@@ -9,6 +9,8 @@ import {
 } from "react-native";
 import ConfettiCannon from "react-native-confetti-cannon";
 import { Audio } from "expo-av";
+import _FontAwesome from "@react-native-vector-icons/fontawesome";
+const FontAwesome = _FontAwesome as React.ElementType;
 type SimpleModalProps = {
   visible: boolean;
   onClose: () => void;
@@ -68,7 +70,6 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
   return (
     <Modal transparent animationType="fade" visible={showModal}>
       <View style={styles.overlay}>
-        {/* 🎉 Confettis une seule fois */}
         {!confettiShot && (
           <ConfettiCannon
             count={80}
@@ -79,14 +80,36 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
           />
         )}
 
-        {/* Contenu animé avec effet scale */}
         <Animated.View
           style={[styles.modalContainer, { transform: [{ scale: scaleAnim }] }]}
         >
-          <Text style={styles.message}>{message}</Text>
+          {/* ❌ Bouton de fermeture */}
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <FontAwesome name="close" size={20} color="#8b43f1" />
+          </TouchableOpacity>
 
-          <TouchableOpacity style={styles.button} onPress={onClose}>
-            <Text style={styles.buttonText}>Fermer</Text>
+          {/* 🎉 Titre principal */}
+          <Text style={styles.title}>Bravo BG !</Text>
+
+          {/* 🏆 Icône trophée */}
+          <FontAwesome
+            name="trophy"
+            size={40}
+            color="#29ffc6"
+            style={styles.icon}
+          />
+
+          {/* 💬 Message badge */}
+          <Text style={styles.description}>
+            GG tu viens de débloquer le badge {"\n"}"Glow Babe"
+          </Text>
+
+          {/* 🔗 Lien vers badges */}
+          <Text style={styles.link}>Voir tous mes badges</Text>
+
+          {/* 👁 Bouton œil */}
+          <TouchableOpacity style={styles.eyeButton}>
+            <FontAwesome name="eye" size={28} color="#ff0084" />
           </TouchableOpacity>
         </Animated.View>
       </View>
@@ -94,34 +117,51 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
   );
 };
 
+// 🎨 Styles avec ta charte
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.5)", // Fond noir semi-transparent
+    backgroundColor: "rgba(0,0,0,0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#fff",
-    borderRadius: 15,
-    padding: 20,
+    backgroundColor: "#ffffff",
+    borderRadius: 20,
+    padding: 25,
     alignItems: "center",
+    position: "relative",
   },
-  message: {
-    fontSize: 18,
+  closeButton: {
+    position: "absolute",
+    top: 15,
+    right: 15,
+    zIndex: 1,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#2a2e30",
+    marginBottom: 15,
+  },
+  icon: {
+    marginBottom: 15,
+  },
+  description: {
+    fontSize: 16,
     textAlign: "center",
+    color: "#2a2e30",
+    marginBottom: 10,
+  },
+  link: {
+    fontStyle: "italic",
+    color: "#2a2e30",
+    marginTop: 5,
     marginBottom: 20,
   },
-  button: {
-    backgroundColor: "#333",
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 8,
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
+  eyeButton: {
+    marginTop: 10,
   },
 });
 

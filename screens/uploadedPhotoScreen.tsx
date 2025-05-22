@@ -1,6 +1,7 @@
 import React from "react";
-import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions } from "react-native";
+import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions, Modal } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import ModalRating from "../components/ModalRating";
 
 type UploadedPhotoScreenRouteProp = {
   params?: {
@@ -15,6 +16,7 @@ export default function UploadedPhotoScreen() {
 
   return (
     <View style={styles.container}>
+      <ModalRating />
       {imageUri ? (
         <Image source={{ uri: imageUri }} style={styles.image} />
       ) : (
