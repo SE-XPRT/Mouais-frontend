@@ -39,13 +39,13 @@ export default function DashboardScreen() {
       .catch((err) => console.error("Erreur dashboard:", err));
   }, [token]);
 
-  fetch(`${API_URL}/photos/${token}`)
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.result && data.photo?.url) {
-        setPhoto(data.photo.url);
-      }
-    });
+  // fetch(`${API_URL}/photos/${token}`)
+  //   .then((res) => res.json())
+  //   .then((data) => {
+  //     if (data.result && data.photo?.url) {
+  //       setPhoto(data.photo.url);
+  //     }
+  //   });
 
   return (
     <View style={styles.container}>

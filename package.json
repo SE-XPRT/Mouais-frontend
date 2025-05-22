@@ -22,6 +22,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "expo": "~53.0.9",
+    "expo-av": "^15.1.4",
     "expo-camera": "^16.1.6",
     "expo-constants": "~17.1.6",
     "expo-linear-gradient": "~14.1.4",
@@ -30,6 +31,7 @@
     "mongoose": "^8.15.0",
     "react": "19.0.0",
     "react-native": "0.79.2",
+    "react-native-confetti-cannon": "^1.5.2",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
     "react-redux": "^9.2.0"
