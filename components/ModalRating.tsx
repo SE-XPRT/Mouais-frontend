@@ -233,6 +233,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     gap: 10,
     borderColor: "#2a2e30",
+    marginBottom: 20,
   },
   adviceText: {
     fontSize: 20,
