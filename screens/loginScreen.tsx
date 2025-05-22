@@ -10,13 +10,14 @@ import {
   SafeAreaView,
   Alert,
   Button,
+  Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
 //test modal import à supprimer
-import SimpleModal from "../components/ModalBadge";
+import ModalBadge from "../components/ModalBadge";
 import { useDispatch } from "react-redux";
 import { updateToken, updateEmail } from "../reducers/users";
 import { useSelector } from "react-redux";
@@ -182,7 +183,7 @@ const LoginScreen: React.FC = () => {
           </Text>
         </TouchableOpacity>
         {/* test modal à supprimer */}
-        <SimpleModal
+        <ModalBadge
           visible={modalVisible}
           onClose={() => setModalVisible(false)}
         />
