@@ -27,7 +27,7 @@ export default function UploadedPhotoScreen() {
         <Text style={styles.buttonText}>Retour</Text>
       </TouchableOpacity>
     </View>
-  );
+  ); 
 }
 
 const styles = StyleSheet.create({
