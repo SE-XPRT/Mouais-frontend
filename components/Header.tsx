@@ -11,6 +11,8 @@ import {
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { useDispatch } from "react-redux";
+import { updateToken, updateEmail } from "../reducers/users";
 
 type RootStackParamList = {
   Login: undefined;
@@ -26,6 +28,7 @@ const labelColor = "#888";
 const valueColor = "#232526";
 const FontAwesome = _FontAwesome as React.ElementType;
 const Header: React.FC = () => {
+  const dispatch = useDispatch();
   const [showPersonalize, setShowPersonalize] = React.useState(false);
 
   const openMenu = () => {
@@ -112,6 +115,8 @@ const Header: React.FC = () => {
           <TouchableOpacity
             style={styles.Button}
             onPress={() => {
+              dispatch(updateToken(""));
+              dispatch(updateEmail(""));
               navigation.navigate("Login");
             }}
           >

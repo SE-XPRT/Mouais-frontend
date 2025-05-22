@@ -39,6 +39,7 @@ const LoginScreen: React.FC = () => {
     };
   }
   const emailData = useSelector((state: any) => state.users.value.email);
+  const tokenData = useSelector((state: any) => state.users.value.token);
   const [placeholderEmail, setPlaceholderEmail] =
     useState("Entrez votre email");
   const [placeholderPassword, setPlaceholderPassword] = useState(
@@ -114,7 +115,24 @@ const LoginScreen: React.FC = () => {
       );
     }
   };
-
+  const handleDelete = async () => {
+    try {
+      const response = await fetch(`${API_URL}/users/delete${tokenData}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          token: tokenData,
+        }),
+      });
+    } catch (error: any) {
+      Alert.alert(
+        "Erreur de suppression",
+        error.message || "Une erreur est survenue."
+      );
+    }
+  };
   return (
     <SafeAreaView style={styles.container}>
       {/* Logo */}

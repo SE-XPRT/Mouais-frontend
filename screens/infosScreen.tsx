@@ -8,9 +8,13 @@ import {
   Dimensions,
   TextInput,
   ScrollView,
+  Alert,
 } from "react-native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { useSelector } from "react-redux";
+import Constants from "expo-constants";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "@react-navigation/native";
 const FontAwesome = _FontAwesome as React.ElementType;
 const backgroundColor = "#2a2a30"; // couleur sombre corrigée
 const textColor = "#fff";
@@ -20,9 +24,19 @@ const cardBorder = "#e0e0e0";
 const labelColor = "#888";
 const valueColor = "#232526";
 const screenHeight = Dimensions.get("window").height;
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
+type RootStackParamList = {
+  Login: undefined;
+};
 
 export default function InfosScreen() {
-  const email = useSelector((state: any) => state.users.value.email);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const email = useSelector(
+    (state: { users: { value: { email: string } } }) => state.users.value.email
+  );
+  const token = useSelector(
+    (state: { users: { value: { token: string } } }) => state.users.value.token
+  );
   const [editMode, setEditMode] = useState(false);
   const [editStyle, setEditStyle] = useState({
     backgroundColor: "#fff",
@@ -33,6 +47,38 @@ export default function InfosScreen() {
       backgroundColor:
         editStyle.backgroundColor === "#fff" ? "#f0f0f0" : "#fff",
     });
+  };
+  const handleDelete = async () => {
+    Alert.alert(
+      "Suppression",
+      "Voulez-vous vraiment supprimer votre compte ?",
+      [
+        { text: "Annuler", style: "cancel" },
+        {
+          text: "Supprimer",
+          style: "destructive",
+          onPress: async () => {
+            const response = await fetch(
+              `${API_URL}/users/delete?token=${token}`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                  token: token,
+                }),
+              }
+            );
+            if (response.ok) {
+              navigation.navigate("Login");
+            } else {
+              Alert.alert("Erreur", "Une erreur est survenue");
+            }
+          },
+        },
+      ]
+    );
   };
   return (
     <ScrollView contentContainerStyle={styles.bg}>
@@ -107,7 +153,15 @@ export default function InfosScreen() {
               placeholder={email}
             />
           </View>
-        </View>{" "}
+          <TouchableOpacity
+            style={styles.Button}
+            onPress={() => handleDelete()}
+          >
+            <Text style={{ color: "#fff", fontSize: 16 }}>
+              Supprimer mon compte
+            </Text>
+          </TouchableOpacity>
+        </View>
         <View style={styles.ButtonContainer}>
           <TouchableOpacity style={styles.Button} onPress={() => {}}>
             <Text style={{ color: "#fff", fontSize: 16 }}>
