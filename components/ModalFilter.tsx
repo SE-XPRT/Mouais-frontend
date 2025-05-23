@@ -5,13 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleZone, setTone } from "../reducers/filters";
 import Constants from "expo-constants";
 import Slider from "@react-native-community/slider";
-import type { RootState } from "../App";
+import type { RootState } from "../App"; // Type global du store Redux
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
+// pour aller chercher l'info dans le fichier app.config.js qui elle va chercher la variable d'environnement.
 
-type FilterModalProps = {
-  visible: boolean;
-  onClose: () => void;
+type FilterModalProps = { // Création du type FilterModalProps avec 2 props
+  visible: boolean; // Pour afficher ou cacher la modale
+  onClose: () => void; // Fonction qui ne prend rien en paramètre et ne retourne rien (à appeler quand on veut fermer la modale)
 };
 
 const FilterModal = ({ visible, onClose }: FilterModalProps) => {
@@ -19,7 +20,7 @@ const FilterModal = ({ visible, onClose }: FilterModalProps) => {
   const filters = useSelector((state: RootState) => state.filters);
 
   const zonesList = Object.keys(filters.zones) as Array<
-    keyof typeof filters.zones
+    keyof typeof filters.zones // Récupérer la liste des noms des zones en précisant à TypeScript de les considérer comme les clés réelles de l'objet filters.zones.
   >;
 
   const [zonesOpen, setZonesOpen] = React.useState(false);
@@ -55,28 +56,29 @@ const FilterModal = ({ visible, onClose }: FilterModalProps) => {
           </TouchableOpacity>
           <Text style={styles.title}>Filtres</Text>
 
-          <Text style={styles.label} onPress={() => setZonesOpen(!zonesOpen)}>
+          <Text style={styles.label} onPress={() => setZonesOpen(!zonesOpen)}> 
+            // On inverse la valeur de zonesOpen : toggle ON/OFF
             Que veux-tu qu’on juge ? {zonesOpen ? "▲" : "▼"}
           </Text>
 
-          {zonesOpen && (
+          {zonesOpen && ( // Si zonesOpen est true, on cette partie
             <View style={styles.zonesList}>
-              {zonesList.map((zone) => (
+              {zonesList.map((zone) => ( // On map sur chaque zone (cheveux, smile...)
                 <View key={zone} style={styles.checkboxContainer}>
                   <TouchableOpacity
                     key={String(zone)}
                     style={[
                       styles.neumorphicCheckbox,
-                      filters.zones[zone] && { backgroundColor: "#8B43F1" },
+                      filters.zones[zone] && { backgroundColor: "#8B43F1" }, 
                     ]}
                     onPress={() => dispatch(toggleZone(zone))}
                   >
                     {filters.zones[zone] && (
                       <Text style={{ color: "#fff" }}>✔</Text>
-                    )}
-                  </TouchableOpacity>
+                    )} 
+                  </TouchableOpacity> // Si zone activée dans Redux, elle devient violette avec un ✔
                   <Text style={styles.checkboxLabel}>
-                    {zone.charAt(0).toUpperCase() + zone.slice(1)}
+                    {zone.charAt(0).toUpperCase() + zone.slice(1)} // Première lettre du nom en majuscule
                   </Text>
                 </View>
               ))}
@@ -94,7 +96,9 @@ const FilterModal = ({ visible, onClose }: FilterModalProps) => {
                 maximumValue={100}
                 step={1}
                 value={filters.tone}
-                onValueChange={(value) => dispatch(setTone(value))}
+                onValueChange={(value) => dispatch(setTone(value))} 
+                // Quand le user bouge le slider, on envoie l'info à Redux via l'action setTone.
+                // On dispatche dans dans Redux pour stocker ça et l'envoyer au backend
                 minimumTrackTintColor="#8B43F1"
                 maximumTrackTintColor="#555"
                 thumbTintColor="#fff"
@@ -126,16 +130,16 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 24,
     shadowColor: "#000",
-    shadowOffset: { width: -6, height: -6 },
+    shadowOffset: { width: -6, height: -6 }, // L'ombre se projette vers le haut et la gauche
     shadowOpacity: 0.6,
-    shadowRadius: 10,
-    elevation: 10,
+    shadowRadius: 10, // Flou de l'ombre
+    elevation: 10, // Effet d'élévation (pour Android uniquement)
   },
   closeButton: {
     position: "absolute",
     top: 10,
     right: 10,
-    zIndex: 1,
+    zIndex: 1, // Comme des calques : le plus élevé passe sur les autres éléments
     width: 32,
     height: 32,
     alignItems: "center",
@@ -144,7 +148,7 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "#fff",
     fontSize: 24,
-    lineHeight: 24,
+    lineHeight: 24, // Définit la hauteur entre les lignes du texte
   },
   title: {
     fontSize: 26,
