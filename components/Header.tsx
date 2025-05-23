@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";
 import { updateToken, updateEmail } from "../reducers/users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import FilterModal from "./ModalFilter";
 
 type RootStackParamList = {
   Login: undefined;
@@ -30,13 +31,19 @@ const valueColor = "#232526";
 const FontAwesome = _FontAwesome as React.ElementType;
 const Header: React.FC = () => {
   const dispatch = useDispatch();
-  const [showPersonalize, setShowPersonalize] = React.useState(false);
+  const [showPersonalize, setShowPersonalize] = useState(false);
+  const [showFiltersModal, setShowFiltersModal] = useState(false);
 
   const openMenu = () => {
     // Handle menu opening
     console.log("Menu opened");
     setShowPersonalize((prev) => !prev);
   };
+
+  const openFilters = () => {
+    setShowFiltersModal(true);
+  };
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   return (
@@ -78,9 +85,7 @@ const Header: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => {
-              console.log("Button clicked");
-            }}
+            onPress={openFilters} // Ouverture de la modal
           >
             <Text style={{ color: "#fff", fontSize: 16 }}>
               Mes filtres & favoris
@@ -126,6 +131,10 @@ const Header: React.FC = () => {
           </TouchableOpacity>
         </View>
       )}
+      <FilterModal
+        visible={showFiltersModal}
+        onClose={() => setShowFiltersModal(false)}
+      />
     </View>
   );
 };

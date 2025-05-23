@@ -169,3 +169,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export type RootState = ReturnType<typeof store.getState>;
