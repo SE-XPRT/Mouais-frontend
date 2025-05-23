@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
-import Checkbox from "expo-checkbox";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleZone, setTone } from "../reducers/filters";
 import Constants from "expo-constants";
@@ -10,27 +9,43 @@ import type { RootState } from "../App"; // Type global du store Redux
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 // pour aller chercher l'info dans le fichier app.config.js qui elle va chercher la variable d'environnement.
 
-type FilterModalProps = { // Création du type FilterModalProps avec 2 props
+type FilterModalProps = {
+  // Création du type FilterModalProps avec 2 props
   visible: boolean; // Pour afficher ou cacher la modale
   onClose: () => void; // Fonction qui ne prend rien en paramètre et ne retourne rien (à appeler quand on veut fermer la modale)
+  token: string;
+  photoId: string;
 };
 
-const FilterModal = ({ visible, onClose }: FilterModalProps) => {
+const FilterModal = ({
+  visible,
+  onClose,
+  token,
+  photoId,
+}: FilterModalProps) => {
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.filters);
 
+  // Récupération de la liste des zones à partir de l'état Redux,
+  // en forçant TypeScript à comprendre que ce sont les clés de filters.zones
   const zonesList = Object.keys(filters.zones) as Array<
-    keyof typeof filters.zones // Récupérer la liste des noms des zones en précisant à TypeScript de les considérer comme les clés réelles de l'objet filters.zones.
+    keyof typeof filters.zones
   >;
 
+  // État local pour afficher/cacher la liste des zones à filtrer
   const [zonesOpen, setZonesOpen] = React.useState(false);
 
+  // Fonction qui envoie les filtres au backend via POST
   const handleAnalyze = async () => {
+    console.log("Bouton Appliquer cliqué");
     try {
+      console.log(API_URL);
       const response = await fetch(`${API_URL}/photos/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
+          token,
+          photoId,
           filters: {
             zones: filters.zones,
             tone: filters.tone,
@@ -40,10 +55,11 @@ const FilterModal = ({ visible, onClose }: FilterModalProps) => {
 
       const data = await response.json();
       console.log("Réponse backend :", data);
-
-      onClose(); // Fermer la modale après l’envoi
     } catch (error) {
       console.error("Erreur lors de l'analyse :", error);
+    } finally {
+      console.log("onClose called");
+      onClose(); // Toujours fermer la modale, succès ou échec
     }
   };
 
@@ -55,38 +71,36 @@ const FilterModal = ({ visible, onClose }: FilterModalProps) => {
             <Text style={styles.closeButtonText}>×</Text>
           </TouchableOpacity>
           <Text style={styles.title}>Filtres</Text>
-
-          <Text style={styles.label} onPress={() => setZonesOpen(!zonesOpen)}> 
-            // On inverse la valeur de zonesOpen : toggle ON/OFF
+          {/* Dans le rendu, on affiche un toggle pour afficher ou non les zones */}
+          <Text style={styles.label} onPress={() => setZonesOpen(!zonesOpen)}>
             Que veux-tu qu’on juge ? {zonesOpen ? "▲" : "▼"}
           </Text>
-
-          {zonesOpen && ( // Si zonesOpen est true, on cette partie
+          {/* Si zonesOpen est true, on map sur toutes les zones,
+    et pour chacune, on affiche un checkbox "customisé" */}
+          {zonesOpen && (
             <View style={styles.zonesList}>
-              {zonesList.map((zone) => ( // On map sur chaque zone (cheveux, smile...)
+              {zonesList.map((zone) => (
                 <View key={zone} style={styles.checkboxContainer}>
                   <TouchableOpacity
-                    key={String(zone)}
                     style={[
                       styles.neumorphicCheckbox,
-                      filters.zones[zone] && { backgroundColor: "#8B43F1" }, 
+                      filters.zones[zone] && { backgroundColor: "#8B43F1" },
                     ]}
-                    onPress={() => dispatch(toggleZone(zone))}
+                    onPress={() => dispatch(toggleZone(zone))} // toggle dans Redux
                   >
+                    {/* Si la zone est sélectionnée, afficher un ✔ */}
                     {filters.zones[zone] && (
                       <Text style={{ color: "#fff" }}>✔</Text>
-                    )} 
-                  </TouchableOpacity> // Si zone activée dans Redux, elle devient violette avec un ✔
+                    )}
+                  </TouchableOpacity>
                   <Text style={styles.checkboxLabel}>
-                    {zone.charAt(0).toUpperCase() + zone.slice(1)} // Première lettre du nom en majuscule
+                    {zone.charAt(0).toUpperCase() + zone.slice(1)}
                   </Text>
                 </View>
               ))}
             </View>
           )}
-
           <Text style={styles.label}>Degré de gentillesse</Text>
-
           <View style={styles.sliderWrapper}>
             <Text style={styles.sliderLabel}>Sois cash</Text>
             <View style={styles.sliderContainer}>
@@ -96,7 +110,7 @@ const FilterModal = ({ visible, onClose }: FilterModalProps) => {
                 maximumValue={100}
                 step={1}
                 value={filters.tone}
-                onValueChange={(value) => dispatch(setTone(value))} 
+                onValueChange={(value) => dispatch(setTone(value))}
                 // Quand le user bouge le slider, on envoie l'info à Redux via l'action setTone.
                 // On dispatche dans dans Redux pour stocker ça et l'envoyer au backend
                 minimumTrackTintColor="#8B43F1"
@@ -106,7 +120,6 @@ const FilterModal = ({ visible, onClose }: FilterModalProps) => {
             </View>
             <Text style={styles.sliderLabel}>Sois gentil steuplé !</Text>
           </View>
-
           <TouchableOpacity style={styles.applyButton} onPress={handleAnalyze}>
             <Text style={styles.applyText}>Appliquer</Text>
           </TouchableOpacity>

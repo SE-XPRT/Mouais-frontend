@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import {
   View,
   Text,
@@ -46,6 +47,11 @@ const Header: React.FC = () => {
 
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const user = useSelector((state: any) => state.users);
+  const token = user.token;
+  const photoId = user.photoId;
+
   return (
     <View style={styles.header}>
       <Image style={styles.logo} source={require("../assets/logo.png")} />
@@ -116,7 +122,7 @@ const Header: React.FC = () => {
               console.log("Button clicked");
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 16 }}>Mes badges</Text>
+            <Text style={{ color: "#fff", fontSize: 16 }}>Mes stats perso</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.Button}
@@ -134,6 +140,8 @@ const Header: React.FC = () => {
       <FilterModal
         visible={showFiltersModal}
         onClose={() => setShowFiltersModal(false)}
+        token={token}
+        photoId={photoId}
       />
     </View>
   );
