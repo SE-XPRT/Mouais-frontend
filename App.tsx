@@ -56,18 +56,42 @@ const AppContent = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Login" component={LoginScreen} />
-        <Stack.Screen name="Snap" component={SnapScreen} />
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Login"
+          component={LoginScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Snap"
+          component={SnapScreen}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="TakePic"
           component={TakePicScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen name="UploadedPhoto" component={UploadedPhotoScreen} />
-        <Stack.Screen name="TabNavigator" component={TabNavigator} />
-        <Stack.Screen name="Home" component={DashboardScreen} />
-        <Stack.Screen name="subscribe" component={SubscriptionScreen} />
+        <Stack.Screen
+          name="UploadedPhoto"
+          component={UploadedPhotoScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="TabNavigator"
+          component={TabNavigator}
+          options={{ headerShown: false }}
+        />
+        {/* <Stack.Screen
+          name="Home"
+          component={DashboardScreen}
+          options={{ headerShown: false }}
+        /> */}
+        <Stack.Screen
+          name="subscribe"
+          component={SubscriptionScreen}
+          options={{ header: () => <Header /> }}
+        />
         <Stack.Screen
           name="Infos"
           component={InfosScreen}

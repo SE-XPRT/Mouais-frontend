@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { FontAwesome } from "@expo/vector-icons"; // Librairie d'icônes
 import { LinearGradient } from "expo-linear-gradient"; // Composant pour créer un dégradé
-
+import { SafeAreaView } from "react-native-safe-area-context";
 // Liste des abonnements disponibles
 const options = [
   { label: "10 coins / jour - 0,99 €", icon: "child" },
@@ -21,82 +21,84 @@ const SubscriptionScreen = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Choisis ton abonnement</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Choisis ton abonnement</Text>
 
-      <ScrollView contentContainerStyle={styles.optionList}>
-        {options.map((opt, index) => {
-          const selected = selectedIndex === index;
+        <ScrollView contentContainerStyle={styles.optionList}>
+          {options.map((opt, index) => {
+            const selected = selectedIndex === index;
 
-          return (
-            <TouchableOpacity
-              key={index}
-              onPress={() => setSelectedIndex(index)}
-            >
-              {selected ? (
-                <LinearGradient
-                  colors={["#8B43F1", "#D395FF"]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 0 }}
-                  style={styles.optionRow}
-                >
-                  <Text style={[styles.optionText, { color: "#ffffff" }]}>
-                    {opt.label}
-                  </Text>
-                  <View
-                    style={[
-                      styles.iconContainer,
-                      { backgroundColor: "#ffffff20" },
-                    ]}
+            return (
+              <TouchableOpacity
+                key={index}
+                onPress={() => setSelectedIndex(index)}
+              >
+                {selected ? (
+                  <LinearGradient
+                    colors={["#8B43F1", "#D395FF"]}
+                    start={{ x: 0, y: 0 }}
+                    end={{ x: 1, y: 0 }}
+                    style={styles.optionRow}
                   >
-                    <FontAwesome
-                      name={opt.icon as any}
-                      size={24}
-                      color="#ffffff"
-                    />
+                    <Text style={[styles.optionText, { color: "#ffffff" }]}>
+                      {opt.label}
+                    </Text>
+                    <View
+                      style={[
+                        styles.iconContainer,
+                        { backgroundColor: "#ffffff20" },
+                      ]}
+                    >
+                      <FontAwesome
+                        name={opt.icon as any}
+                        size={24}
+                        color="#ffffff"
+                      />
+                    </View>
+                  </LinearGradient>
+                ) : (
+                  <View style={[styles.optionRow, styles.optionRowUnselected]}>
+                    <Text style={[styles.optionText, { color: "#d395ff" }]}>
+                      {opt.label}
+                    </Text>
+                    <View style={styles.iconContainer}>
+                      <FontAwesome
+                        name={opt.icon as any}
+                        size={24}
+                        color="#d395ff"
+                      />
+                    </View>
                   </View>
-                </LinearGradient>
-              ) : (
-                <View style={[styles.optionRow, styles.optionRowUnselected]}>
-                  <Text style={[styles.optionText, { color: "#d395ff" }]}>
-                    {opt.label}
-                  </Text>
-                  <View style={styles.iconContainer}>
-                    <FontAwesome
-                      name={opt.icon as any}
-                      size={24}
-                      color="#d395ff"
-                    />
-                  </View>
-                </View>
-              )}
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
 
-      {/* Boutons action */}
-      <View style={styles.actions}>
-        <TouchableOpacity style={styles.circleButton}>
-          <FontAwesome name="arrow-left" size={24} color="#d395ff" />
+        {/* Boutons action */}
+        <View style={styles.actions}>
+          <TouchableOpacity style={styles.circleButton}>
+            <FontAwesome name="arrow-left" size={24} color="#d395ff" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.circleButton}>
+            <FontAwesome name="check" size={24} color="#d395ff" />
+          </TouchableOpacity>
+        </View>
+
+        {/* Bouton principal */}
+        <TouchableOpacity style={styles.applyButton}>
+          <Text style={styles.applyText}>Appliquer</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.circleButton}>
-          <FontAwesome name="check" size={24} color="#d395ff" />
-        </TouchableOpacity>
-      </View>
 
-      {/* Bouton principal */}
-      <TouchableOpacity style={styles.applyButton}>
-        <Text style={styles.applyText}>Appliquer</Text>
-      </TouchableOpacity>
-
-      {/* Footer navigation */}
-      <View style={styles.footer}>
-        <FontAwesome name="user" size={24} color="#ffffff" />
-        <FontAwesome name="home" size={24} color="#ffffff" />
-        <FontAwesome name="sliders" size={24} color="#ffffff" />
+        {/* Footer navigation */}
+        <View style={styles.footer}>
+          <FontAwesome name="user" size={24} color="#ffffff" />
+          <FontAwesome name="home" size={24} color="#ffffff" />
+          <FontAwesome name="sliders" size={24} color="#ffffff" />
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
