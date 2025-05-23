@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 import {
+  useRoute,
+  RouteProp,
+  useNavigation,
+  NavigationProp,
+} from "@react-navigation/native";
+import {
   View,
   Text,
   TouchableOpacity,
@@ -16,9 +22,13 @@ const options = [
   { label: "30 coins / jour - 2,99 €", icon: "medal" },
   { label: "50 coins / jour - 5,99 €", icon: "trophy" },
 ];
-
+type RootStackParamList = {
+  Dashboard: { token: string };
+  subscribe: undefined;
+};
 const SubscriptionScreen = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -76,27 +86,10 @@ const SubscriptionScreen = () => {
           })}
         </ScrollView>
 
-        {/* Boutons action */}
-        <View style={styles.actions}>
-          <TouchableOpacity style={styles.circleButton}>
-            <FontAwesome name="arrow-left" size={24} color="#d395ff" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.circleButton}>
-            <FontAwesome name="check" size={24} color="#d395ff" />
-          </TouchableOpacity>
-        </View>
-
         {/* Bouton principal */}
         <TouchableOpacity style={styles.applyButton}>
           <Text style={styles.applyText}>Appliquer</Text>
         </TouchableOpacity>
-
-        {/* Footer navigation */}
-        <View style={styles.footer}>
-          <FontAwesome name="user" size={24} color="#ffffff" />
-          <FontAwesome name="home" size={24} color="#ffffff" />
-          <FontAwesome name="sliders" size={24} color="#ffffff" />
-        </View>
       </View>
     </SafeAreaView>
   );
