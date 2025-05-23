@@ -50,6 +50,9 @@ const FilterModal = ({ visible, onClose }: FilterModalProps) => {
     <Modal visible={visible} animationType="slide" transparent>
       <View style={styles.overlay}>
         <View style={styles.modalContainer}>
+          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+            <Text style={styles.closeButtonText}>×</Text>
+          </TouchableOpacity>
           <Text style={styles.title}>Filtres</Text>
 
           <Text style={styles.label} onPress={() => setZonesOpen(!zonesOpen)}>
@@ -118,6 +121,23 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.6,
     shadowRadius: 10,
     elevation: 10,
+  },
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    zIndex: 1,
+    backgroundColor: "#333",
+    borderRadius: 20,
+    width: 32,
+    height: 32,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  closeButtonText: {
+    color: "#fff",
+    fontSize: 24,
+    lineHeight: 24,
   },
   title: {
     fontSize: 26,
