@@ -21,6 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import users, { loadStoredData } from "./reducers/users";
 import filters from "./reducers/filters";
 import SubscriptionScreen from "./screens/subscriptionScreen";
+import DashboardStack from "./screens/dashboardStack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -118,7 +119,7 @@ const TabNavigator = () => {
     >
       <Tab.Screen
         name="Home"
-        component={DashboardScreen}
+        component={DashboardStack}
         options={{
           header: () => <Header />,
           tabBarIcon: ({ color, size }) => (
