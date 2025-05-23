@@ -8,11 +8,12 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import AppButton from "./AppButton";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
+
 const FontAwesome = _FontAwesome as React.ElementType;
 
 function ProgressBar({ percent }: { percent: number }) {
@@ -23,9 +24,15 @@ function ProgressBar({ percent }: { percent: number }) {
   );
 }
 
-export default function ModalRating() {
-  const [modalVisible, setModalVisible] = useState(true);
+export default function ModalRating({
+  visible,
+  onClose,
+}: {
+  visible: boolean;
+  onClose: () => void;
+}) {
   const navigation = useNavigation<any>();
+
   const rating = [];
   for (let i = 0; i < 3; i++) {
     rating.push(<FontAwesome key={i} name="star" size={30} color="#ffac25" />);
@@ -35,25 +42,18 @@ export default function ModalRating() {
       <FontAwesome key={i + 7} name="star" size={30} color="#2a2e30" />
     );
   }
+
   return (
     <Modal
       animationType="slide"
       transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => {
-        setModalVisible(false);
-        console.log("Modal has been closed.");
-      }}
+      visible={visible}
+      onRequestClose={onClose}
     >
       <View style={styles.overlay}>
         <View style={styles.modal}>
           <ScrollView contentContainerStyle={styles.modalContent}>
-            <TouchableOpacity
-              style={styles.closeModal}
-              onPress={() => {
-                setModalVisible(!modalVisible);
-              }}
-            >
+            <TouchableOpacity style={styles.closeModal} onPress={onClose}>
               <FontAwesome name="times" size={30} color="#000" />
             </TouchableOpacity>
             <View style={styles.ratingContainer}>{rating}</View>
@@ -77,10 +77,10 @@ export default function ModalRating() {
             </View>
             <View style={styles.buttonContainer}>
               <AppButton
-                title="Retante ta chance"
+                title="Retente ta chance"
                 color="#d395ff"
                 textColor="#fff"
-                onPress={() => navigation.navigate("TakePic")}
+                onPress={onClose}
               />
               <AppButton title="Conseils" color="#FF0084" textColor="#fff" />
             </View>
@@ -89,36 +89,12 @@ export default function ModalRating() {
               <Text style={styles.coinsLeftText}>Il te reste 2 coins</Text>
             </View>
             <View style={styles.adviceContainer}>
-              <Text style={styles.adviceTitle}>Récupitulatif :</Text>
+              <Text style={styles.adviceTitle}>Récapitulatif :</Text>
               <Text style={styles.adviceText}>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
                 eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
                 enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum.
+                nisi ut aliquip ex ea commodo consequat.
               </Text>
             </View>
           </ScrollView>
@@ -175,16 +151,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     gap: 10,
   },
-  gaugeBar: {
-    width: "60%",
-    height: 30,
-    backgroundColor: "#ffac25",
-    borderRadius: 30,
-  },
-  fillingBar: {
-    width: "30%",
-    height: 30,
-    backgroundColor: "#2a2e30",
+  gaugeText: {
+    fontSize: 20,
   },
   progressBarBackground: {
     width: "60%",
@@ -197,9 +165,6 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: "#ffac25",
     borderRadius: 50,
-  },
-  gaugeText: {
-    fontSize: 20,
   },
   buttonContainer: {
     width: "100%",

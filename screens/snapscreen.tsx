@@ -13,6 +13,8 @@ const FontAwesome = _FontAwesome as React.ElementType;
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import Constants from "expo-constants";
+import ModalRating from "../components/ModalRating"; // ajuste le chemin si besoin
+
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
 type RootStackParamList = {
@@ -28,6 +30,7 @@ export default function SnapScreen() {
   const [hasPermission, setHasPermission] = useState(false);
   const [facing, setFacing] = useState<CameraType>("back");
   const [flashStatus, setFlashStatus] = useState<FlashMode>("off");
+  const [modalVisible, setModalVisible] = useState(false); // ← ajout
 
   useEffect(() => {
     (async () => {
@@ -52,8 +55,8 @@ export default function SnapScreen() {
     const photo: any = await cameraRef.current?.takePictureAsync({
       quality: 0.3,
     });
-    if(photo) {
-    await fetch(`${API_URL}/photos/upload`, {
+    if (photo) {
+      await fetch(`${API_URL}/photos/upload`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -62,56 +65,65 @@ export default function SnapScreen() {
           imageUrl: photo.uri,
           userToken: "1",
         }),
-    })
+      });
 
-    } 
+      setModalVisible(true); // ← afficher la modale
+    }
   };
 
   return (
-    <CameraView
-      style={styles.camera}
-      facing={facing}
-      flash={flashStatus}
-      ref={(ref: any) => (cameraRef.current = ref)}
-    >
-      <TouchableOpacity
-        style={[styles.settingButton, styles.flashButton]}
-        onPress={toggleFlashStatus}
+    <>
+      <CameraView
+        style={styles.camera}
+        facing={facing}
+        flash={flashStatus}
+        ref={(ref: any) => (cameraRef.current = ref)}
       >
-        <FontAwesome
-          name="flash"
-          size={25}
-          color={flashStatus === "on" ? "#e8be4b" : "white"}
-        />
-      </TouchableOpacity>
-      <View
-        style={{
-          position: "absolute",
-          bottom: 60,
-          left: 0,
-          right: 0,
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: 40,
-          marginBottom: 20,
-        }}
-      >
-        <TouchableOpacity onPress={() => navigation.navigate("TabNavigator")}>
-          <FontAwesome name="chevron-left" size={35} color="white" />
-        </TouchableOpacity>
         <TouchableOpacity
-          style={styles.snapButton}
-          onPress={takePicture}
-        ></TouchableOpacity>
-        <TouchableOpacity
-          style={styles.settingButton}
-          onPress={toggleCameraFacing}
+          style={[styles.settingButton, styles.flashButton]}
+          onPress={toggleFlashStatus}
         >
-          <FontAwesome name="rotate-right" size={35} color="white" />
+          <FontAwesome
+            name="flash"
+            size={25}
+            color={flashStatus === "on" ? "#e8be4b" : "white"}
+          />
         </TouchableOpacity>
-      </View>
-    </CameraView>
+        <View
+          style={{
+            position: "absolute",
+            bottom: 60,
+            left: 0,
+            right: 0,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 40,
+            marginBottom: 20,
+          }}
+        >
+          <TouchableOpacity onPress={() => navigation.navigate("TabNavigator")}>
+            <FontAwesome name="chevron-left" size={35} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.snapButton}
+            onPress={takePicture}
+          ></TouchableOpacity>
+          <TouchableOpacity
+            style={styles.settingButton}
+            onPress={toggleCameraFacing}
+          >
+            <FontAwesome name="rotate-right" size={35} color="white" />
+          </TouchableOpacity>
+        </View>
+      </CameraView>
+
+      {/* ← ajout ici de la modale */}
+      <ModalRating
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
+    </>
   );
 }
 

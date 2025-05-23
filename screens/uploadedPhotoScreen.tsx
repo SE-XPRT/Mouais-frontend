@@ -1,5 +1,12 @@
-import React from "react";
-import { View, Image, StyleSheet, Text, TouchableOpacity, Dimensions, Modal } from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import ModalRating from "../components/ModalRating";
 
@@ -14,9 +21,14 @@ export default function UploadedPhotoScreen() {
   const navigation = useNavigation();
   const imageUri = route.params?.imageUri;
 
+  const [modalVisible, setModalVisible] = useState(true);
+
   return (
     <View style={styles.container}>
-      <ModalRating />
+      <ModalRating
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      />
       {imageUri ? (
         <Image source={{ uri: imageUri }} style={styles.image} />
       ) : (
@@ -29,7 +41,7 @@ export default function UploadedPhotoScreen() {
         <Text style={styles.buttonText}>Retour</Text>
       </TouchableOpacity>
     </View>
-  ); 
+  );
 }
 
 const styles = StyleSheet.create({
@@ -40,7 +52,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#2a2e30",
   },
   image: {
-    width:  Dimensions.get("window").width - 40,
+    width: Dimensions.get("window").width - 40,
     height: Dimensions.get("window").height - 200,
     borderRadius: 20,
     marginBottom: 30,
