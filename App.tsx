@@ -12,6 +12,7 @@ import SnapScreen from "./screens/snapscreen";
 import TakePicScreen from "./screens/takePicScreen";
 import InfosScreen from "./screens/infosScreen";
 import LoginScreen from "./screens/loginScreen";
+import SubscriptionScreenScreen from "./screens/subscriptionScreen";
 import UploadedPhotoScreen from "./screens/uploadedPhotoScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider, useDispatch } from "react-redux";
@@ -19,6 +20,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import users, { loadStoredData } from "./reducers/users";
 import filters from "./reducers/filters";
+import SubscriptionScreen from "./screens/subscriptionScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -65,6 +67,7 @@ const AppContent = () => {
         <Stack.Screen name="UploadedPhoto" component={UploadedPhotoScreen} />
         <Stack.Screen name="TabNavigator" component={TabNavigator} />
         <Stack.Screen name="Home" component={DashboardScreen} />
+        <Stack.Screen name="subscribe" component={SubscriptionScreen} />
         <Stack.Screen
           name="Infos"
           component={InfosScreen}

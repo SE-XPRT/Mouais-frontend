@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
-import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
+import {
+  useRoute,
+  RouteProp,
+  useNavigation,
+  NavigationProp,
+} from "@react-navigation/native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import Constants from "expo-constants";
 import { useSelector } from "react-redux";
+
+type RootStackParamList = {
+  Dashboard: { token: string };
+  subscribe: undefined;
+};
 
 type DashboardParams = {
   Dashboard: { token: string };
@@ -12,7 +22,7 @@ type DashboardParams = {
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? ""; // pour aller chercher l'info dans le fichier app.config.js qui elle va chercher la variable d'environnement.
 
 export default function DashboardScreen() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute<RouteProp<DashboardParams, "Dashboard">>();
   const token = route.params?.token;
 
@@ -99,7 +109,10 @@ export default function DashboardScreen() {
           <Text style={styles.buttonText}>Gagne des coins</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.greenButton}>
+        <TouchableOpacity
+          style={styles.greenButton}
+          onPress={() => navigation.navigate("subscribe")} //  redirige vers l'écran subscription pour test
+        >
           <Text style={styles.buttonText}>BUY PREMIUM</Text>
         </TouchableOpacity>
 

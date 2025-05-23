@@ -18,15 +18,12 @@ const options = [
 ];
 
 const SubscriptionScreen = () => {
-  // État pour suivre l’option sélectionnée (index dans le tableau)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
   return (
     <View style={styles.container}>
-      {/* Titre principal de la page */}
       <Text style={styles.title}>Choisis ton abonnement</Text>
 
-      {/* Liste des options avec défilement si trop longue */}
       <ScrollView contentContainerStyle={styles.optionList}>
         {options.map((opt, index) => {
           const selected = selectedIndex === index;
@@ -36,19 +33,16 @@ const SubscriptionScreen = () => {
               key={index}
               onPress={() => setSelectedIndex(index)}
             >
-              {/* Si l’option est sélectionnée → on affiche un dégradé */}
               {selected ? (
                 <LinearGradient
-                  colors={["#8B43F1", "#D395FF"]} // Violet vers rose
+                  colors={["#8B43F1", "#D395FF"]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 0 }}
                   style={styles.optionRow}
                 >
-                  {/* Texte blanc sur fond violet-rose */}
                   <Text style={[styles.optionText, { color: "#ffffff" }]}>
                     {opt.label}
                   </Text>
-                  {/* Icône avec fond semi-transparent blanc */}
                   <View
                     style={[
                       styles.iconContainer,
@@ -63,14 +57,15 @@ const SubscriptionScreen = () => {
                   </View>
                 </LinearGradient>
               ) : (
-                // Sinon on affiche une ligne classique
-                <View style={styles.optionRow}>
-                  <Text style={styles.optionText}>{opt.label}</Text>
+                <View style={[styles.optionRow, styles.optionRowUnselected]}>
+                  <Text style={[styles.optionText, { color: "#d395ff" }]}>
+                    {opt.label}
+                  </Text>
                   <View style={styles.iconContainer}>
                     <FontAwesome
                       name={opt.icon as any}
                       size={24}
-                      color="#2a2e30"
+                      color="#d395ff"
                     />
                   </View>
                 </View>
@@ -80,69 +75,72 @@ const SubscriptionScreen = () => {
         })}
       </ScrollView>
 
-      {/* Deux boutons d’action : retour et valider */}
+      {/* Boutons action */}
       <View style={styles.actions}>
         <TouchableOpacity style={styles.circleButton}>
-          <FontAwesome name="arrow-left" size={24} color="#2a2e30" />
+          <FontAwesome name="arrow-left" size={24} color="#d395ff" />
         </TouchableOpacity>
         <TouchableOpacity style={styles.circleButton}>
-          <FontAwesome name="check" size={24} color="#2a2e30" />
+          <FontAwesome name="check" size={24} color="#d395ff" />
         </TouchableOpacity>
       </View>
 
-      {/* Bouton BG coins (ex : voir son solde) */}
-      <TouchableOpacity style={styles.coinsButton}>
-        <Text style={styles.coinsText}>BG coins</Text>
+      {/* Bouton principal */}
+      <TouchableOpacity style={styles.applyButton}>
+        <Text style={styles.applyText}>Appliquer</Text>
       </TouchableOpacity>
 
-      {/* Barre de navigation en bas avec 3 icônes */}
+      {/* Footer navigation */}
       <View style={styles.footer}>
-        <FontAwesome name="user" size={24} color="#2a2e30" />
-        <FontAwesome name="home" size={24} color="#2a2e30" />
-        <FontAwesome name="sliders" size={24} color="#2a2e30" />
+        <FontAwesome name="user" size={24} color="#ffffff" />
+        <FontAwesome name="home" size={24} color="#ffffff" />
+        <FontAwesome name="sliders" size={24} color="#ffffff" />
       </View>
     </View>
   );
 };
 
-// 🎨 Styles définis en fonction de ta charte graphique
+// 🎨 Styles mis à jour
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffffff", // Fond blanc
+    backgroundColor: "#2a2e30",
     padding: 20,
     justifyContent: "flex-start",
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#2a2e30", // Texte noir graphique
+    color: "#ffffff",
     marginBottom: 20,
   },
   optionList: {
     paddingBottom: 30,
   },
   optionRow: {
-    flexDirection: "row", // Texte + icône côte à côte
+    flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 12,
     paddingHorizontal: 15,
     marginBottom: 12,
-    borderRadius: 10,
-    backgroundColor: "#f5f5f5", // Fond gris clair par défaut
+    borderRadius: 12,
+  },
+  optionRowUnselected: {
+    backgroundColor: "#3a3f42", // fond sombre
+    borderWidth: 1,
+    borderColor: "#d395ff",
   },
   optionText: {
     fontSize: 16,
     fontStyle: "italic",
-    color: "#2a2e30", // Texte noir
     flex: 1,
   },
   iconContainer: {
     width: 40,
     height: 40,
     borderRadius: 8,
-    backgroundColor: "#eaeaea", // Fond gris clair
+    backgroundColor: "#2a2e30",
     justifyContent: "center",
     alignItems: "center",
     marginLeft: 12,
@@ -157,28 +155,29 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: "#eaeaea", // Bouton rond clair
+    backgroundColor: "#3a3f42",
     justifyContent: "center",
     alignItems: "center",
   },
-  coinsButton: {
-    backgroundColor: "#2a2e30", // Fond noir charte
-    paddingVertical: 10,
-    paddingHorizontal: 25,
-    borderRadius: 8,
+  applyButton: {
+    backgroundColor: "#29ffc6",
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 10,
     alignSelf: "center",
     marginVertical: 10,
   },
-  coinsText: {
-    color: "#ffffff", // Texte blanc
+  applyText: {
+    color: "#2a2e30",
     fontWeight: "bold",
+    fontSize: 16,
   },
   footer: {
     flexDirection: "row",
     justifyContent: "space-around",
     paddingVertical: 12,
     borderTopWidth: 1,
-    borderTopColor: "#ccc",
+    borderTopColor: "#444",
   },
 });
 
