@@ -3,6 +3,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import DashboardScreen from "./dashboardScreen";
 import SubscriptionScreen from "./subscriptionScreen";
+import PaymentScreen from "./paymentScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -17,6 +18,11 @@ const DashboardStack = () => (
       name="subscribe"
       component={SubscriptionScreen}
       options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="payment"
+      component={PaymentScreen}
+      options={{ headerShown: false }} // ou ton Header personnalisé
     />
   </Stack.Navigator>
 );

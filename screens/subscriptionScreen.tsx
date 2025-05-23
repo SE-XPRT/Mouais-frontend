@@ -1,10 +1,5 @@
+// screens/subscriptionScreen.tsx
 import React, { useState } from "react";
-import {
-  useRoute,
-  RouteProp,
-  useNavigation,
-  NavigationProp,
-} from "@react-navigation/native";
 import {
   View,
   Text,
@@ -12,9 +7,12 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { FontAwesome } from "@expo/vector-icons"; // Librairie d'icônes
-import { LinearGradient } from "expo-linear-gradient"; // Composant pour créer un dégradé
+import { FontAwesome } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
+import { DashboardStackParamList } from "./paymentScreen"; // Import des types de routes
+
 // Liste des abonnements disponibles
 const options = [
   { label: "10 coins / jour - 0,99 €", icon: "child" },
@@ -22,19 +20,25 @@ const options = [
   { label: "30 coins / jour - 2,99 €", icon: "medal" },
   { label: "50 coins / jour - 5,99 €", icon: "trophy" },
 ];
-type RootStackParamList = {
-  Dashboard: { token: string };
-  subscribe: undefined;
-};
+
 const SubscriptionScreen = () => {
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
-  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // Suivi de l'option choisie
+  const navigation = useNavigation<NavigationProp<DashboardStackParamList>>(); // Accès à la navigation typée
+
+  // Fonction déclenchée lors du clic sur "Appliquer"
+  const handleApply = () => {
+    if (selectedIndex !== null) {
+      const selected = options[selectedIndex];
+      navigation.navigate("payment", { subscriptionLabel: selected.label }); // Envoie le label sélectionné à la page payment
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
         <Text style={styles.title}>Choisis ton abonnement</Text>
 
+        {/* Liste des options d'abonnement */}
         <ScrollView contentContainerStyle={styles.optionList}>
           {options.map((opt, index) => {
             const selected = selectedIndex === index;
@@ -86,8 +90,8 @@ const SubscriptionScreen = () => {
           })}
         </ScrollView>
 
-        {/* Bouton principal */}
-        <TouchableOpacity style={styles.applyButton}>
+        {/* Bouton principal "Appliquer" qui déclenche handleApply */}
+        <TouchableOpacity style={styles.applyButton} onPress={handleApply}>
           <Text style={styles.applyText}>Appliquer</Text>
         </TouchableOpacity>
       </View>
@@ -95,7 +99,7 @@ const SubscriptionScreen = () => {
   );
 };
 
-// 🎨 Styles mis à jour
+// Styles de la page
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -122,7 +126,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   optionRowUnselected: {
-    backgroundColor: "#3a3f42", // fond sombre
+    backgroundColor: "#3a3f42",
     borderWidth: 1,
     borderColor: "#d395ff",
   },
@@ -140,20 +144,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginLeft: 12,
   },
-  actions: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 20,
-    marginBottom: 10,
-  },
-  circleButton: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: "#3a3f42",
-    justifyContent: "center",
-    alignItems: "center",
-  },
   applyButton: {
     backgroundColor: "#29ffc6",
     paddingVertical: 12,
@@ -166,13 +156,6 @@ const styles = StyleSheet.create({
     color: "#2a2e30",
     fontWeight: "bold",
     fontSize: 16,
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    paddingVertical: 12,
-    borderTopWidth: 1,
-    borderTopColor: "#444",
   },
 });
 
