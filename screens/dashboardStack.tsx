@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import DashboardScreen from "./dashboardScreen";
 import SubscriptionScreen from "./subscriptionScreen";
 import PaymentScreen from "./paymentScreen";
-
+import EndCreditScreen from "./endCreditScreen";
 const Stack = createNativeStackNavigator();
 
 const DashboardStack = () => (
@@ -23,6 +23,11 @@ const DashboardStack = () => (
       name="payment"
       component={PaymentScreen}
       options={{ headerShown: false }} // ou ton Header personnalisé
+    />
+    <Stack.Screen
+      name="endCredit"
+      component={EndCreditScreen}
+      options={{ headerShown: false }}
     />
   </Stack.Navigator>
 );

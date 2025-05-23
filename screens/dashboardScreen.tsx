@@ -14,6 +14,7 @@ import { useSelector } from "react-redux";
 type RootStackParamList = {
   Dashboard: { token: string };
   subscribe: undefined;
+  endCredit: undefined; // à supprimer plus tard
 };
 
 type DashboardParams = {
@@ -23,6 +24,7 @@ const API_URL = Constants.expoConfig?.extra?.API_URL ?? ""; // pour aller cherch
 
 export default function DashboardScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const route = useRoute<RouteProp<DashboardParams, "Dashboard">>();
   const token = route.params?.token;
 
@@ -116,7 +118,13 @@ export default function DashboardScreen() {
           <Text style={styles.buttonText}>BUY PREMIUM</Text>
         </TouchableOpacity>
 
-        <Text style={styles.coinInfo}>Il te reste {coins} coins</Text>
+        <TouchableOpacity
+          onPress={() => navigation.navigate("endCredit")} //bouton temporaire test vers endCredit page
+        >
+          <Text style={styles.coinInfo}>
+            Il te reste {coins} coins Bouton test endCreditScreen
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
