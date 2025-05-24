@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Text,
   View,
@@ -13,8 +13,10 @@ import AppButton from "./AppButton";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
+import Constants from "expo-constants";
 
 const FontAwesome = _FontAwesome as React.ElementType;
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
 function ProgressBar({ percent }: { percent: number }) {
   return (
@@ -24,79 +26,105 @@ function ProgressBar({ percent }: { percent: number }) {
   );
 }
 
+function Gauge({ label, value }: { label: string; value: number }) {
+  return (
+    <View style={styles.gauge}>
+      <Text style={styles.gaugeText}>{label}</Text>
+      <ProgressBar percent={value} />
+    </View>
+  );
+}
+
 export default function ModalRating({
   visible,
   onClose,
+  imageUri,
+  token,
 }: {
   visible: boolean;
   onClose: () => void;
+  imageUri: string;
+  token: string;
 }) {
   const navigation = useNavigation<any>();
+  const [analysis, setAnalysis] = useState<any>(null);
 
-  const rating = [];
-  for (let i = 0; i < 3; i++) {
-    rating.push(<FontAwesome key={i} name="star" size={30} color="#ffac25" />);
-  }
-  for (let i = 0; i < 2; i++) {
-    rating.push(
-      <FontAwesome key={i + 7} name="star" size={30} color="#2a2e30" />
-    );
-  }
+  useEffect(() => {
+    const fetchAnalysis = async () => {
+      try {
+        const response = await fetch(`${API_URL}/photos/upload`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userToken: token, imageUrl: imageUri }),
+        });
+
+        const data = await response.json();
+        if (data.result) {
+          setAnalysis(data.photo.analyse[0]);
+        }
+      } catch (error) {
+        console.error("Erreur fetch analyse :", error);
+      }
+    };
+
+    if (visible && imageUri && token && !analysis) {
+      fetchAnalysis();
+    }
+  }, [visible, imageUri, token]);
+
+  const generateStars = (score: number) => {
+    const stars = [];
+    const rounded = Math.round(score * 5);
+    for (let i = 0; i < rounded; i++) {
+      stars.push(<FontAwesome key={`full-${i}`} name="star" size={30} color="#ffac25" />);
+    }
+    for (let i = rounded; i < 5; i++) {
+      stars.push(<FontAwesome key={`empty-${i}`} name="star" size={30} color="#2a2e30" />);
+    }
+    return stars;
+  };
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={visible}
-      onRequestClose={onClose}
-    >
+    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
       <View style={styles.overlay}>
         <View style={styles.modal}>
           <ScrollView contentContainerStyle={styles.modalContent}>
             <TouchableOpacity style={styles.closeModal} onPress={onClose}>
               <FontAwesome name="times" size={30} color="#000" />
             </TouchableOpacity>
-            <View style={styles.ratingContainer}>{rating}</View>
-            <View style={styles.gaugesContainer}>
-              <View style={styles.gauge}>
-                <Text style={styles.gaugeText}>Style</Text>
-                <ProgressBar percent={0.7} />
-              </View>
-              <View style={styles.gauge}>
-                <Text style={styles.gaugeText}>Sourire</Text>
-                <ProgressBar percent={0.9} />
-              </View>
-              <View style={styles.gauge}>
-                <Text style={styles.gaugeText}>Maquillage</Text>
-                <ProgressBar percent={0.3} />
-              </View>
-              <View style={styles.gauge}>
-                <Text style={styles.gaugeText}>Glow</Text>
-                <ProgressBar percent={0.5} />
-              </View>
-            </View>
-            <View style={styles.buttonContainer}>
-              <AppButton
-                title="Retente ta chance"
-                color="#d395ff"
-                textColor="#fff"
-                onPress={onClose}
-              />
-              <AppButton title="Conseils" color="#FF0084" textColor="#fff" />
-            </View>
-            <View style={styles.coinsLeft}>
-              <FontAwesomeIcon icon={faCoins} size={30} color="#000" />
-              <Text style={styles.coinsLeftText}>Il te reste 2 coins</Text>
-            </View>
-            <View style={styles.adviceContainer}>
-              <Text style={styles.adviceTitle}>Récapitulatif :</Text>
-              <Text style={styles.adviceText}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat.
-              </Text>
-            </View>
+
+            {analysis ? (
+              <>
+                <View style={styles.ratingContainer}>{generateStars(analysis.score)}</View>
+
+                <View style={styles.gaugesContainer}>
+                  <Gauge label="Style" value={analysis.criteria.outfit} />
+                  <Gauge label="Sourire" value={analysis.criteria.smile} />
+                  <Gauge label="Maquillage" value={analysis.criteria.makeup} />
+                  <Gauge label="Cheveux" value={analysis.criteria.cheveux} />
+                </View>
+
+                <View style={styles.buttonContainer}>
+                  <AppButton title="Retente ta chance" color="#d395ff" textColor="#fff" onPress={onClose} />
+                  <AppButton title="Conseils" color="#FF0084" textColor="#fff" />
+                </View>
+
+                <View style={styles.coinsLeft}>
+                  <FontAwesomeIcon icon={faCoins} size={30} color="#000" />
+                  <Text style={styles.coinsLeftText}>Il te reste 2 coins</Text>
+                </View>
+
+                <View style={styles.adviceContainer}>
+                  <Text style={styles.adviceTitle}>Récapitulatif :</Text>
+                  <Text style={styles.adviceText}>{analysis.comment.cheveux}</Text>
+                  <Text style={styles.adviceText}>{analysis.comment.smile}</Text>
+                  <Text style={styles.adviceText}>{analysis.comment.makeup}</Text>
+                  <Text style={styles.adviceText}>{analysis.comment.outfit}</Text>
+                </View>
+              </>
+            ) : (
+              <Text style={{ marginTop: 200, fontSize: 18 }}>Analyse en cours...</Text>
+            )}
           </ScrollView>
         </View>
       </View>
