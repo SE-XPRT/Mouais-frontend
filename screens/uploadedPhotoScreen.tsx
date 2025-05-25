@@ -13,6 +13,7 @@ import ModalRating from "../components/ModalRating";
 type UploadedPhotoScreenRouteProp = {
   params?: {
     imageUri?: string;
+    token?: string;
   };
 };
 
@@ -20,15 +21,20 @@ export default function UploadedPhotoScreen() {
   const route = useRoute() as UploadedPhotoScreenRouteProp;
   const navigation = useNavigation();
   const imageUri = route.params?.imageUri;
+  const token = route.params?.token || "1"; // ← ici, on récupère le token, ou valeur par défaut "1"
 
   const [modalVisible, setModalVisible] = useState(true);
 
   return (
     <View style={styles.container}>
-      <ModalRating
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-      />
+      {imageUri && (
+        <ModalRating
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          imageUri={imageUri}
+          token={token}
+        />
+      )}
       {imageUri ? (
         <Image source={{ uri: imageUri }} style={styles.image} />
       ) : (

@@ -3,17 +3,14 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  Text,
-  SafeAreaView,
 } from "react-native";
 import { CameraView, CameraType, FlashMode, Camera } from "expo-camera";
-import { useDispatch } from "react-redux";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
+import ModalRating from "../components/ModalRating";
 import Constants from "expo-constants";
-import ModalRating from "../components/ModalRating"; // ajuste le chemin si besoin
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
@@ -24,50 +21,36 @@ type RootStackParamList = {
 export default function SnapScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const isFocused = useIsFocused();
-
   const cameraRef = useRef<CameraView | null>(null);
 
   const [hasPermission, setHasPermission] = useState(false);
   const [facing, setFacing] = useState<CameraType>("back");
   const [flashStatus, setFlashStatus] = useState<FlashMode>("off");
-  const [modalVisible, setModalVisible] = useState(false); // ← ajout
+  const [modalVisible, setModalVisible] = useState(false);
+  const [capturedUri, setCapturedUri] = useState<string>("");
 
   useEffect(() => {
     (async () => {
       const result = await Camera.requestCameraPermissionsAsync();
-      setHasPermission(result && result?.status === "granted");
+      setHasPermission(result?.status === "granted");
     })();
   }, []);
 
-  if (!hasPermission || !isFocused) {
-    return <View />;
-  }
+  if (!hasPermission || !isFocused) return <View />;
 
   const toggleCameraFacing = () => {
-    setFacing((current: CameraType) => (current === "back" ? "front" : "back"));
+    setFacing((prev) => (prev === "back" ? "front" : "back"));
   };
 
   const toggleFlashStatus = () => {
-    setFlashStatus((current: FlashMode) => (current === "off" ? "on" : "off"));
+    setFlashStatus((prev) => (prev === "off" ? "on" : "off"));
   };
 
   const takePicture = async () => {
-    const photo: any = await cameraRef.current?.takePictureAsync({
-      quality: 0.3,
-    });
-    if (photo) {
-      await fetch(`${API_URL}/photos/upload`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          imageUrl: photo.uri,
-          userToken: "1",
-        }),
-      });
-
-      setModalVisible(true); // ← afficher la modale
+    const photo = await cameraRef.current?.takePictureAsync({ quality: 0.3 });
+    if (photo?.uri) {
+      setCapturedUri(photo.uri);
+      setModalVisible(true);
     }
   };
 
@@ -83,72 +66,50 @@ export default function SnapScreen() {
           style={[styles.settingButton, styles.flashButton]}
           onPress={toggleFlashStatus}
         >
-          <FontAwesome
-            name="flash"
-            size={25}
-            color={flashStatus === "on" ? "#e8be4b" : "white"}
-          />
+          <FontAwesome name="flash" size={25} color={flashStatus === "on" ? "#e8be4b" : "white"} />
         </TouchableOpacity>
-        <View
-          style={{
-            position: "absolute",
-            bottom: 60,
-            left: 0,
-            right: 0,
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 40,
-            marginBottom: 20,
-          }}
-        >
+
+        <View style={styles.controlRow}>
           <TouchableOpacity onPress={() => navigation.navigate("TabNavigator")}>
             <FontAwesome name="chevron-left" size={35} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.snapButton}
-            onPress={takePicture}
-          ></TouchableOpacity>
-          <TouchableOpacity
-            style={styles.settingButton}
-            onPress={toggleCameraFacing}
-          >
+
+          <TouchableOpacity style={styles.snapButton} onPress={takePicture} />
+
+          <TouchableOpacity style={styles.settingButton} onPress={toggleCameraFacing}>
             <FontAwesome name="rotate-right" size={35} color="white" />
           </TouchableOpacity>
         </View>
       </CameraView>
 
-      {/* ← ajout ici de la modale */}
       <ModalRating
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
+        imageUri={capturedUri}
+        token="1"
       />
     </>
   );
 }
 
 const styles = StyleSheet.create({
-  camera: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
+  camera: { flex: 1, justifyContent: "flex-end" },
   settingButton: {
     width: 40,
     aspectRatio: 1,
     alignItems: "center",
     justifyContent: "center",
   },
-  snapContainer: {
+  controlRow: {
+    position: "absolute",
+    bottom: 60,
+    left: 0,
+    right: 0,
     flexDirection: "row",
     justifyContent: "center",
-    alignItems: "flex-end",
-    marginBottom: 100,
-    gap: 50,
-  },
-  facingButton: {
-    position: "absolute",
-    right: "20%",
-    bottom: "14.5%",
+    alignItems: "center",
+    gap: 40,
+    marginBottom: 20,
   },
   flashButton: {
     position: "absolute",
@@ -164,12 +125,5 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     borderWidth: 5,
     borderColor: "rgba(255, 255, 255, 0.5)",
-    shadowColor: "rgba(0, 0, 0, 0.5)",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 3.84,
   },
 });

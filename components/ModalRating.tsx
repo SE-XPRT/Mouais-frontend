@@ -8,7 +8,6 @@ import {
   StyleSheet,
   ScrollView,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import AppButton from "./AppButton";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
@@ -46,7 +45,6 @@ export default function ModalRating({
   imageUri: string;
   token: string;
 }) {
-  const navigation = useNavigation<any>();
   const [analysis, setAnalysis] = useState<any>(null);
 
   useEffect(() => {
@@ -67,25 +65,38 @@ export default function ModalRating({
       }
     };
 
-    if (visible && imageUri && token && !analysis) {
+    if (visible && imageUri && token) {
+      setAnalysis(null); // 
       fetchAnalysis();
     }
   }, [visible, imageUri, token]);
 
   const generateStars = (score: number) => {
     const stars = [];
-    const rounded = Math.round(score * 5);
+    const rounded = Math.round(score * 10); 
+
     for (let i = 0; i < rounded; i++) {
-      stars.push(<FontAwesome key={`full-${i}`} name="star" size={30} color="#ffac25" />);
+      stars.push(
+        <FontAwesome key={`full-${i}`} name="star" size={30} color="#ffac25" />
+      );
     }
-    for (let i = rounded; i < 5; i++) {
-      stars.push(<FontAwesome key={`empty-${i}`} name="star" size={30} color="#2a2e30" />);
+
+    for (let i = rounded; i < 10; i++) {
+      stars.push(
+        <FontAwesome key={`empty-${i}`} name="star" size={30} color="#2a2e30" />
+      );
     }
+
     return stars;
   };
 
   return (
-    <Modal animationType="slide" transparent={true} visible={visible} onRequestClose={onClose}>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onClose}
+    >
       <View style={styles.overlay}>
         <View style={styles.modal}>
           <ScrollView contentContainerStyle={styles.modalContent}>
@@ -95,8 +106,9 @@ export default function ModalRating({
 
             {analysis ? (
               <>
-                <View style={styles.ratingContainer}>{generateStars(analysis.score)}</View>
-
+                <View style={styles.ratingContainer}>
+                  {generateStars(analysis.score)}
+                </View>
                 <View style={styles.gaugesContainer}>
                   <Gauge label="Style" value={analysis.criteria.outfit} />
                   <Gauge label="Sourire" value={analysis.criteria.smile} />
@@ -105,8 +117,17 @@ export default function ModalRating({
                 </View>
 
                 <View style={styles.buttonContainer}>
-                  <AppButton title="Retente ta chance" color="#d395ff" textColor="#fff" onPress={onClose} />
-                  <AppButton title="Conseils" color="#FF0084" textColor="#fff" />
+                  <AppButton
+                    title="Retente ta chance"
+                    color="#d395ff"
+                    textColor="#fff"
+                    onPress={onClose}
+                  />
+                  <AppButton
+                    title="Conseils"
+                    color="#FF0084"
+                    textColor="#fff"
+                  />
                 </View>
 
                 <View style={styles.coinsLeft}>
@@ -116,14 +137,24 @@ export default function ModalRating({
 
                 <View style={styles.adviceContainer}>
                   <Text style={styles.adviceTitle}>Récapitulatif :</Text>
-                  <Text style={styles.adviceText}>{analysis.comment.cheveux}</Text>
-                  <Text style={styles.adviceText}>{analysis.comment.smile}</Text>
-                  <Text style={styles.adviceText}>{analysis.comment.makeup}</Text>
-                  <Text style={styles.adviceText}>{analysis.comment.outfit}</Text>
+                  <Text style={styles.adviceText}>
+                    {analysis.comment.cheveux}
+                  </Text>
+                  <Text style={styles.adviceText}>
+                    {analysis.comment.smile}
+                  </Text>
+                  <Text style={styles.adviceText}>
+                    {analysis.comment.makeup}
+                  </Text>
+                  <Text style={styles.adviceText}>
+                    {analysis.comment.outfit}
+                  </Text>
                 </View>
               </>
             ) : (
-              <Text style={{ marginTop: 200, fontSize: 18 }}>Analyse en cours...</Text>
+              <Text style={{ marginTop: 200, fontSize: 18 }}>
+                Analyse en cours...
+              </Text>
             )}
           </ScrollView>
         </View>
