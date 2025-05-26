@@ -3,6 +3,7 @@ import appJson from './app.json';
 
 export default ({ config }) => {
   return {
+    ...config,
     ...appJson.expo,
     extra: {
       ...appJson.expo.extra,

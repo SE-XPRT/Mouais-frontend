@@ -48,6 +48,12 @@ export default function ModalRating({
   const [analysis, setAnalysis] = useState<any>(null);
 
   useEffect(() => {
+    console.log("URL utilisée :", API_URL);
+    console.log(
+      "Corps de la requête :",
+      JSON.stringify({ userToken: token, imageUri })
+    );
+
     const fetchAnalysis = async () => {
       try {
         const response = await fetch(`${API_URL}/photos/upload`, {
@@ -58,6 +64,7 @@ export default function ModalRating({
 
         const data = await response.json();
         if (data.result) {
+          console.log("Réponse du backend :", data.photo);
           setAnalysis(data.photo.analyse[0]);
         }
       } catch (error) {
@@ -66,14 +73,14 @@ export default function ModalRating({
     };
 
     if (visible && imageUri && token) {
-      setAnalysis(null); // 
+      setAnalysis(null); //
       fetchAnalysis();
     }
   }, [visible, imageUri, token]);
 
   const generateStars = (score: number) => {
     const stars = [];
-    const rounded = Math.round(score * 10); 
+    const rounded = Math.round(score * 10);
 
     for (let i = 0; i < rounded; i++) {
       stars.push(
@@ -89,6 +96,7 @@ export default function ModalRating({
 
     return stars;
   };
+  console.log("State analysis :", analysis);
 
   return (
     <Modal
