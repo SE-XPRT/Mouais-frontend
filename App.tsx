@@ -20,13 +20,14 @@ import { configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import users, { loadStoredData } from "./reducers/users";
 import filters from "./reducers/filters";
+import badges from "./reducers/badges";
 import SubscriptionScreen from "./screens/subscriptionScreen";
 import DashboardStack from "./screens/dashboardStack";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { users, filters },
+  reducer: { users, filters, badges },
 });
 
 // Composant pour charger les données sauvegardées

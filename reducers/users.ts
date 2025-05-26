@@ -6,19 +6,16 @@ export type UserState = {
     email: string | "";
     token: string | "";
     pseudo: string | "";
-<<<<<<< HEAD
+    badges: [];
   };
 };
-=======
-  }
-}
->>>>>>> dfa7f02fab116410ae031222acef8500848fb020
 
 const initialState: UserState = {
   value: {
     email: "",
     token: "",
     pseudo: "",
+    badges: [],
   },
 };
 
