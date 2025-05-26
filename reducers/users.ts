@@ -1,7 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const initialState = {
+export type UserState = {
+  value: {
+    email: string | "";
+    token: string | "";
+    pseudo: string | "";
+  };
+};
+
+const initialState: UserState = {
   value: {
     email: "",
     token: "",
