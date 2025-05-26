@@ -6,6 +6,8 @@ export type UserState = {
     email: string | "";
     token: string | "";
     pseudo: string | "";
+    coins: number;
+    guestCoins: number;
   };
 };
 
@@ -14,6 +16,8 @@ const initialState: UserState = {
     email: "",
     token: "",
     pseudo: "",
+    coins: 0,         
+    guestCoins: 3,   
   },
 };
 
@@ -23,30 +27,42 @@ export const usersSlice = createSlice({
   reducers: {
     updateEmail: (state, action) => {
       state.value.email = action.payload;
-      // Sauvegarder l'email dans AsyncStorage
       AsyncStorage.setItem("userEmail", action.payload);
     },
     updateToken: (state, action) => {
       state.value.token = action.payload;
-      // Sauvegarder le token dans AsyncStorage
       AsyncStorage.setItem("userToken", action.payload);
     },
     updatePseudo: (state, action) => {
       state.value.pseudo = action.payload;
-      // On ne sauvegarde plus le pseudo dans AsyncStorage
     },
     logout: (state) => {
       state.value.email = "";
       state.value.token = "";
       state.value.pseudo = "";
-      // On ne supprime plus le pseudo de AsyncStorage car il n'y est plus stocké
-      AsyncStorage.multiRemove(["userEmail", "userToken"]);
+      state.value.coins = 0;
+      AsyncStorage.multiRemove(["userEmail", "userToken", "userCoins"]);
     },
-    // Nouveau reducer pour charger les données sauvegardées
     loadStoredData: (state, action) => {
       state.value.email = action.payload.email || "";
       state.value.token = action.payload.token || "";
       state.value.pseudo = "";
+    },
+    loadStoredGuestCoins: (state, action: PayloadAction<number>) => {
+      state.value.guestCoins = action.payload;
+    },
+    updateCoins: (state, action: PayloadAction<number>) => {
+      if (state.value.token) {
+        state.value.coins += action.payload;
+        AsyncStorage.setItem("userCoins", state.value.coins.toString());
+      } else {
+        state.value.guestCoins += action.payload;
+        AsyncStorage.setItem("guestCoins", state.value.guestCoins.toString());
+      }
+    },
+    actualizeCoins: (state, action: PayloadAction<number>) => {
+      state.value.coins = action.payload;
+      AsyncStorage.setItem("userCoins", action.payload.toString());
     },
   },
 });
@@ -57,5 +73,9 @@ export const {
   updatePseudo,
   logout,
   loadStoredData,
+  loadStoredGuestCoins,
+  updateCoins,
+  actualizeCoins,
 } = usersSlice.actions;
+
 export default usersSlice.reducer;

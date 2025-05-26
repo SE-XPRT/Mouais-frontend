@@ -17,7 +17,7 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
 
 import { useDispatch } from "react-redux";
-import { updateToken, updateEmail, logout } from "../reducers/users";
+import { updateToken, updateEmail, logout, actualizeCoins, UserState } from "../reducers/users";
 import { useSelector } from "react-redux";
 import { colors } from "../theme/colors";
 type RootStackParamList = {
@@ -40,6 +40,7 @@ const LoginScreen: React.FC = () => {
       };
     };
   }
+  const coins = useSelector((state: {users: UserState}) => state.users.value.coins);
   const emailData = useSelector((state: any) => state.users.value.email);
   const tokenData = useSelector((state: any) => state.users.value.token);
   const [email, setEmail] = useState("");
@@ -120,6 +121,7 @@ const LoginScreen: React.FC = () => {
         body: JSON.stringify({
           email,
           password,
+          coins
         }),
       });
 
@@ -132,6 +134,7 @@ const LoginScreen: React.FC = () => {
       if (data.result) {
         dispatch(updateToken(data.token));
         dispatch(updateEmail(email));
+        dispatch(actualizeCoins(data.coins)); 
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigator" }],

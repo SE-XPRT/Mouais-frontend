@@ -18,10 +18,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Provider, useDispatch } from "react-redux";
 import { configureStore } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import users, { loadStoredData } from "./reducers/users";
+import users, { loadStoredData, loadStoredGuestCoins } from "./reducers/users";
 import filters from "./reducers/filters";
 import SubscriptionScreen from "./screens/subscriptionScreen";
 import DashboardStack from "./screens/dashboardStack";
+import EndCreditScreen from "./screens/endCreditScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +39,11 @@ const AppContent = () => {
       try {
         const storedEmail = await AsyncStorage.getItem("userEmail");
         const storedToken = await AsyncStorage.getItem("userToken");
+        const storedGuestCoins = await AsyncStorage.getItem("guestCoins");
 
+        if (storedGuestCoins !== null) {
+          dispatch(loadStoredGuestCoins(parseInt(storedGuestCoins, 10)));
+        }
         if (storedEmail && storedToken) {
           dispatch(
             loadStoredData({
@@ -78,6 +83,12 @@ const AppContent = () => {
           component={UploadedPhotoScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="EndCreditScreen"
+          component={EndCreditScreen}
+          options={{ header: () => <Header /> }}
+        />
+
         <Stack.Screen
           name="TabNavigator"
           component={TabNavigator}
