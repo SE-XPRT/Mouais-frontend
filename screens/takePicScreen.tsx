@@ -1,36 +1,69 @@
 import React from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
-const FontAwesome = _FontAwesome as React.ElementType;
 import * as ImagePicker from "expo-image-picker";
+import { useSelector } from "react-redux";
+import { UserState } from "../reducers/users";
+
+const FontAwesome = _FontAwesome as React.ElementType;
 
 type RootStackParamList = {
   TakePic: undefined;
   Snap: undefined;
   UploadedPhoto: { imageUri: string };
+  EndCreditScreen: undefined;
 };
 
 export default function TakePicScreen() {
+  const { email, coins, guestCoins } = useSelector(
+    (state: { users: UserState & { value: any } }) => state.users.value
+  );
+
   const navigation =
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
+  const isGuest = email === "";
+  const currentCoins = isGuest ? guestCoins : coins;
+
   const pickImage = async () => {
+    if (currentCoins <= 0) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "EndCreditScreen" }],
+      });
+      return;
+    }
+
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
       alert("Permission d'accéder à la galerie refusée !");
       return;
     }
+
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: "images",
       allowsEditing: false,
       quality: 1,
     });
-    if (!result.canceled && result.assets && result.assets.length > 0) {
-      // Redirige vers UploadedPhotoScreen avec l'URI de l'image
-      navigation.navigate("UploadedPhoto", { imageUri: result.assets[0].uri });
+
+    if (!result.canceled && result.assets.length > 0) {
+      navigation.navigate("UploadedPhoto", {
+        imageUri: result.assets[0].uri,
+      });
+    }
+  };
+
+  const handleCameraPress = () => {
+    if (currentCoins <= 0) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "EndCreditScreen" }],
+      });
+    } else {
+      navigation.navigate("Snap");
     }
   };
 
@@ -40,37 +73,31 @@ export default function TakePicScreen() {
         <TouchableOpacity style={styles.icons} onPress={pickImage}>
           <FontAwesome name="upload" size={100} color="#fff" />
         </TouchableOpacity>
-        <TouchableOpacity
-          style={styles.icons}
-          onPress={() => {
-            navigation.navigate("Snap");
-          }}
-        >
+        <TouchableOpacity style={styles.icons} onPress={handleCameraPress}>
           <FontAwesome name="camera" size={100} color="#fff" />
         </TouchableOpacity>
       </View>
+
       <Text style={styles.text}>Envie de personnaliser ton expérience ?</Text>
+
       <TouchableOpacity style={styles.createProfilButton}>
         <Text style={styles.text}>Crée ton profil ici !</Text>
       </TouchableOpacity>
+
       <TouchableOpacity style={styles.coinsButton}>
-        <Text style={styles.text}>Coins : 0 / 3 </Text>
+        <Text style={styles.text}>
+          Coins : {currentCoins} {isGuest ? "/ 3" : ""}
+        </Text>
       </TouchableOpacity>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     backgroundColor: "#2a2e30",
-  },
-  logo: {
-    width: 100,
-    height: 100,
-    marginBottom: 20,
-    position: "absolute",
-    top: 25,
   },
   text: {
     fontSize: 24,
@@ -88,7 +115,7 @@ const styles = StyleSheet.create({
   },
   icons: {
     backgroundColor: "gray",
-    borderRadius: "100%",
+    borderRadius: 999,
     padding: 40,
     justifyContent: "center",
     alignItems: "center",

@@ -13,6 +13,8 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import Constants from "expo-constants";
+import { useDispatch } from "react-redux";
+import { updateCoins } from "../reducers/users";
 
 const FontAwesome = _FontAwesome as React.ElementType;
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
@@ -45,15 +47,17 @@ export default function ModalRating({
   imageUri: string;
   token: string;
 }) {
+  const dispatch = useDispatch();
   const [analysis, setAnalysis] = useState<any>(null);
 
-  useEffect(() => {
-    console.log("URL utilisée :", API_URL);
-    console.log(
-      "Corps de la requête :",
-      JSON.stringify({ userToken: token, imageUri })
-    );
 
+ useEffect(() => {
+  if (visible && imageUri && token) {
+    dispatch(updateCoins(-1));
+  }
+}, [visible]);
+
+  useEffect(() => {
     const fetchAnalysis = async () => {
       try {
         const response = await fetch(`${API_URL}/photos/upload`, {
@@ -96,7 +100,6 @@ export default function ModalRating({
 
     return stars;
   };
-  console.log("State analysis :", analysis);
 
   return (
     <Modal

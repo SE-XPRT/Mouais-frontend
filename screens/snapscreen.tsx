@@ -10,7 +10,6 @@ const FontAwesome = _FontAwesome as React.ElementType;
 import { useIsFocused } from "@react-navigation/native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import ModalRating from "../components/ModalRating";
-import Constants from "expo-constants";
 import { useSelector } from "react-redux";
 
 type RootStackParamList = {
