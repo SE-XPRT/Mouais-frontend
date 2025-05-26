@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import ModalRating from "../components/ModalRating";
+import { useSelector } from "react-redux";
 
 type UploadedPhotoScreenRouteProp = {
   params?: {
@@ -20,8 +21,12 @@ type UploadedPhotoScreenRouteProp = {
 export default function UploadedPhotoScreen() {
   const route = useRoute() as UploadedPhotoScreenRouteProp;
   const navigation = useNavigation();
+
   const imageUri = route.params?.imageUri;
-  const token = route.params?.token || "1"; // ← ici, on récupère le token, ou valeur par défaut "1"
+
+  const tokenFromParams = route.params?.token;
+  const tokenFromStore = useSelector((state: any) => state.users?.value?.token);
+  const token = tokenFromParams || tokenFromStore || "invité";
 
   const [modalVisible, setModalVisible] = useState(true);
 
@@ -35,11 +40,13 @@ export default function UploadedPhotoScreen() {
           token={token}
         />
       )}
+
       {imageUri ? (
         <Image source={{ uri: imageUri }} style={styles.image} />
       ) : (
         <Text style={styles.text}>Aucune image sélectionnée.</Text>
       )}
+
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.goBack()}

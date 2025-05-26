@@ -11,8 +11,7 @@ import { useIsFocused } from "@react-navigation/native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import ModalRating from "../components/ModalRating";
 import Constants from "expo-constants";
-
-const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
+import { useSelector } from "react-redux";
 
 type RootStackParamList = {
   TabNavigator: undefined;
@@ -28,6 +27,8 @@ export default function SnapScreen() {
   const [flashStatus, setFlashStatus] = useState<FlashMode>("off");
   const [modalVisible, setModalVisible] = useState(false);
   const [capturedUri, setCapturedUri] = useState<string>("");
+
+  const token = useSelector((state: any) => state.users?.value?.token || "invité");
 
   useEffect(() => {
     (async () => {
@@ -86,7 +87,7 @@ export default function SnapScreen() {
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
         imageUri={capturedUri}
-        token="1"
+        token={token}
       />
     </>
   );
