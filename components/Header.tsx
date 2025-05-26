@@ -16,19 +16,14 @@ import { useDispatch } from "react-redux";
 import { updateToken, updateEmail } from "../reducers/users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FilterModal from "./ModalFilter";
+import { colors } from "../theme/colors";
 
 type RootStackParamList = {
   Login: undefined;
+  Infos: undefined;
   // Ajoutez ici d'autres routes si nécessaire
 };
 const screenHeight = Dimensions.get("window").height;
-const backgroundColor = "#2a2a30"; // couleur sombre corrigée
-const textColor = "#fff";
-const accentColor = "#8b43f1";
-const cardBg = "#fff";
-const cardBorder = "#e0e0e0";
-const labelColor = "#888";
-const valueColor = "#232526";
 const FontAwesome = _FontAwesome as React.ElementType;
 const Header: React.FC = () => {
   const dispatch = useDispatch();
@@ -60,32 +55,35 @@ const Header: React.FC = () => {
         style={styles.menu}
         name="bars"
         size={40}
-        color="#fff"
+        color={colors.text.primary}
         onPress={openMenu}
       />
 
       {/* Dropdown menu */}
       {showPersonalize && (
         <View style={styles.menuContainer}>
-          <Text style={{ fontSize: 20, color: "#fff", marginBottom: 8 }}>
+          <Text
+            style={{
+              fontSize: 20,
+              color: colors.text.primary,
+              marginBottom: 8,
+            }}
+          >
             Bienvenue !
           </Text>
 
           <TouchableOpacity
             style={styles.Button}
             onPress={() => {
-              console.log("Button clicked");
+              navigation.navigate("Infos");
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 16 }}>Mon Compte</Text>
+            <Text style={{ color: colors.text.primary, fontSize: 16 }}>
+              Mon Compte
+            </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.Button}
-            onPress={() => {
-              console.log("Button clicked");
-            }}
-          >
-            <Text style={{ color: "#fff", fontSize: 16 }}>
+          <TouchableOpacity style={styles.Button} onPress={() => {}}>
+            <Text style={{ color: colors.text.primary, fontSize: 16 }}>
               Mes notifications
             </Text>
           </TouchableOpacity>
@@ -93,7 +91,7 @@ const Header: React.FC = () => {
             style={styles.Button}
             onPress={openFilters} // Ouverture de la modal
           >
-            <Text style={{ color: "#fff", fontSize: 16 }}>
+            <Text style={{ color: colors.text.primary, fontSize: 16 }}>
               Mes filtres & favoris
             </Text>
           </TouchableOpacity>
@@ -103,7 +101,7 @@ const Header: React.FC = () => {
               console.log("Button clicked");
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 16 }}>
+            <Text style={{ color: colors.text.primary, fontSize: 16 }}>
               Mon album photos
             </Text>
           </TouchableOpacity>
@@ -113,7 +111,9 @@ const Header: React.FC = () => {
               console.log("Button clicked");
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 16 }}>Mes badges</Text>
+            <Text style={{ color: colors.text.primary, fontSize: 16 }}>
+              Mes badges
+            </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
@@ -122,7 +122,9 @@ const Header: React.FC = () => {
               console.log("Button clicked");
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 16 }}>Mes stats perso</Text>
+            <Text style={{ color: colors.text.primary, fontSize: 16 }}>
+              Mes stats perso
+            </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.Button}
@@ -133,7 +135,9 @@ const Header: React.FC = () => {
               navigation.navigate("Login");
             }}
           >
-            <Text style={{ color: "#fff", fontSize: 16 }}>Deconnexion</Text>
+            <Text style={{ color: colors.text.primary, fontSize: 16 }}>
+              Deconnexion
+            </Text>
           </TouchableOpacity>
         </View>
       )}
@@ -150,10 +154,10 @@ const Header: React.FC = () => {
 const styles = StyleSheet.create({
   header: {
     padding: 16,
-    backgroundColor: "#2a2e30",
+    backgroundColor: colors.background.main,
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: "rgba(255,255,255,0.1)",
+    borderBottomColor: colors.border.light,
   },
   logo: {
     width: 200,
@@ -166,20 +170,20 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 16,
     top: 50,
-    color: "#fff",
-    backgroundColor: accentColor,
+    color: colors.text.primary,
+    backgroundColor: colors.primary.main,
     padding: 10,
     borderRadius: 8,
   },
   Button: {
-    backgroundColor: accentColor,
+    backgroundColor: colors.primary.main,
     paddingVertical: 16,
     paddingHorizontal: 24,
     borderRadius: 12,
     marginBottom: 14,
     borderWidth: 2,
-    borderColor: "rgba(255,255,255,0.25)",
-    shadowColor: "#000",
+    borderColor: colors.border.accent,
+    shadowColor: colors.specific.black,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.35,
     shadowRadius: 6,
@@ -193,17 +197,17 @@ const styles = StyleSheet.create({
     top: 85,
     width: "92%",
     right: 15,
-    backgroundColor: "#25272c",
+    backgroundColor: colors.background.modal,
     borderRadius: 14,
     padding: 24,
-    shadowColor: "#000",
+    shadowColor: colors.specific.black,
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.35,
     shadowRadius: 8,
     elevation: 10,
     zIndex: 1000,
     borderWidth: 1.5,
-    borderColor: "rgba(255,255,255,0.2)",
+    borderColor: colors.border.accent,
   },
 });
 

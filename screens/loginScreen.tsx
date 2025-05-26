@@ -10,20 +10,19 @@ import {
   SafeAreaView,
   Alert,
   Button,
-  //Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
-//test modal import à supprimer
-//import ModalBadge from "../components/ModalBadge";
+
 import { useDispatch } from "react-redux";
 import { updateToken, updateEmail, logout } from "../reducers/users";
 import { useSelector } from "react-redux";
+import { colors } from "../theme/colors";
 type RootStackParamList = {
   TabNavigator: undefined;
-  // ajoutez ici d'autres routes si nécessaire
+  // ajoutez ici d'autres navigation si nécessaire
 };
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
@@ -33,9 +32,7 @@ const FontAwesome = _FontAwesome as React.ElementType;
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
   const dispatch = useDispatch();
-  //test modal à supprimer
-  //const [modalVisible, setModalVisible] = useState(false);
-  // Replace 'RootState' with the actual type of your Redux root state if different
+
   interface RootState {
     users: {
       email: {
@@ -95,32 +92,6 @@ const LoginScreen: React.FC = () => {
 
   const token = useSelector((state: any) => state.users.value.token);
 
-  // Fonction de déconnexion
-  const handleLogout = async () => {
-    try {
-      // Appeler le backend pour la déconnexion si nécessaire
-      if (token) {
-        await fetch(`${API_URL}/users/logout`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-      }
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion:", error);
-    } finally {
-      // Nettoyer le store Redux et AsyncStorage
-      dispatch(logout());
-      // Réinitialiser les états locaux
-      setEmail("");
-      setPassword("");
-      setEmailError("");
-      setPasswordError("");
-    }
-  };
-
   // Rediriger vers TabNavigator si l'utilisateur est déjà connecté
   useEffect(() => {
     if (token) {
@@ -177,24 +148,7 @@ const LoginScreen: React.FC = () => {
       );
     }
   };
-  const handleDelete = async () => {
-    try {
-      const response = await fetch(`${API_URL}/users/delete${tokenData}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          token: tokenData,
-        }),
-      });
-    } catch (error: any) {
-      Alert.alert(
-        "Erreur de suppression",
-        error.message || "Une erreur est survenue."
-      );
-    }
-  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Logo */}
@@ -303,7 +257,7 @@ const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2a2e30",
+    backgroundColor: colors.background.main,
     paddingHorizontal: 20,
     justifyContent: "center",
   },
@@ -322,7 +276,6 @@ const styles = StyleSheet.create({
   logoCircle: {
     width: 100,
     height: 100,
-
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
@@ -333,7 +286,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   title: {
-    color: "#fff",
+    color: colors.text.primary,
     fontWeight: "bold",
     fontSize: 25,
   },
@@ -342,10 +295,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginVertical: 20,
     paddingHorizontal: 20,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.specific.white,
     padding: 10,
     borderRadius: 10,
-    shadowColor: "#ffffff",
+    shadowColor: colors.specific.white,
     shadowOpacity: 0.25,
     shadowOffset: {
       width: 0,
@@ -354,7 +307,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     textAlign: "center",
-    color: "#ffffff",
+    color: colors.text.primary,
     fontSize: 14,
     marginBottom: 10,
   },
@@ -362,15 +315,14 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   input: {
-    backgroundColor: "#e5e2e2", //#e5e2e2
+    backgroundColor: colors.specific.gray.light,
     borderRadius: 5,
     marginBottom: 10,
-
     marginTop: 10,
     paddingVertical: 12,
     paddingHorizontal: 15,
     fontSize: 16,
-    shadowColor: "#000",
+    shadowColor: colors.specific.black,
     shadowOpacity: 0.4,
     shadowRadius: 6,
     shadowOffset: {
@@ -380,13 +332,13 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   loginButton: {
-    backgroundColor: "#ffac25",
+    backgroundColor: colors.action.warning,
     paddingVertical: 12,
     borderRadius: 5,
     alignItems: "center",
   },
   loginButtonText: {
-    color: "#fff",
+    color: colors.text.primary,
     fontWeight: "bold",
     fontSize: 16,
   },
@@ -394,16 +346,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
     textDecorationLine: "underline",
-    color: "#ffffff",
+    color: colors.text.primary,
   },
   signupButton: {
-    backgroundColor: "#d395ff",
+    backgroundColor: colors.primary.light,
     paddingVertical: 10,
     borderRadius: 5,
     marginTop: 10,
   },
   signupButtonText: {
-    color: "#fff",
+    color: colors.text.primary,
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 13,
@@ -412,36 +364,36 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 15,
     fontStyle: "italic",
-    color: "#ffffff",
+    color: colors.text.primary,
   },
   inputError: {
-    borderColor: "#ff4757",
+    borderColor: colors.action.danger,
     borderWidth: 1,
   },
   errorText: {
-    color: "#ff4757",
+    color: colors.action.danger,
     fontSize: 12,
     marginTop: 4,
     marginLeft: 4,
   },
   logoutButton: {
-    backgroundColor: "#ff4757",
+    backgroundColor: colors.action.danger,
     paddingVertical: 12,
     borderRadius: 5,
     alignItems: "center",
     marginTop: 10,
   },
   logoutButtonText: {
-    color: "#fff",
+    color: colors.text.primary,
     fontWeight: "bold",
     fontSize: 16,
   },
   modalButtonText: {
-    color: "#fff",
+    color: colors.text.primary,
     textAlign: "center",
     marginTop: 20,
     padding: 10,
-    backgroundColor: "#8b43f1",
+    backgroundColor: colors.primary.main,
     borderRadius: 8,
   },
 });

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export type UserState = {
