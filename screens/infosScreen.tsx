@@ -20,6 +20,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePseudo, logout } from "../reducers/users";
 import { colors } from "../theme/colors";
 import AppButton from "../components/AppButton";
+import ModalNewsletter from "../components/ModalNewsletter";
 const FontAwesome = _FontAwesome as React.ElementType;
 const backgroundColor = "#1a1a1f";
 const textColor = "#fff";
@@ -59,6 +60,7 @@ export default function InfosScreen() {
   });
   const [tempPseudo, setTempPseudo] = useState(storedPseudo);
   const [isLoading, setIsLoading] = useState(false);
+  const [showNewsletter, setShowNewsletter] = useState(false);
 
   // Mettre à jour userData et tempPseudo quand storedPseudo change
   useEffect(() => {
@@ -338,14 +340,15 @@ export default function InfosScreen() {
 
             <AppButton
               title="Newsletter"
-              onPress={() => {
-                alert("Fonctionnalité à venir !");
-                // Gérer l'inscription à la newsletter
-              }}
+              onPress={() => setShowNewsletter(true)}
               style={styles.actionButton}
               textStyle={styles.actionButtonText}
             />
           </View>
+          <ModalNewsletter
+            visible={showNewsletter}
+            onClose={() => setShowNewsletter(false)}
+          />
         </View>
       </LinearGradient>
     </ScrollView>

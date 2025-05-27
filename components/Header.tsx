@@ -22,6 +22,7 @@ import ModalBadges from "./ModalBadges";
 
 type RootStackParamList = {
   Login: undefined;
+  PhotosAlbum: undefined;
   Infos: undefined;
   // Ajoutez ici d'autres routes si nécessaire
 };
@@ -101,7 +102,7 @@ const Header: React.FC = () => {
           <TouchableOpacity
             style={styles.Button}
             onPress={() => {
-              console.log("Button clicked");
+              navigation.navigate("PhotosAlbum");
             }}
           >
             <Text style={{ color: colors.text.primary, fontSize: 16 }}>

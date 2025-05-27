@@ -24,6 +24,7 @@ import badges from "./reducers/badges";
 import SubscriptionScreen from "./screens/subscriptionScreen";
 import DashboardStack from "./screens/dashboardStack";
 import EndCreditScreen from "./screens/endCreditScreen";
+import PhotosAlbumScreen from "./screens/photosAlbumScreen";
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -108,6 +109,11 @@ const AppContent = () => {
         <Stack.Screen
           name="Infos"
           component={InfosScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PhotosAlbum"
+          component={PhotosAlbumScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
