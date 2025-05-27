@@ -6,6 +6,7 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import * as ImagePicker from "expo-image-picker";
 import { useSelector } from "react-redux";
 import { UserState } from "../reducers/users";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const FontAwesome = _FontAwesome as React.ElementType;
 
@@ -87,6 +88,12 @@ export default function TakePicScreen() {
       <TouchableOpacity style={styles.coinsButton}>
         <Text style={styles.text}>
           Coins : {currentCoins} {isGuest ? "/ 3" : ""}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() =>  AsyncStorage.setItem("guestCoins", "3")} 
+        style={{marginTop: 20, backgroundColor: "black", padding: 10, alignItems: "center", justifyContent: "center"}}>
+        <Text style={styles.text}>
+          reset Coins
         </Text>
       </TouchableOpacity>
     </View>

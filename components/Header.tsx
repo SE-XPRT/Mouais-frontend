@@ -16,7 +16,11 @@ import { useDispatch } from "react-redux";
 import { updateToken, updateEmail } from "../reducers/users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FilterModal from "./ModalFilter";
+<<<<<<< HEAD
 import { colors } from "../theme/colors";
+=======
+import ModalBadges from "./ModalBadges";
+>>>>>>> 9e32b94bb2425dffa32632868b8baa1cc48c6620
 
 type RootStackParamList = {
   Login: undefined;
@@ -29,6 +33,7 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const [showPersonalize, setShowPersonalize] = useState(false);
   const [showFiltersModal, setShowFiltersModal] = useState(false);
+  const [showBadgesModal, setShowBadgesModal] = useState(false);
 
   const openMenu = () => {
     // Handle menu opening
@@ -107,9 +112,7 @@ const Header: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => {
-              console.log("Button clicked");
-            }}
+            onPress={() => setShowBadgesModal(true)}
           >
             <Text style={{ color: colors.text.primary, fontSize: 16 }}>
               Mes badges
@@ -146,6 +149,10 @@ const Header: React.FC = () => {
         onClose={() => setShowFiltersModal(false)}
         token={token}
         photoId={photoId}
+      />
+      <ModalBadges
+        visible={showBadgesModal}
+        onClose={() => setShowBadgesModal(false)}
       />
     </View>
   );

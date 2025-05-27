@@ -330,13 +330,9 @@ export default function InfosScreen() {
 
           <View style={styles.ButtonContainer}>
             <AppButton
-              title="Mes informations"
-              onPress={() => {
-                alert("Fonctionnalité à venir !");
-                // Gérer l'inscription à la newsletter
-              }}
+              title="Modifier mon mot de passe"
+              onPress={() => {}}
               style={styles.actionButton}
-              gradientStyle={styles.gradientButton}
               textStyle={styles.actionButtonText}
             />
 
@@ -347,7 +343,6 @@ export default function InfosScreen() {
                 // Gérer l'inscription à la newsletter
               }}
               style={styles.actionButton}
-              gradientStyle={styles.gradientButton}
               textStyle={styles.actionButtonText}
             />
           </View>
@@ -475,6 +470,8 @@ const styles = StyleSheet.create({
   ButtonContainer: {
     width: "100%",
     gap: 16,
+
+    alignItems: "center",
   },
   actionButton: {
     width: "100%",

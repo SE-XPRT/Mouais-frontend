@@ -14,6 +14,8 @@ import { useSelector } from "react-redux";
 
 type RootStackParamList = {
   TabNavigator: undefined;
+  EndCreditScreen: undefined;
+
 };
 
 export default function SnapScreen() {
@@ -28,6 +30,9 @@ export default function SnapScreen() {
   const [capturedUri, setCapturedUri] = useState<string>("");
 
   const token = useSelector((state: any) => state.users?.value?.token || "invité");
+  const  { coins, guestCoins } = useSelector((state: any) => state.users.value);
+  const isGuest = token === "invité";
+  const currentCoins = isGuest ? guestCoins : coins;
 
   useEffect(() => {
     (async () => {
@@ -46,7 +51,15 @@ export default function SnapScreen() {
     setFlashStatus((prev) => (prev === "off" ? "on" : "off"));
   };
 
-  const takePicture = async () => {
+  const takePicture = async () => { 
+    if (currentCoins <= 0) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: "EndCreditScreen" }],
+      });
+      return;
+    }
+
     const photo = await cameraRef.current?.takePictureAsync({ quality: 0.3 });
     if (photo?.uri) {
       setCapturedUri(photo.uri);

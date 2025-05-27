@@ -8,6 +8,7 @@ export type UserState = {
     pseudo: string | "";
     coins: number;
     guestCoins: number;
+    badges: [];
   };
 };
 
@@ -16,8 +17,9 @@ const initialState: UserState = {
     email: "",
     token: "",
     pseudo: "",
-    coins: 0,         
-    guestCoins: 3,   
+    coins: 0,
+    guestCoins: 3,
+    badges: [],
   },
 };
 
