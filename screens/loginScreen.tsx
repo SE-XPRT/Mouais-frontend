@@ -122,7 +122,7 @@ const LoginScreen: React.FC = () => {
         body: JSON.stringify({
           email,
           password,
-          coins
+          coins,
         }),
       });
 
