@@ -14,7 +14,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import Constants from "expo-constants";
 import { useDispatch } from "react-redux";
-import { updateCoins } from "../reducers/users";
+import { updateCoins, UserState } from "../reducers/users";
+import { useSelector } from "react-redux";
 
 const FontAwesome = _FontAwesome as React.ElementType;
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
@@ -48,14 +49,19 @@ export default function ModalRating({
   token: string;
 }) {
   const dispatch = useDispatch();
+  const { email, coins, guestCoins } = useSelector(
+    (state: { users: UserState & { value: any } }) => state.users.value
+  );
+  const isGuest = email === "";
+  const currentCoins = isGuest ? guestCoins : coins;
+  
   const [analysis, setAnalysis] = useState<any>(null);
 
-
- useEffect(() => {
-  if (visible && imageUri && token) {
-    dispatch(updateCoins(-1));
-  }
-}, [visible]);
+  useEffect(() => {
+    if (visible && imageUri && token) {
+      dispatch(updateCoins(-1));
+    }
+  }, [visible]);
 
   useEffect(() => {
     console.log("Token envoyé au backend :", token);
@@ -79,7 +85,7 @@ export default function ModalRating({
     };
 
     if (visible && imageUri && token) {
-      setAnalysis(null); //
+      setAnalysis(null);
       fetchAnalysis();
     }
   }, [visible, imageUri, token]);
@@ -145,7 +151,7 @@ export default function ModalRating({
 
                 <View style={styles.coinsLeft}>
                   <FontAwesomeIcon icon={faCoins} size={30} color="#000" />
-                  <Text style={styles.coinsLeftText}>Il te reste 2 coins</Text>
+                  <Text style={styles.coinsLeftText}>Il te reste {currentCoins} {isGuest ? "/ 3" : ""} coins</Text>
                 </View>
 
                 <View style={styles.adviceContainer}>

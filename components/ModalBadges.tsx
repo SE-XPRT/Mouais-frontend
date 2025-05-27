@@ -31,9 +31,8 @@ const allBadges: Badge[] = [
 
 const ModalBadges: React.FC<ModalBadgesProps> = ({ visible, onClose }) => {
   // Sécurité : si badges pas définis, retourner tableau vide pour éviter les erreurs
-  const userBadges: number[] = useSelector(
-    (state: any) => state.users?.badges ?? []
-  );
+  const rawUserBadges = useSelector((state: any) => state.users?.badges);
+  const userBadges: number[] = rawUserBadges || [];
 
   // Si pas de badges (ex : utilisateur invité), on affiche un message sympa
   if (!userBadges.length) {
