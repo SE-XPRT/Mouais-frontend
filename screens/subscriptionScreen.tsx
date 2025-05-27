@@ -29,7 +29,7 @@ const SubscriptionScreen = () => {
   const handleApply = () => {
     if (selectedIndex !== null) {
       const selected = options[selectedIndex];
-      navigation.navigate("payment", { subscriptionLabel: selected.label }); // Envoie le label sélectionné à la page payment
+      navigation.navigate("Payment", { subscriptionLabel: selected.label }); // Envoie le label sélectionné à la page payment
     }
   };
 

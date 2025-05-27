@@ -12,6 +12,7 @@ import SnapScreen from "./screens/snapscreen";
 import TakePicScreen from "./screens/takePicScreen";
 import InfosScreen from "./screens/infosScreen";
 import LoginScreen from "./screens/loginScreen";
+import PaymentScreen from "./screens/paymentScreen";
 import SubscriptionScreenScreen from "./screens/subscriptionScreen";
 import UploadedPhotoScreen from "./screens/uploadedPhotoScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -111,7 +112,11 @@ const AppContent = () => {
           component={InfosScreen}
           options={{ headerShown: false }}
         />
-       
+        <Stack.Screen
+          name="Payment"
+          component={PaymentScreen}
+          options={{ headerShown: false }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
