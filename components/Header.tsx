@@ -102,7 +102,7 @@ const Header: React.FC = () => {
           <TouchableOpacity
             style={styles.Button}
             onPress={() => {
-              navigation.navigate("PhotosAlbum");
+              navigation.navigate("PhotosAlbum");;
             }}
           >
             <Text style={{ color: colors.text.primary, fontSize: 16 }}>

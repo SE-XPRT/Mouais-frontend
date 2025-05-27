@@ -111,11 +111,7 @@ const AppContent = () => {
           component={InfosScreen}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="PhotosAlbum"
-          component={PhotosAlbumScreen}
-          options={{ headerShown: false }}
-        />
+       
       </Stack.Navigator>
     </NavigationContainer>
   );
