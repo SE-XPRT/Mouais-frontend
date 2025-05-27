@@ -18,6 +18,8 @@ import { NavigationProp } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePseudo, logout } from "../reducers/users";
+import { colors } from "../theme/colors";
+import AppButton from "../components/AppButton";
 const FontAwesome = _FontAwesome as React.ElementType;
 const backgroundColor = "#1a1a1f";
 const textColor = "#fff";
@@ -203,18 +205,34 @@ export default function InfosScreen() {
       ]
     );
   };
+  const editPhoto = () => {
+    alert("Fonctionnalité à venir !");
+    //prendre une photo ou choisir une image de la galerie
+  };
   return (
     <ScrollView contentContainerStyle={styles.bg}>
       <LinearGradient
-        colors={["#1a1a1f", "#2a2a30"] as [string, string]}
+        colors={
+          [colors.background.main, colors.background.cardLight] as [
+            string,
+            string
+          ]
+        }
         style={styles.gradientBg}
       >
         <View style={styles.container}>
           <View style={styles.avatarContainer}>
             <LinearGradient
-              colors={accentGradient as [string, string]}
+              colors={colors.primary.gradient}
               style={styles.avatarGradient}
             >
+              <FontAwesome
+                name="edit"
+                size={24}
+                color="#fff"
+                style={{ position: "absolute", top: 10, right: -25 }}
+                onPress={editPhoto}
+              />
               <Image
                 source={require("../assets/user.png")}
                 style={styles.userIcon}
@@ -243,8 +261,11 @@ export default function InfosScreen() {
                   style={[
                     styles.value,
                     editMode
-                      ? { backgroundColor: "#ffffff" }
-                      : { backgroundColor: "rgba(255,255,255,0.05)" },
+                      ? { color: "#ffffff", backgroundColor: "#ffffff" }
+                      : {
+                          color: "#ffffff",
+                          backgroundColor: "rgba(255,255,255,0.05)",
+                        },
                   ]}
                   editable={editMode}
                   placeholder={
@@ -264,11 +285,14 @@ export default function InfosScreen() {
                   style={[
                     styles.value,
                     editMode
-                      ? { backgroundColor: "#ffffff" }
-                      : { backgroundColor: "rgba(255,255,255,0.05)" },
+                      ? { color: "#ffffff", backgroundColor: "#ffffff" }
+                      : {
+                          color: "#ffffff",
+                          backgroundColor: "rgba(255,255,255,0.05)",
+                        },
                   ]}
                   editable={false}
-                  value={userData.email}
+                  value={userData.email.slice(0, 18) + "..."}
                 />
               </View>
 
@@ -305,37 +329,22 @@ export default function InfosScreen() {
           </View>
 
           <View style={styles.ButtonContainer}>
-            <TouchableOpacity style={styles.actionButton}>
-              <LinearGradient
-                colors={accentGradient as [string, string]}
-                style={styles.gradientButton}
-              >
-                <FontAwesome
-                  name="credit-card"
-                  size={20}
-                  color="#fff"
-                  style={styles.buttonIcon}
-                />
-                <Text style={styles.actionButtonText}>
-                  Mes informations de paiement
-                </Text>
-              </LinearGradient>
-            </TouchableOpacity>
+            <AppButton
+              title="Modifier mon mot de passe"
+              onPress={() => {}}
+              style={styles.actionButton}
+              textStyle={styles.actionButtonText}
+            />
 
-            <TouchableOpacity style={styles.actionButton}>
-              <LinearGradient
-                colors={accentGradient as [string, string]}
-                style={styles.gradientButton}
-              >
-                <FontAwesome
-                  name="envelope"
-                  size={20}
-                  color="#fff"
-                  style={styles.buttonIcon}
-                />
-                <Text style={styles.actionButtonText}>Newsletter</Text>
-              </LinearGradient>
-            </TouchableOpacity>
+            <AppButton
+              title="Newsletter"
+              onPress={() => {
+                alert("Fonctionnalité à venir !");
+                // Gérer l'inscription à la newsletter
+              }}
+              style={styles.actionButton}
+              textStyle={styles.actionButtonText}
+            />
           </View>
         </View>
       </LinearGradient>
@@ -345,7 +354,7 @@ export default function InfosScreen() {
 
 const styles = StyleSheet.create({
   bg: {
-    backgroundColor: backgroundColor,
+    backgroundColor: colors.background.main,
   },
   gradientBg: {
     paddingBottom: 40,
@@ -368,11 +377,11 @@ const styles = StyleSheet.create({
     width: 110,
     height: 110,
     borderRadius: 55,
-    backgroundColor: cardBg,
+    backgroundColor: colors.background.card,
   },
   username: {
     fontSize: 24,
-    color: textColor,
+    color: colors.text.primary,
     fontWeight: "bold",
     letterSpacing: 1.2,
     textShadowColor: "rgba(0,0,0,0.3)",
@@ -383,14 +392,14 @@ const styles = StyleSheet.create({
     width: "100%",
     borderRadius: 20,
     padding: 24,
-    backgroundColor: cardBg,
-    shadowColor: "#000",
+    backgroundColor: colors.background.cardLight,
+    shadowColor: colors.specific.black,
     shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.2,
     shadowRadius: 16,
     elevation: 8,
     borderWidth: 1,
-    borderColor: cardBorder,
+    borderColor: colors.border.main,
     marginBottom: 30,
   },
   cardHeader: {
@@ -400,18 +409,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     paddingBottom: 15,
     borderBottomWidth: 1,
-    borderBottomColor: cardBorder,
+    borderBottomColor: colors.border.main,
   },
   cardTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    color: textColor,
+    color: colors.text.primary,
     letterSpacing: 0.5,
   },
   editButton: {
     padding: 8,
     borderRadius: 12,
-    backgroundColor: "rgba(139, 67, 241, 0.1)",
+    backgroundColor: colors.state.hover,
   },
   infoContainer: {
     gap: 16,
@@ -423,50 +432,52 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: labelColor,
+    color: colors.text.secondary,
     width: 90,
     fontWeight: "600",
   },
   value: {
     flex: 1,
     fontSize: 16,
-    color: "#000000",
+    color: colors.text.dark,
     fontWeight: "500",
     paddingVertical: 12,
     paddingHorizontal: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.specific.white,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)",
+    borderColor: colors.border.dark,
   },
   deleteButton: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(255,71,87,0.1)",
+    backgroundColor: colors.state.hover,
     paddingVertical: 12,
     borderRadius: 12,
     marginTop: 20,
     borderWidth: 1,
-    borderColor: "rgba(255,71,87,0.2)",
+    borderColor: colors.border.accent,
   },
   deleteIcon: {
     marginRight: 8,
   },
   deleteButtonText: {
-    color: dangerColor,
+    color: colors.action.danger,
     fontSize: 16,
     fontWeight: "600",
   },
   ButtonContainer: {
     width: "100%",
     gap: 16,
+
+    alignItems: "center",
   },
   actionButton: {
     width: "100%",
     borderRadius: 16,
     overflow: "hidden",
-    shadowColor: "#000",
+    shadowColor: colors.specific.black,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 8,
@@ -483,7 +494,7 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   actionButtonText: {
-    color: "#fff",
+    color: colors.text.primary,
     fontSize: 16,
     fontWeight: "600",
   },
@@ -500,13 +511,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   cancelButton: {
-    backgroundColor: "#666",
+    backgroundColor: colors.specific.gray.medium,
   },
   validateButton: {
-    backgroundColor: accentColor,
+    backgroundColor: colors.primary.main,
   },
   editActionButtonText: {
-    color: "#fff",
+    color: colors.text.primary,
     fontSize: 16,
     fontWeight: "600",
   },

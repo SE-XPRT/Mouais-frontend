@@ -10,6 +10,7 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 import Constants from "expo-constants";
 import { useSelector } from "react-redux";
+import { colors } from "../theme/colors";
 
 type RootStackParamList = {
   Dashboard: { token: string };
@@ -132,13 +133,13 @@ export default function DashboardScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#2a2e30",
+    backgroundColor: colors.background.main,
     alignItems: "center",
     paddingTop: 120,
     paddingBottom: 120,
   },
   greetings: {
-    color: "#fff",
+    color: colors.text.primary,
     fontSize: 22,
     fontFamily: "Fredoka One",
     marginBottom: 30,
@@ -148,28 +149,31 @@ const styles = StyleSheet.create({
   userName: {
     fontFamily: "Fredoka One",
     fontWeight: "bold",
-    color: "#fff",
+    color: colors.text.primary,
   },
   aura: {
-    color: "#E7C6FF",
+    color: colors.primary.light,
     fontWeight: "bold",
     fontFamily: "Fredoka One",
   },
   cardGrid: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.specific.white,
     borderRadius: 20,
     paddingVertical: 30,
     paddingHorizontal: 20,
     width: "90%",
     alignItems: "center",
-    shadowColor: "#000",
+    shadowColor: colors.specific.black,
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
     shadowRadius: 10,
     elevation: 0,
     borderBottomWidth: 4,
     borderRightWidth: 4,
-    borderColor: "#d1d9e6",
+    borderColor: colors.specific.gray.light,
   },
   cardWrapper: {
     flexDirection: "row",
@@ -179,15 +183,14 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.specific.white,
     width: "48%",
     height: 120,
     marginBottom: 15,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
-
-    shadowColor: "#000",
+    shadowColor: colors.specific.black,
     shadowOpacity: 0.4,
     shadowRadius: 6,
     shadowOffset: {
@@ -197,7 +200,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cardText: {
-    color: "black",
+    color: colors.text.dark,
     fontSize: 14,
     marginTop: 10,
     textAlign: "center",
@@ -210,27 +213,27 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   pinkButton: {
-    backgroundColor: "#ff0084",
+    backgroundColor: colors.specific.pink,
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 10,
     marginTop: 20,
     borderBottomWidth: 4,
     borderRightWidth: 4,
-    borderColor: "#b3005c",
+    borderColor: colors.action.danger,
   },
   greenButton: {
-    backgroundColor: "#29ffc6",
+    backgroundColor: colors.action.success,
     paddingVertical: 10,
     paddingHorizontal: 50,
     borderRadius: 10,
     marginTop: 10,
     borderBottomWidth: 4,
     borderRightWidth: 4,
-    borderColor: "#1fb198",
+    borderColor: colors.specific.green,
   },
   buttonText: {
-    color: "#000",
+    color: colors.text.dark,
     fontWeight: "bold",
     fontFamily: "Playpen Sans",
   },
@@ -239,11 +242,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 50,
-    backgroundColor: "#fff",
+    backgroundColor: colors.specific.white,
     fontFamily: "Playpen Sans",
-    color: "#333",
+    color: colors.specific.gray.dark,
     textAlign: "center",
-    shadowColor: "#000",
+    shadowColor: colors.specific.black,
     shadowOffset: { width: -2, height: -2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
