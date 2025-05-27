@@ -17,9 +17,9 @@ const initialState: UserState = {
     email: "",
     token: "",
     pseudo: "",
-    coins: 0,         
-    guestCoins: 3,  
-    badges: []; 
+    coins: 0,
+    guestCoins: 3,
+    badges: [],
   },
 };
 
