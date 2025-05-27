@@ -117,6 +117,14 @@ export default function DashboardScreen() {
         >
           <Text style={styles.buttonText}>BUY PREMIUM</Text>
         </TouchableOpacity>
+
+        <TouchableOpacity
+          onPress={() => navigation.navigate("endCredit")} //bouton temporaire test vers endCredit page
+        >
+          <Text style={styles.coinInfo}>
+            Il te reste {coins} coins Bouton test endCreditScreen
+          </Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

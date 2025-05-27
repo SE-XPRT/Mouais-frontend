@@ -19,6 +19,7 @@ import FilterModal from "./ModalFilter";
 
 type RootStackParamList = {
   Login: undefined;
+  PhotosAlbum: undefined;
   // Ajoutez ici d'autres routes si nécessaire
 };
 const screenHeight = Dimensions.get("window").height;
@@ -100,7 +101,7 @@ const Header: React.FC = () => {
           <TouchableOpacity
             style={styles.Button}
             onPress={() => {
-              console.log("Button clicked");
+              navigation.navigate("PhotosAlbum");
             }}
           >
             <Text style={{ color: "#fff", fontSize: 16 }}>

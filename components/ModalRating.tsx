@@ -58,6 +58,8 @@ export default function ModalRating({
 }, [visible]);
 
   useEffect(() => {
+    console.log("Token envoyé au backend :", token);
+
     const fetchAnalysis = async () => {
       try {
         const response = await fetch(`${API_URL}/photos/upload`, {
