@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  Button,
   Dimensions,
 } from "react-native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
