@@ -17,7 +17,7 @@ import { DashboardStackParamList } from "./paymentScreen"; // Import des types d
 const options = [
   { label: "10 coins / jour - 0,99 €", icon: "child" },
   { label: "20 coins / jour - 1,99 €", icon: "heart" },
-  { label: "30 coins / jour - 2,99 €", icon: "medal" },
+  { label: "30 coins / jour - 2,99 €", icon: "bullseye" },
   { label: "50 coins / jour - 5,99 €", icon: "trophy" },
 ];
 
