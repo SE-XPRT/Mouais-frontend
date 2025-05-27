@@ -30,31 +30,10 @@ const allBadges: Badge[] = [
 ];
 
 const ModalBadges: React.FC<ModalBadgesProps> = ({ visible, onClose }) => {
-  // Sécurité : si badges pas définis, retourner tableau vide pour éviter les erreurs
   const userBadges: number[] = useSelector(
-    (state: any) => state.users?.badges ?? []
+    (state: any) => state.users?.value?.badges ?? []
   );
 
-  // Si pas de badges (ex : utilisateur invité), on affiche un message sympa
-  if (!userBadges.length) {
-    return (
-      <Modal visible={visible} animationType="slide" transparent>
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContent}>
-            <Text style={styles.title}>🎖️ Mes Badges</Text>
-            <Text style={{ textAlign: "center", marginVertical: 20 }}>
-              Connecte-toi pour voir tes badges !
-            </Text>
-            <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <Text style={styles.closeText}>Fermer</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      </Modal>
-    );
-  }
-
-  // Sinon on affiche la liste des badges avec leur état (débloqué ou non)
   const renderBadge = ({ item }: { item: Badge }) => {
     const isUnlocked = userBadges.includes(item.id);
     return (

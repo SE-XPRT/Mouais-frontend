@@ -21,6 +21,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import users, { loadStoredData, loadStoredGuestCoins } from "./reducers/users";
 import filters from "./reducers/filters";
 import badges from "./reducers/badges";
+import records from "./reducers/records";
 import SubscriptionScreen from "./screens/subscriptionScreen";
 import DashboardStack from "./screens/dashboardStack";
 import EndCreditScreen from "./screens/endCreditScreen";
@@ -28,7 +29,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const store = configureStore({
-  reducer: { users, filters, badges },
+  reducer: { users, filters, badges, records },
 });
 
 // Composant pour charger les données sauvegardées

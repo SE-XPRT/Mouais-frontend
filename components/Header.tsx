@@ -17,6 +17,7 @@ import { updateToken, updateEmail } from "../reducers/users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FilterModal from "./ModalFilter";
 import ModalBadges from "./ModalBadges";
+import ModalRecords from "./ModalRecords";
 
 type RootStackParamList = {
   Login: undefined;
@@ -36,6 +37,7 @@ const Header: React.FC = () => {
   const [showPersonalize, setShowPersonalize] = useState(false);
   const [showFiltersModal, setShowFiltersModal] = useState(false);
   const [showBadgesModal, setShowBadgesModal] = useState(false);
+  const [showRecordsModal, setShowRecordsModal] = useState(false);
 
   const openMenu = () => {
     // Handle menu opening
@@ -93,7 +95,7 @@ const Header: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.Button}
-            onPress={openFilters} // Ouverture de la modal
+            onPress={openFilters} // Ouverture de la modal Filters
           >
             <Text style={{ color: "#fff", fontSize: 16 }}>
               Mes filtres & favoris
@@ -118,9 +120,7 @@ const Header: React.FC = () => {
 
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => {
-              console.log("Button clicked");
-            }}
+            onPress={() => setShowRecordsModal(true)} // Ouverture de la modal Records
           >
             <Text style={{ color: "#fff", fontSize: 16 }}>Mes stats perso</Text>
           </TouchableOpacity>
@@ -146,6 +146,10 @@ const Header: React.FC = () => {
       <ModalBadges
         visible={showBadgesModal}
         onClose={() => setShowBadgesModal(false)}
+      />
+      <ModalRecords
+        visible={showRecordsModal}
+        onClose={() => setShowRecordsModal(false)}
       />
     </View>
   );
