@@ -18,6 +18,7 @@ import { NavigationProp } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { updatePseudo, logout } from "../reducers/users";
+import ModalNewsletter from "../components/ModalNewsletter";
 const FontAwesome = _FontAwesome as React.ElementType;
 const backgroundColor = "#1a1a1f";
 const textColor = "#fff";
@@ -57,6 +58,7 @@ export default function InfosScreen() {
   });
   const [tempPseudo, setTempPseudo] = useState(storedPseudo);
   const [isLoading, setIsLoading] = useState(false);
+  const [showNewsletter, setShowNewsletter] = useState(false);
 
   // Mettre à jour userData et tempPseudo quand storedPseudo change
   useEffect(() => {
@@ -322,7 +324,10 @@ export default function InfosScreen() {
               </LinearGradient>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.actionButton}>
+            <TouchableOpacity
+              style={styles.actionButton}
+              onPress={() => setShowNewsletter(true)}
+            >
               <LinearGradient
                 colors={accentGradient as [string, string]}
                 style={styles.gradientButton}
@@ -334,6 +339,10 @@ export default function InfosScreen() {
                   style={styles.buttonIcon}
                 />
                 <Text style={styles.actionButtonText}>Newsletter</Text>
+                <ModalNewsletter
+                  visible={showNewsletter}
+                  onClose={() => setShowNewsletter(false)}
+                />
               </LinearGradient>
             </TouchableOpacity>
           </View>
