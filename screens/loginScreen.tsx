@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { updateToken, updateEmail, logout, actualizeCoins, UserState } from "../reducers/users";
 import { useSelector } from "react-redux";
 import { colors } from "../theme/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 type RootStackParamList = {
   TabNavigator: undefined;
   // ajoutez ici d'autres navigation si nécessaire
@@ -132,7 +133,9 @@ const LoginScreen: React.FC = () => {
       const data = await response.json();
 
       if (data.result) {
+        console.log("Connexion réussie :", data);
         dispatch(updateToken(data.token));
+        await AsyncStorage.setItem("token", data.token)
         dispatch(updateEmail(email));
         dispatch(actualizeCoins(data.coins)); 
         navigation.reset({

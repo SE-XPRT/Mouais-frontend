@@ -5,6 +5,8 @@ import DashboardScreen from "./dashboardScreen";
 import SubscriptionScreen from "./subscriptionScreen";
 import PaymentScreen from "./paymentScreen";
 import EndCreditScreen from "./endCreditScreen";
+import PhotosAlbumScreen from "./photosAlbumScreen";
+
 const Stack = createNativeStackNavigator();
 
 const DashboardStack = () => (
@@ -22,11 +24,16 @@ const DashboardStack = () => (
     <Stack.Screen
       name="payment"
       component={PaymentScreen}
-      options={{ headerShown: false }} // ou ton Header personnalisé
+      options={{ headerShown: false }}
     />
     <Stack.Screen
       name="endCredit"
       component={EndCreditScreen}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="PhotosAlbum"
+      component={PhotosAlbumScreen}
       options={{ headerShown: false }}
     />
   </Stack.Navigator>

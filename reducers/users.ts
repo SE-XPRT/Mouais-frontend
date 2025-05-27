@@ -33,7 +33,6 @@ export const usersSlice = createSlice({
     },
     updateToken: (state, action) => {
       state.value.token = action.payload;
-      AsyncStorage.setItem("userToken", action.payload);
     },
     updatePseudo: (state, action) => {
       state.value.pseudo = action.payload;
