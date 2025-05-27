@@ -16,11 +16,10 @@ import { useDispatch } from "react-redux";
 import { updateToken, updateEmail } from "../reducers/users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FilterModal from "./ModalFilter";
-<<<<<<< HEAD
+
 import { colors } from "../theme/colors";
-=======
+
 import ModalBadges from "./ModalBadges";
->>>>>>> 9e32b94bb2425dffa32632868b8baa1cc48c6620
 
 type RootStackParamList = {
   Login: undefined;
