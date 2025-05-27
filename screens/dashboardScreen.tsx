@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { colors } from "../theme/colors";
 
 type RootStackParamList = {
-  Dashboard: { token: string };
+  Dashboard: { token: string }; // ????
   subscribe: undefined;
   endCredit: undefined; // à supprimer plus tard
 };
