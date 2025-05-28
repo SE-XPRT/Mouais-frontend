@@ -11,9 +11,10 @@ const FontAwesome = _FontAwesome as React.ElementType;
 import Constants from "expo-constants";
 import { useSelector } from "react-redux";
 import { colors } from "../theme/colors";
+import { UserState } from "../reducers/users";
 
 type RootStackParamList = {
-  Dashboard: { token: string }; // ????
+  Dashboard: { token: string };
   subscribe: undefined;
   endCredit: undefined; // à supprimer plus tard
 };
@@ -25,10 +26,13 @@ const API_URL = Constants.expoConfig?.extra?.API_URL ?? ""; // pour aller cherch
 
 export default function DashboardScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-
+  const { email, coins, guestCoins } = useSelector(
+    (state: { users: UserState & { value: any } }) => state.users.value
+  );
   const route = useRoute<RouteProp<DashboardParams, "Dashboard">>();
   const token = route.params?.token;
-
+  const isGuest = email === "";
+  const currentCoins = isGuest ? guestCoins : coins;
   // Récupérer le pseudo depuis le store Redux
   const storedPseudo = useSelector(
     (state: { users: { value: { pseudo: string } } }) =>
@@ -38,7 +42,6 @@ export default function DashboardScreen() {
   const [averageScore, setAverageScore] = useState<number | null>(null);
   const [bestScore, setBestScore] = useState<number | null>(null);
   const [badgeNames, setBadgeNames] = useState<string[]>([]);
-  const [coins, setCoins] = useState<number>(0);
   const [photo, setPhoto] = useState<string | null>(null);
 
   useEffect(() => {
@@ -51,7 +54,6 @@ export default function DashboardScreen() {
           setAverageScore(data.averageScore);
           setBestScore(data.bestScore);
           setBadgeNames(data.badgeNames);
-          setCoins(data.coins);
         }
       })
       .catch((err) => console.error("Erreur dashboard:", err));
@@ -123,7 +125,7 @@ export default function DashboardScreen() {
           onPress={() => navigation.navigate("endCredit")} //bouton temporaire test vers endCredit page
         >
           <Text style={styles.coinInfo}>
-            Il te reste {coins} coins Bouton test endCreditScreen
+            Il te reste {currentCoins} {isGuest ? "/ 3 " : ""}coins
           </Text>
         </TouchableOpacity>
       </View>
