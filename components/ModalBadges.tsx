@@ -23,10 +23,10 @@ type ModalBadgesProps = {
 };
 
 const allBadges: Badge[] = [
-  { id: 1, title: "Explorateur", iconName: "compass" },
-  { id: 2, title: "Photographe", iconName: "camera" },
-  { id: 3, title: "Maître du like", iconName: "thumbs-up" },
-  { id: 4, title: "Champion", iconName: "trophy" },
+  { id: 1, title: "Baby BG", iconName: "compass" },
+  { id: 2, title: "BG in progress", iconName: "camera" },
+  { id: 3, title: "Mouais addict", iconName: "thumbs-up" },
+  { id: 4, title: "BG forever", iconName: "trophy" },
 ];
 
 const ModalBadges: React.FC<ModalBadgesProps> = ({ visible, onClose }) => {

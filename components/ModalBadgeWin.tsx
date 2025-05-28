@@ -11,19 +11,28 @@ import ConfettiCannon from "react-native-confetti-cannon";
 import { Audio } from "expo-av";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
+
 type SimpleModalProps = {
   visible: boolean;
   onClose: () => void;
 };
+
+type Badge = {
+  name: string;
+  iconName: string;
+};
+
 type ModalBadgeProps = {
   visible: boolean; // Détermine si la modale est visible
   onClose: () => void; // Fonction appelée quand on ferme la modale
   message?: string; // Message affiché dans la modale (optionnel)
+  badge?: Badge;
 };
 const ModalBadge: React.FC<ModalBadgeProps> = ({
   visible,
   onClose,
   message = "Tu as débloqué un badge ! 🎉", // Message par défaut
+  badge,
 }) => {
   const scaleAnim = useRef(new Animated.Value(0)).current; // Valeur animée pour effet scale
   const [showModal, setShowModal] = useState(visible); // État interne pour l'affichage réel
@@ -83,17 +92,17 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
         <Animated.View
           style={[styles.modalContainer, { transform: [{ scale: scaleAnim }] }]}
         >
-          {/* ❌ Bouton de fermeture */}
+          {/* Bouton de fermeture */}
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <FontAwesome name="close" size={20} color="#8b43f1" />
           </TouchableOpacity>
 
-          {/* 🎉 Titre principal */}
+          {/* Titre principal */}
           <Text style={styles.title}>Bravo BG !</Text>
 
-          {/* 🏆 Icône trophée */}
+          {/* Icône trophée */}
           <FontAwesome
-            name="trophy"
+            name={badge?.iconName || "trophy"}
             size={40}
             color="#29ffc6"
             style={styles.icon}
@@ -101,7 +110,8 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
 
           {/* 💬 Message badge */}
           <Text style={styles.description}>
-            GG tu viens de débloquer le badge {"\n"}"Glow Babe"
+            GG tu viens de débloquer le badge {"\n"}
+            {badge ? `"${badge.name}"` : "Glow Babe"}
           </Text>
 
           {/* 🔗 Lien vers badges */}

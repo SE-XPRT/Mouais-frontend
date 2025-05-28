@@ -27,6 +27,8 @@ import SubscriptionScreen from "./screens/subscriptionScreen";
 import DashboardStack from "./screens/dashboardStack";
 import EndCreditScreen from "./screens/endCreditScreen";
 import PhotosAlbumScreen from "./screens/photosAlbumScreen";
+import BadgeUnlocker from "./components/BadgeUnlocker";
+
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -184,6 +186,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <AppContent />
+      <BadgeUnlocker />
     </Provider>
   );
 }

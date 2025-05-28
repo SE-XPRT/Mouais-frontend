@@ -6,6 +6,7 @@ export type Badge = {
   name: string;
   description: string;
   iconURL: string;
+  iconName: string;
   criteria: string[];
 };
 
@@ -31,7 +32,9 @@ const badgesSlice = createSlice({
     },
     unlockBadge: (state, action: PayloadAction<Badge>) => {
       const newBadge = action.payload;
-      const alreadyUnlocked = state.list.some((b) => b._id === newBadge._id);
+      const alreadyUnlocked = state.unlocked.some(
+        (b) => b._id === newBadge._id
+      );
       if (!alreadyUnlocked) {
         state.list.push(newBadge);
         state.unlocked.push(newBadge);
@@ -48,5 +51,6 @@ const badgesSlice = createSlice({
   },
 });
 
-export const { setBadges, unlockBadge, resetBadges } = badgesSlice.actions;
+export const { setBadges, unlockBadge, resetLatestUnlocked, resetBadges } =
+  badgesSlice.actions;
 export default badgesSlice.reducer;

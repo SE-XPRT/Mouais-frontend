@@ -78,16 +78,14 @@ export default function DashboardScreen() {
         <View style={styles.cardWrapper}>
           <View style={styles.card}>
             <FontAwesome name="trophy" size={40} color="#29ffc6" />
-            <Text style={styles.cardText}>
-              Tes badges ({badgeNames.length})
-            </Text>
+            <Text style={styles.cardText}>Tes badges {badgeNames.length}</Text>
           </View>
 
           <View style={styles.card}>
             <FontAwesome name="thumbs-up" size={40} color="#ffac25" />
             <Text style={styles.cardText}>
               Ton score moyen
-              {averageScore !== null ? averageScore.toFixed(2) : "-"}
+              {averageScore !== null ? averageScore.toFixed(2) : ""}
             </Text>
           </View>
 
@@ -104,8 +102,8 @@ export default function DashboardScreen() {
           <View style={styles.card}>
             <FontAwesome name="star" size={40} color="#ff0084" />
             <Text style={styles.cardText}>
-              Ta best score
-              {bestScore !== null ? bestScore : "-"}
+              Ton best score
+              {bestScore !== null ? bestScore : ""}
             </Text>
           </View>
         </View>

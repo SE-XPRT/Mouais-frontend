@@ -15,10 +15,10 @@ import { DashboardStackParamList } from "./paymentScreen"; // Import des types d
 import { colors } from "../theme/colors";
 // Liste des abonnements disponibles
 const options = [
-  { label: "10 coins / jour - 0,99 €", icon: "child" },
-  { label: "20 coins / jour - 1,99 €", icon: "heart" },
-  { label: "30 coins / jour - 2,99 €", icon: "bullseye" },
-  { label: "50 coins / jour - 5,99 €", icon: "trophy" },
+  { label: "10 coins - 0,99 €", icon: "child" },
+  { label: "20 coins - 1,99 €", icon: "heart" },
+  { label: "30 coins - 2,99 €", icon: "bullseye" },
+  { label: "50 coins - 5,99 €", icon: "trophy" },
 ];
 
 const SubscriptionScreen = () => {
@@ -36,7 +36,7 @@ const SubscriptionScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        <Text style={styles.title}>Choisis ton abonnement</Text>
+        <Text style={styles.title}>Choisis ta formule</Text>
 
         {/* Liste des options d'abonnement */}
         <ScrollView contentContainerStyle={styles.optionList}>
