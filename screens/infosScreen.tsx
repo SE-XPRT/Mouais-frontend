@@ -266,7 +266,10 @@ export default function InfosScreen() {
                   style={[
                     styles.value,
                     editMode
-                      ? { color: "#ffffff", backgroundColor: "#ffffff" }
+                      ? {
+                          color: "#ffffff",
+                          backgroundColor: "rgba(255,255,255,0.05)",
+                        }
                       : {
                           color: "#ffffff",
                           backgroundColor: "rgba(255,255,255,0.05)",
@@ -290,7 +293,10 @@ export default function InfosScreen() {
                   style={[
                     styles.value,
                     editMode
-                      ? { color: "#ffffff", backgroundColor: "#ffffff" }
+                      ? {
+                          color: "#ffffff",
+                          backgroundColor: "rgba(255,255,255,0.05)",
+                        }
                       : {
                           color: "#ffffff",
                           backgroundColor: "rgba(255,255,255,0.05)",

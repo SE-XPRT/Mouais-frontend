@@ -35,6 +35,14 @@ const EndCreditScreen = () => {
           <FontAwesome name="credit-card" size={16} color="#ffffff" />
           <Text style={styles.buttonText}> Abonne toi</Text>
         </TouchableOpacity>
+        {/* Bouton retour */}
+        <TouchableOpacity
+          style={styles.validateButton}
+          onPress={() => navigation.goBack()}
+          accessibilityLabel="Retour"
+        >
+          <Text style={styles.gradientText}>Retour</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -80,6 +88,23 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#ffffff",
     fontWeight: "600",
+    fontSize: 16,
+  },
+  validateButtonText: {
+    color: "#2a2e30",
+    fontWeight: "bold",
+    fontSize: 16,
+  },
+  validateButton: {
+    backgroundColor: colors.specific.green,
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: "center",
+    marginTop: 10,
+  },
+  gradientText: {
+    color: "#2a2e30",
+    fontWeight: "bold",
     fontSize: 16,
   },
 });
