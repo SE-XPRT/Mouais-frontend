@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import * as ImagePicker from "expo-image-picker";
@@ -15,6 +15,7 @@ type RootStackParamList = {
   Snap: undefined;
   UploadedPhoto: { imageUri: string };
   EndCreditScreen: undefined;
+  Home: { screen: string };
 };
 
 export default function TakePicScreen() {
@@ -22,7 +23,7 @@ export default function TakePicScreen() {
     (state: { users: UserState & { value: any } }) => state.users.value
   );
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const isGuest = email === "";
   const currentCoins = isGuest ? guestCoins : coins;
