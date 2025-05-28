@@ -22,18 +22,17 @@ export default function TakePicScreen() {
     (state: { users: UserState & { value: any } }) => state.users.value
   );
 
-  const navigation =
-    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+  const navigation = useNavigation();
 
   const isGuest = email === "";
   const currentCoins = isGuest ? guestCoins : coins;
 
   const pickImage = async () => {
     if (currentCoins <= 0) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "EndCreditScreen" }],
+      navigation.navigate("Home", {
+        screen: "endCredit",
       });
+
       return;
     }
 
@@ -59,9 +58,8 @@ export default function TakePicScreen() {
 
   const handleCameraPress = () => {
     if (currentCoins <= 0) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: "EndCreditScreen" }],
+      navigation.navigate("Home", {
+        screen: "endCredit",
       });
     } else {
       navigation.navigate("Snap");
@@ -90,11 +88,17 @@ export default function TakePicScreen() {
           Coins : {currentCoins} {isGuest ? "/ 3" : ""}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() =>  AsyncStorage.setItem("guestCoins", "3")} 
-        style={{marginTop: 20, backgroundColor: "black", padding: 10, alignItems: "center", justifyContent: "center"}}>
-        <Text style={styles.text}>
-          reset Coins
-        </Text>
+      <TouchableOpacity
+        onPress={() => AsyncStorage.setItem("guestCoins", "3")}
+        style={{
+          marginTop: 20,
+          backgroundColor: "black",
+          padding: 10,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Text style={styles.text}>reset Coins</Text>
       </TouchableOpacity>
     </View>
   );
