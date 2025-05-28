@@ -16,13 +16,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 
 const FontAwesome = _FontAwesome as React.ElementType;
-
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 const screenWidth = Dimensions.get("window").width;
 
 export default function PhotosAlbumScreen() {
   const [photos, setPhotos] = useState<any[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
+  const [analysisToShow, setAnalysisToShow] = useState<any | null>(null);
 
   useEffect(() => {
     const fetchPhotos = async () => {
@@ -53,29 +53,32 @@ export default function PhotosAlbumScreen() {
   }, []);
 
   const handleShowAnalysis = (photo: any) => {
-    console.log("Analyse :", photo.analyse);
+    if (photo.analyse && photo.analyse.length > 0) {
+      setAnalysisToShow(photo.analyse[0]);
+    } else {
+      Alert.alert("Aucune analyse", "Cette photo n’a pas encore d’analyse.");
+    }
   };
 
   const handleDelete = async (photoId: string) => {
-  try {
-    const response = await fetch(`${API_URL}/photos/${photoId}`, {
-      method: "DELETE",
-    });
+    try {
+      const response = await fetch(`${API_URL}/photos/${photoId}`, {
+        method: "DELETE",
+      });
 
-    if (!response.ok) {
-      const raw = await response.text();
-      throw new Error("Échec de la suppression de la photo");
+      if (!response.ok) {
+        const raw = await response.text();
+        throw new Error("Échec de la suppression de la photo");
+      }
+
+      const result = await response.json();
+      console.log(result.message);
+
+      setPhotos((prev) => prev.filter((photo) => photo._id !== photoId));
+    } catch (error: any) {
+      Alert.alert("Erreur", error.message);
     }
-
-    const result = await response.json();
-    console.log(result.message);
-
-    setPhotos((prev) => prev.filter((photo) => photo._id !== photoId));
-  } catch (error: any) {
-    Alert.alert("Erreur", error.message);
-  }
-};
-
+  };
 
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.photoContainer}>
@@ -116,6 +119,7 @@ export default function PhotosAlbumScreen() {
         </View>
       )}
 
+      {/* Modale pour agrandir l’image */}
       <Modal visible={!!selectedPhoto} transparent>
         <TouchableWithoutFeedback onPress={() => setSelectedPhoto(null)}>
           <View style={styles.modalOverlay}>
@@ -124,6 +128,34 @@ export default function PhotosAlbumScreen() {
               style={styles.fullscreenImage}
               resizeMode="contain"
             />
+          </View>
+        </TouchableWithoutFeedback>
+      </Modal>
+
+      {/* Modale pour afficher l’analyse */}
+      <Modal visible={!!analysisToShow} transparent animationType="slide">
+        <TouchableWithoutFeedback onPress={() => setAnalysisToShow(null)}>
+          <View style={styles.modalOverlay}>
+            <View style={styles.analysisModal}>
+              <Text style={styles.analysisTitle}>Analyse de la photo</Text>
+              {analysisToShow && (
+                <>
+                  <Text style={styles.analysisText}>💬 Ton : {analysisToShow.tone}</Text>
+                  <Text style={styles.analysisText}>⭐ Score : {analysisToShow.score}</Text>
+                  <Text style={styles.analysisText}>🧠 Critères :</Text>
+                  <Text style={styles.analysisText}>• Cheveux : {analysisToShow.criteria.cheveux}</Text>
+                  <Text style={styles.analysisText}>• Sourire : {analysisToShow.criteria.smile}</Text>
+                  <Text style={styles.analysisText}>• Maquillage : {analysisToShow.criteria.makeup}</Text>
+                  <Text style={styles.analysisText}>• Tenue : {analysisToShow.criteria.outfit}</Text>
+                  <Text style={styles.analysisText}>💡 Commentaires :</Text>
+                  <Text style={styles.analysisText}>• {analysisToShow.comment.cheveux}</Text>
+                  <Text style={styles.analysisText}>• {analysisToShow.comment.smile}</Text>
+                  <Text style={styles.analysisText}>• {analysisToShow.comment.makeup}</Text>
+                  <Text style={styles.analysisText}>• {analysisToShow.comment.outfit}</Text>
+                </>
+              )}
+              <Text style={styles.analysisClose}>Appuie n'importe où pour fermer</Text>
+            </View>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
@@ -181,5 +213,31 @@ const styles = StyleSheet.create({
   fullscreenImage: {
     width: "100%",
     height: "100%",
+  },
+  analysisModal: {
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 16,
+    margin: 30,
+    maxWidth: "90%",
+  },
+  analysisTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 12,
+    color: "#333",
+    textAlign: "center",
+  },
+  analysisText: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 4,
+  },
+  analysisClose: {
+    marginTop: 12,
+    fontSize: 14,
+    color: "#888",
+    textAlign: "center",
+    fontStyle: "italic",
   },
 });
