@@ -212,7 +212,10 @@ export default function InfosScreen() {
     //prendre une photo ou choisir une image de la galerie
   };
   return (
-    <ScrollView contentContainerStyle={styles.bg}>
+    <ScrollView
+      style={{ flex: 1, backgroundColor: colors.background.main }}
+      contentContainerStyle={styles.bg}
+    >
       <LinearGradient
         colors={
           [colors.background.main, colors.background.cardLight] as [
@@ -366,6 +369,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     paddingTop: 60,
+    paddingBottom: 100,
   },
   avatarContainer: {
     alignItems: "center",
