@@ -12,7 +12,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { DashboardStackParamList } from "./paymentScreen"; // Import des types de routes
-
+import { colors } from "../theme/colors";
 // Liste des abonnements disponibles
 const options = [
   { label: "10 coins / jour - 0,99 €", icon: "child" },
@@ -102,9 +102,11 @@ const SubscriptionScreen = () => {
 // Styles de la page
 const styles = StyleSheet.create({
   container: {
+    paddingTop: 40,
     flex: 1,
-    backgroundColor: "#2a2e30",
+    backgroundColor: colors.background.main,
     padding: 20,
+    display: "flex",
     justifyContent: "flex-start",
   },
   title: {
@@ -126,7 +128,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   optionRowUnselected: {
-    backgroundColor: "#3a3f42",
+    backgroundColor: colors.background.cardLight,
     borderWidth: 1,
     borderColor: "#d395ff",
   },

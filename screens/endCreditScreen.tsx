@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
-
+import { colors } from "../theme/colors";
 // Typage des routes disponibles dans ce stack
 type DashboardStackParamList = {
   subscribe: undefined;
@@ -46,7 +46,7 @@ export default EndCreditScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2a2e30", // fond sombre
+    backgroundColor: colors.background.card, // fond sombre
     padding: 20,
     justifyContent: "center",
     alignItems: "center",

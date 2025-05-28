@@ -6,43 +6,60 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useRoute, RouteProp } from "@react-navigation/native";
+import {
+  useRoute,
+  RouteProp,
+  useNavigation,
+  NavigationProp,
+} from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { colors } from "../theme/colors";
 
-// Définition des types de routes pour le Stack imbriqué
+// Types de navigation pour le stack Dashboard
 export type DashboardStackParamList = {
   DashboardHome: undefined;
   subscribe: undefined;
-  payment: { subscriptionLabel: string }; // Reçoit le texte de l'abonnement sélectionné
+  payment: { subscriptionLabel: string };
+};
+
+// Types de navigation pour le stack principal
+export type RootStackParamList = {
+  payment: { subscriptionLabel: string };
 };
 
 type PaymentScreenRouteProp = RouteProp<DashboardStackParamList, "payment">;
 
-// Déclaration du composant PaymentScreen
+// Composant principal de l'écran de paiement
 const PaymentScreen = () => {
-  // Récupération du paramètre passé via navigation
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const route = useRoute<PaymentScreenRouteProp>();
   const { subscriptionLabel } = route.params;
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
-        {/* Titre principal */}
+        {/* Titre */}
         <Text style={styles.title}>Choisis un mode de paiement</Text>
 
-        {/* Modes de paiement : Stripe ou Carte */}
+        {/* Choix du mode de paiement */}
         <View style={styles.paymentRow}>
-          <TouchableOpacity style={styles.paymentMethod}>
+          <TouchableOpacity
+            style={styles.paymentMethod}
+            accessibilityLabel="Payer avec Stripe"
+          >
             <Text style={styles.paymentText}>stripe</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.paymentMethod}>
+          <TouchableOpacity
+            style={styles.paymentMethod}
+            accessibilityLabel="Payer par carte"
+          >
             <FontAwesome name="credit-card" size={28} color="#ffffff" />
           </TouchableOpacity>
         </View>
 
-        {/* Entrée pour numéro de carte + infos complémentaires */}
+        {/* Saisie des informations de carte */}
         <View style={styles.cardInputRow}>
           <TextInput
             style={styles.input}
@@ -65,7 +82,7 @@ const PaymentScreen = () => {
           </View>
         </View>
 
-        {/* Récapitulatif de la commande avec dégradé */}
+        {/* Récapitulatif de la commande */}
         <Text style={styles.subtitle}>Voici ta commande :</Text>
         <LinearGradient
           colors={["#ff0084", "#eeeaec"]}
@@ -74,20 +91,28 @@ const PaymentScreen = () => {
           <Text style={styles.gradientText}>{subscriptionLabel}</Text>
         </LinearGradient>
 
-        {/* Bouton de validation du paiement */}
+        {/* Bouton de validation */}
         <TouchableOpacity style={styles.validateButton}>
           <Text style={styles.validateButtonText}>Valider le paiement</Text>
         </TouchableOpacity>
       </View>
+      {/* Bouton retour */}
+      <TouchableOpacity
+        style={styles.validateButton}
+        onPress={() => navigation.goBack()}
+        accessibilityLabel="Retour"
+      >
+        <Text style={styles.gradientText}>Retour</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
-// Styles de la page de paiement
+// Styles de l'écran de paiement
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#2a2e30",
+    backgroundColor: colors.background.main,
     padding: 20,
   },
   title: {
@@ -106,7 +131,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   paymentMethod: {
-    backgroundColor: "#3a3f42",
+    backgroundColor: colors.background.card,
     padding: 20,
     borderRadius: 10,
     shadowColor: "#000",
@@ -123,7 +148,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    backgroundColor: "#3a3f42",
+    backgroundColor: colors.specific.white,
     color: "#ffffff",
     borderRadius: 10,
     paddingHorizontal: 15,
@@ -136,7 +161,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   inputSmall: {
-    backgroundColor: "#3a3f42",
+    backgroundColor: colors.specific.white,
     color: "#ffffff",
     borderRadius: 10,
     paddingHorizontal: 15,
@@ -161,10 +186,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   validateButton: {
-    backgroundColor: "#29ffc6",
+    backgroundColor: colors.specific.green,
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
+    marginTop: 10,
   },
   validateButtonText: {
     color: "#2a2e30",
@@ -173,5 +199,4 @@ const styles = StyleSheet.create({
   },
 });
 
-// Export du composant pour utilisation dans la navigation
 export default PaymentScreen;
