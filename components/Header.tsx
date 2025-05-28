@@ -104,7 +104,7 @@ const Header: React.FC = () => {
           <TouchableOpacity
             style={styles.Button}
             onPress={() => {
-              navigation.navigate("PhotosAlbum");;
+              navigation.navigate("PhotosAlbum");
             }}
           >
             <Text style={{ color: colors.text.primary, fontSize: 16 }}>
@@ -133,7 +133,12 @@ const Header: React.FC = () => {
             onPress={() => {
               dispatch(updateToken(""));
               dispatch(updateEmail(""));
-              AsyncStorage.removeItem("userData");
+              AsyncStorage.multiRemove([
+                "userEmail",
+                "userToken",
+                "userCoins",
+                "userPseudo",
+              ]);
               navigation.navigate("Login");
             }}
           >

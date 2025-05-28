@@ -36,18 +36,23 @@ export const usersSlice = createSlice({
     },
     updatePseudo: (state, action) => {
       state.value.pseudo = action.payload;
+      AsyncStorage.setItem("userPseudo", action.payload);
     },
     logout: (state) => {
-      state.value.email = "";
-      state.value.token = "";
-      state.value.pseudo = "";
-      state.value.coins = 0;
-      AsyncStorage.multiRemove(["userEmail", "userToken", "userCoins"]);
+      state.value = {
+        email: "",
+        token: "",
+        pseudo: "",
+        coins: 0,
+        guestCoins: 3,
+        badges: [],
+      };
     },
     loadStoredData: (state, action) => {
       state.value.email = action.payload.email || "";
       state.value.token = action.payload.token || "";
-      state.value.pseudo = "";
+      state.value.pseudo = action.payload.pseudo || "";
+      state.value.coins = action.payload.coins || 0;
     },
     loadStoredGuestCoins: (state, action: PayloadAction<number>) => {
       state.value.guestCoins = action.payload;
