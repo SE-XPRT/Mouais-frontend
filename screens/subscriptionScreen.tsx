@@ -17,7 +17,7 @@ import { colors } from "../theme/colors";
 const options = [
   { label: "10 coins / jour - 0,99 €", icon: "child" },
   { label: "20 coins / jour - 1,99 €", icon: "heart" },
-  { label: "30 coins / jour - 2,99 €", icon: "medal" },
+  { label: "30 coins / jour - 2,99 €", icon: "bullseye" },
   { label: "50 coins / jour - 5,99 €", icon: "trophy" },
 ];
 
@@ -29,7 +29,7 @@ const SubscriptionScreen = () => {
   const handleApply = () => {
     if (selectedIndex !== null) {
       const selected = options[selectedIndex];
-      navigation.navigate("Payment", { subscriptionLabel: selected.label }); // Envoie le label sélectionné à la page payment
+      navigation.navigate("payment", { subscriptionLabel: selected.label }); // Envoie le label sélectionné à la page payment
     }
   };
 
