@@ -247,24 +247,34 @@ const LoginScreen: React.FC = () => {
         <Text style={styles.logoText}>
           <Image style={styles.logo} source={require("../assets/logo.png")} />
         </Text>
-
-        <Animated.Text
-          style={[
-            styles.title,
-            {
-              textShadowRadius: glowAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: [20, 50],
-              }),
-              textShadowColor: glowAnim.interpolate({
-                inputRange: [0, 1],
-                outputRange: ["#29ffc644", "#29ffc6ff"],
-              }),
-            },
-          ]}
+        <View
+          style={{
+            position: "relative",
+            alignItems: "center",
+            overflow: "visible",
+          }}
         >
-          Connecte-toi viiite !
-        </Animated.Text>
+          <Animated.Text
+            style={[
+              styles.title,
+              {
+                position: "relative",
+                zIndex: 10,
+                paddingHorizontal: 12,
+                textShadowRadius: glowAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [40, 60],
+                }),
+                textShadowColor: glowAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ["#29ffc666", "#29ffc6ff"],
+                }),
+              },
+            ]}
+          >
+            {"\u2003\u2003\u2003Connecte-toi viiite !\u2003\u2003\u2003"}
+          </Animated.Text>
+        </View>
       </View>
 
       {/* Social Icons */}
@@ -444,14 +454,18 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   title: {
-    color: "#fff",
     fontWeight: "bold",
     fontSize: 28,
+    color: "#ffffff",
     textAlign: "center",
+    marginBottom: 32,
+
     textShadowColor: "#ffffff",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 12,
-    marginBottom: 20,
+    marginBottom: 30,
+    marginTop: 16, // 🟢 si besoin
+    overflow: "visible", // 🟢 pour permettre au glow de dépasser
   },
 
   subtitle: {
