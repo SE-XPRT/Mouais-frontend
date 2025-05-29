@@ -12,7 +12,6 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 import Constants from "expo-constants";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { useSelector } from "react-redux";
 
@@ -151,23 +150,20 @@ export default function PhotosAlbumScreen() {
               {analysisToShow && (
                 <>
                   <Text style={styles.analysisText}>
-                    💬 Ton : {analysisToShow.tone}
-                  </Text>
-                  <Text style={styles.analysisText}>
-                    ⭐ Score : {analysisToShow.score}
+                    ⭐ Score : {analysisToShow.score * 10}
                   </Text>
                   <Text style={styles.analysisText}>🧠 Critères :</Text>
                   <Text style={styles.analysisText}>
-                    • Cheveux : {analysisToShow.criteria.cheveux}
+                    • Cheveux : {analysisToShow.criteria.cheveux *10}
                   </Text>
                   <Text style={styles.analysisText}>
-                    • Sourire : {analysisToShow.criteria.smile}
+                    • Sourire : {analysisToShow.criteria.smile *10}
                   </Text>
                   <Text style={styles.analysisText}>
-                    • Maquillage : {analysisToShow.criteria.makeup}
+                    • Maquillage : {analysisToShow.criteria.makeup *10}
                   </Text>
                   <Text style={styles.analysisText}>
-                    • Tenue : {analysisToShow.criteria.outfit}
+                    • Tenue : {analysisToShow.criteria.outfit *10}
                   </Text>
                   <Text style={styles.analysisText}>💡 Commentaires :</Text>
                   <Text style={styles.analysisText}>
@@ -248,17 +244,19 @@ const styles = StyleSheet.create({
   },
   analysisModal: {
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 40,
     borderRadius: 16,
     margin: 30,
-    maxWidth: "90%",
+    width: "90%",
+    height: "60%",
+    justifyContent: "center",
+    
   },
   analysisTitle: {
     fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 12,
+    marginBottom: 22,
     color: "#333",
-    textAlign: "center",
   },
   analysisText: {
     fontSize: 16,
