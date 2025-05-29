@@ -463,9 +463,8 @@ const styles = StyleSheet.create({
     textShadowColor: "#ffffff",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 12,
-    marginBottom: 30,
-    marginTop: 16, // 🟢 si besoin
-    overflow: "visible", // 🟢 pour permettre au glow de dépasser
+    marginTop: 16, 
+    overflow: "visible", 
   },
 
   subtitle: {
