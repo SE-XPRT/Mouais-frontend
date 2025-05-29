@@ -6,8 +6,8 @@ import Constants from "expo-constants";
 import Slider from "@react-native-community/slider";
 import ModalBadge from "./ModalBadgeWin";
 import type { RootState } from "../store"; // Type global du store Redux
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "react-native";
+import { setHasWonFilterBadge } from "../reducers/badges";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
@@ -18,9 +18,17 @@ type FilterModalProps = {
   photoId: string;
 };
 
-const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => {
+const FilterModal = ({
+  visible,
+  onClose,
+  token,
+  photoId,
+}: FilterModalProps) => {
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.filters);
+  const hasWonFilterBadge = useSelector(
+    (state: RootState) => state.badges.hasWonFilterBadge
+  );
 
   const [badge, setBadge] = React.useState<null | {
     name: string;
@@ -57,12 +65,7 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
       const data = await response.json();
       console.log("Réponse backend :", data);
 
-      const alreadyWon = await AsyncStorage.getItem("badge_filters_used");
-
-      console.log("alreadyClickedRef:", alreadyClickedRef.current);
-      console.log("alreadyWon from AsyncStorage:", alreadyWon);
-
-      if (!alreadyClickedRef.current && !alreadyWon) {
+      if (!alreadyClickedRef.current && !hasWonFilterBadge) {
         alreadyClickedRef.current = true;
 
         setBadge({
@@ -71,19 +74,17 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
         });
 
         setBadgeModalVisible(true);
-        await AsyncStorage.setItem("badge_filters_used", "true");
+        dispatch(setHasWonFilterBadge(true));
 
-        // ⏱️ Donne le temps à la modale badge de s'afficher
         setTimeout(() => {
-          onClose();
+          setBadgeModalVisible(false); // Ferme d’abord la modal badge
+          setTimeout(onClose, 500); // Puis ferme la modal principale après un petit délai
         }, 2500);
       } else {
-        // Si le badge a déjà été gagné, on ferme direct la modale filtre
         onClose();
       }
     } catch (error) {
       console.error("Erreur lors de l'analyse :", error);
-      // En cas d'erreur, on ferme aussi la modale pour pas bloquer l'utilisateur
       onClose();
     }
   };
@@ -95,14 +96,9 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
         <View style={{ marginTop: 40, alignItems: "center" }}>
           <Button
             title="Reset Badge Test"
-            onPress={async () => {
-              try {
-                await AsyncStorage.removeItem("badge_filters_used");
-                console.log("Clé AsyncStorage supprimée");
-                alert("AsyncStorage reset !");
-              } catch (error) {
-                console.error("Erreur lors du reset :", error);
-              }
+            onPress={() => {
+              dispatch(setHasWonFilterBadge(false));
+              alert("Redux badge reset !");
             }}
           />
         </View>
@@ -119,7 +115,10 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
               {zonesList.map((zone) => (
                 <View key={zone} style={styles.checkboxContainer}>
                   <TouchableOpacity
-                    style={[styles.neumorphicCheckbox, filters.zones[zone] && { backgroundColor: "#8B43F1" }]}
+                    style={[
+                      styles.neumorphicCheckbox,
+                      filters.zones[zone] && { backgroundColor: "#8B43F1" },
+                    ]}
                     onPress={() => dispatch(toggleZone(zone))}
                   >
                     {filters.zones[zone] && (
@@ -156,11 +155,13 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
           </TouchableOpacity>
         </View>
       </View>
-      <ModalBadge
-        visible={badgeModalVisible}
-        onClose={() => setBadgeModalVisible(false)}
-        badge={badge}
-      />
+      {badgeModalVisible && (
+        <ModalBadge
+          visible={badgeModalVisible}
+          onClose={() => setBadgeModalVisible(false)}
+          badge={badge}
+        />
+      )}
     </Modal>
   );
 };

@@ -15,12 +15,14 @@ export type BadgesState = {
   list: Badge[];
   unlocked: Badge[];
   latestUnlocked: Badge | null;
+  hasWonFilterBadge: boolean;
 };
 
 const initialState: BadgesState = {
   list: [],
   unlocked: [],
   latestUnlocked: null,
+  hasWonFilterBadge: false,
 };
 
 const badgesSlice = createSlice({
@@ -48,9 +50,17 @@ const badgesSlice = createSlice({
       state.unlocked = [];
       state.latestUnlocked = null;
     },
+    setHasWonFilterBadge: (state, action: PayloadAction<boolean>) => {
+      state.hasWonFilterBadge = action.payload;
+    },
   },
 });
 
-export const { setBadges, unlockBadge, resetLatestUnlocked, resetBadges } =
-  badgesSlice.actions;
+export const {
+  setBadges,
+  unlockBadge,
+  resetLatestUnlocked,
+  resetBadges,
+  setHasWonFilterBadge,
+} = badgesSlice.actions;
 export default badgesSlice.reducer;
