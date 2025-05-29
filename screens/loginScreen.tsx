@@ -254,11 +254,11 @@ const LoginScreen: React.FC = () => {
             {
               textShadowRadius: glowAnim.interpolate({
                 inputRange: [0, 1],
-                outputRange: [6, 24],
+                outputRange: [20, 50],
               }),
               textShadowColor: glowAnim.interpolate({
                 inputRange: [0, 1],
-                outputRange: ["#ffffff44", "#ffffffcc"],
+                outputRange: ["#29ffc644", "#29ffc6ff"],
               }),
             },
           ]}
