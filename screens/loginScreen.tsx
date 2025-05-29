@@ -217,7 +217,7 @@ const LoginScreen: React.FC = () => {
         dispatch(updateToken(data.token));
         dispatch(updateEmail(email));
         dispatch(actualizeCoins(data.coins));
-        dispatch(updatePseudo(data.pseudo || "Anonyme"))
+        dispatch(updatePseudo(data.pseudo || "Anonyme"));
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigator" }],
@@ -479,8 +479,9 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: "center",
     marginTop: 20,
-    minWidth: 342, //  ajoute cette ligne (ajuste selon ton écran)
-    alignItems: "center", //  pour bien centrer le texte
+    minWidth: "95%",
+    maxWidth: "95%",
+    alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -504,7 +505,10 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
+    minWidth: "95%",
+    maxWidth: "95%",
     alignSelf: "center",
+    textAlign: "center",
     marginTop: 12,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -587,7 +591,8 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   inputIcon: {
-marginLeft: 10, },
+    marginLeft: 10,
+  },
 });
 
 export default LoginScreen;
