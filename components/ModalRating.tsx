@@ -15,7 +15,14 @@ import { faCoins } from "@fortawesome/free-solid-svg-icons";
 import Constants from "expo-constants";
 import { useDispatch } from "react-redux";
 import { updateCoins, UserState } from "../reducers/users";
+import { unlockBadge } from "../reducers/badges";
+import ModalBadge from "./ModalBadgeWin";
 import { useSelector } from "react-redux";
+
+type Badge = {
+  name: string;
+  iconName: string;
+};
 
 const FontAwesome = _FontAwesome as React.ElementType;
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
@@ -54,8 +61,11 @@ export default function ModalRating({
   );
   const isGuest = email === "";
   const currentCoins = isGuest ? guestCoins : coins;
-  
+
   const [analysis, setAnalysis] = useState<any>(null);
+
+  const [showBadgeModal, setShowBadgeModal] = useState(false);
+  const [unlockedBadge, setUnlockedBadge] = useState<Badge | null>(null);
 
   useEffect(() => {
     if (visible && imageUri && token) {
@@ -75,6 +85,12 @@ export default function ModalRating({
         });
 
         const data = await response.json();
+
+        if (data.badgeUnlocked) {
+          dispatch(unlockBadge(data.badgeUnlocked));
+          setUnlockedBadge(data.badgeUnlocked);
+          setShowBadgeModal(true);
+        }
         if (data.result) {
           console.log("Réponse du backend :", data.photo);
           setAnalysis(data.photo.analyse[0]);
@@ -151,7 +167,9 @@ export default function ModalRating({
 
                 <View style={styles.coinsLeft}>
                   <FontAwesomeIcon icon={faCoins} size={30} color="#000" />
-                  <Text style={styles.coinsLeftText}>Il te reste {currentCoins} {isGuest ? "/ 3" : ""} coins</Text>
+                  <Text style={styles.coinsLeftText}>
+                    Il te reste {currentCoins} {isGuest ? "/ 3" : ""} coins
+                  </Text>
                 </View>
 
                 <View style={styles.adviceContainer}>
@@ -178,6 +196,11 @@ export default function ModalRating({
           </ScrollView>
         </View>
       </View>
+      <ModalBadge
+        visible={showBadgeModal}
+        onClose={() => setShowBadgeModal(false)}
+        badge={unlockedBadge}
+      />
     </Modal>
   );
 }

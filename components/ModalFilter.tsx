@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleZone, setTone } from "../reducers/filters";
 import Constants from "expo-constants";
 import Slider from "@react-native-community/slider";
+import ModalBadge from "./ModalBadgeWin";
 import type { RootState } from "../App"; // Type global du store Redux
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "react-native";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 // pour aller chercher l'info dans le fichier app.config.js qui elle va chercher la variable d'environnement.
@@ -26,14 +29,21 @@ const FilterModal = ({
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.filters);
 
+  const [badge, setBadge] = React.useState<null | {
+    name: string;
+    iconName: string;
+  }>(null);
+  const [badgeModalVisible, setBadgeModalVisible] = React.useState(false);
+  // État local pour afficher/cacher la liste des zones à filtrer
+  const [zonesOpen, setZonesOpen] = React.useState(false);
+
+  const alreadyClickedRef = useRef(false);
+
   // Récupération de la liste des zones à partir de l'état Redux,
   // en forçant TypeScript à comprendre que ce sont les clés de filters.zones
   const zonesList = Object.keys(filters.zones) as Array<
     keyof typeof filters.zones
   >;
-
-  // État local pour afficher/cacher la liste des zones à filtrer
-  const [zonesOpen, setZonesOpen] = React.useState(false);
 
   // Fonction qui envoie les filtres au backend via POST
   const handleAnalyze = async () => {
@@ -55,17 +65,56 @@ const FilterModal = ({
 
       const data = await response.json();
       console.log("Réponse backend :", data);
+
+      const alreadyWon = await AsyncStorage.getItem("badge_filters_used");
+
+      console.log("alreadyClickedRef:", alreadyClickedRef.current);
+      console.log("alreadyWon from AsyncStorage:", alreadyWon);
+
+      if (!alreadyClickedRef.current && !alreadyWon) {
+        alreadyClickedRef.current = true;
+
+        setBadge({
+          name: "Filtre Queen",
+          iconName: "filter",
+        });
+
+        setBadgeModalVisible(true);
+        await AsyncStorage.setItem("badge_filters_used", "true");
+
+        // ⏱️ Donne le temps à la modale badge de s'afficher
+        setTimeout(() => {
+          onClose();
+        }, 2500);
+      } else {
+        // Si le badge a déjà été gagné, on ferme direct la modale filtre
+        onClose();
+      }
     } catch (error) {
       console.error("Erreur lors de l'analyse :", error);
-    } finally {
-      console.log("onClose called");
-      onClose(); // Toujours fermer la modale, succès ou échec
+      // En cas d'erreur, on ferme aussi la modale pour pas bloquer l'utilisateur
+      onClose();
     }
   };
 
   return (
     <Modal visible={visible} animationType="slide" transparent>
       <View style={styles.overlay}>
+        {/* WRAPPER DU BOUTON DE TEST */}
+        <View style={{ marginTop: 40, alignItems: "center" }}>
+          <Button
+            title="Reset Badge Test"
+            onPress={async () => {
+              try {
+                await AsyncStorage.removeItem("badge_filters_used");
+                console.log("Clé AsyncStorage supprimée");
+                alert("AsyncStorage reset !");
+              } catch (error) {
+                console.error("Erreur lors du reset :", error);
+              }
+            }}
+          />
+        </View>
         <View style={styles.modalContainer}>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>×</Text>
@@ -125,6 +174,11 @@ const FilterModal = ({
           </TouchableOpacity>
         </View>
       </View>
+      <ModalBadge
+        visible={badgeModalVisible}
+        onClose={() => setBadgeModalVisible(false)}
+        badge={badge}
+      />
     </Modal>
   );
 };
