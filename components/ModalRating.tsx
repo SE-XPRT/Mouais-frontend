@@ -70,6 +70,30 @@ export default function ModalRating({
   useEffect(() => {
     if (visible && imageUri && token) {
       dispatch(updateCoins(-1));
+
+      if (email !== "") {
+        const updateCoinsInDB = async () => {
+          try {
+            const response = await fetch(`${API_URL}/users/updateCoins`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token, coins: coins - 1 }),
+            });
+
+            const data = await response.json();
+            if (!data.result) {
+              console.warn(
+                "Erreur mise à jour coins :",
+                data.error
+              );
+            }
+          } catch (error) {
+            console.error("Erreur fetch updateCoins :", error);
+          }
+        };
+
+        updateCoinsInDB();
+      }
     }
   }, [visible]);
 
