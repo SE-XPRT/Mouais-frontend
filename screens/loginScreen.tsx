@@ -10,14 +10,11 @@ import {
   SafeAreaView,
   Alert,
   Button,
-  //Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
-//test modal import à supprimer
-//import ModalBadge from "../components/ModalBadge";
 import { useDispatch } from "react-redux";
 import {
   updateToken,
@@ -29,7 +26,6 @@ import {
 import { useSelector } from "react-redux";
 type RootStackParamList = {
   TabNavigator: undefined;
-  // ajoutez ici d'autres routes si nécessaire
 };
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
@@ -37,12 +33,8 @@ console.log(API_URL);
 
 const FontAwesome = _FontAwesome as React.ElementType;
 
-//Définition du composant principal
 const LoginScreen: React.FC = () => {
   const dispatch = useDispatch();
-  //test modal à supprimer
-  //const [modalVisible, setModalVisible] = useState(false);
-  // Replace 'RootState' with the actual type of your Redux root state if different
   interface RootState {
     users: {
       email: {
@@ -63,7 +55,6 @@ const LoginScreen: React.FC = () => {
     "signin"
   );
 
-  // Regex pour la validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^.{5,}$/;
 
@@ -95,7 +86,6 @@ const LoginScreen: React.FC = () => {
 
   const changeAuthentification = () => {
     setSigninOrSignup(signinOrSignup === "signin" ? "signup" : "signin");
-    // Réinitialiser les erreurs lors du changement de mode
     setEmailError("");
     setPasswordError("");
   };
@@ -104,32 +94,6 @@ const LoginScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const token = useSelector((state: any) => state.users.value.token);
-
-  // Fonction de déconnexion
-  const handleLogout = async () => {
-    try {
-      // Appeler le backend pour la déconnexion si nécessaire
-      if (token) {
-        await fetch(`${API_URL}/users/logout`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-      }
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion:", error);
-    } finally {
-      // Nettoyer le store Redux et AsyncStorage
-      dispatch(logout());
-      // Réinitialiser les états locaux
-      setEmail("");
-      setPassword("");
-      setEmailError("");
-      setPasswordError("");
-    }
-  };
 
   // Rediriger vers TabNavigator si l'utilisateur est déjà connecté
   useEffect(() => {
@@ -142,7 +106,6 @@ const LoginScreen: React.FC = () => {
   }, [token]);
 
   const handleSignin = async () => {
-    // Valider les champs avant l'envoi
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
 
