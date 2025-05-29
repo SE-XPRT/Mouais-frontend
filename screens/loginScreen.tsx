@@ -317,7 +317,7 @@ const LoginScreen: React.FC = () => {
         <View style={styles.inputWrapper}>
           <FontAwesome
             name="lock"
-            size={20}
+            size={24}
             color="#aaa"
             style={styles.inputIcon}
           />
@@ -464,12 +464,13 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   input: {
-    color: "#ffffff", // texte bien visible
+    color: "#ffffff",
     borderRadius: 12,
     paddingVertical: 6,
     paddingHorizontal: 15,
     fontSize: 16,
-    marginTop: 10,
+    width: "100%",
+    height: 50,
   },
   loginButton: {
     backgroundColor: "#29ffc6",
@@ -586,8 +587,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   inputIcon: {
-    marginRight: 10,
-  },
+marginLeft: 10, },
 });
 
 export default LoginScreen;
