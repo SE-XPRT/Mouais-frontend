@@ -26,7 +26,7 @@ type ModalBadgeProps = {
   visible: boolean; // Détermine si la modale est visible
   onClose: () => void; // Fonction appelée quand on ferme la modale
   message?: string; // Message affiché dans la modale (optionnel)
-  badge?: Badge;
+  badge: Badge | null;
 };
 const ModalBadge: React.FC<ModalBadgeProps> = ({
   visible,
@@ -39,6 +39,7 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
   const [confettiShot, setConfettiShot] = useState(false); // Contrôle des confettis (1 seule fois)
   useEffect(() => {
     // Fonction pour jouer un son lors de l'ouverture
+    console.log("MODAL VISIBLE :", visible);
     const playSound = async () => {
       try {
         const { sound } = await Audio.Sound.createAsync(
@@ -75,7 +76,10 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
   }, [visible]);
 
   // Ne rend rien si la modale est fermée
-  if (!showModal) return null;
+  if (!showModal) {
+    console.log("ModalBadge retourne null (donc non affichée)");
+    return null;
+  }
   return (
     <Modal transparent animationType="fade" visible={showModal}>
       <View style={styles.overlay}>
