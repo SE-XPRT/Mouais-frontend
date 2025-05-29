@@ -112,16 +112,16 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
             style={styles.icon}
           />
 
-          {/* 💬 Message badge */}
+          {/* Message badge */}
           <Text style={styles.description}>
             GG tu viens de débloquer le badge {"\n"}
             {badge ? `"${badge.name}"` : "Glow Babe"}
           </Text>
 
-          {/* 🔗 Lien vers badges */}
+          {/* Lien vers badges */}
           <Text style={styles.link}>Voir tous mes badges</Text>
 
-          {/* 👁 Bouton œil */}
+          {/* Bouton œil */}
           <TouchableOpacity style={styles.eyeButton}>
             <FontAwesome name="eye" size={28} color="#ff0084" />
           </TouchableOpacity>
@@ -131,7 +131,6 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
   );
 };
 
-// 🎨 Styles avec ta charte
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
