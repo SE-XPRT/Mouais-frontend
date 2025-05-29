@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { StatusBar } from "expo-status-bar";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
-const FontAwesome = _FontAwesome as React.ElementType;
 import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import Header from "./components/Header";
@@ -13,188 +12,102 @@ import TakePicScreen from "./screens/takePicScreen";
 import InfosScreen from "./screens/infosScreen";
 import LoginScreen from "./screens/loginScreen";
 import PaymentScreen from "./screens/paymentScreen";
-import SubscriptionScreenScreen from "./screens/subscriptionScreen";
+import SubscriptionScreen from "./screens/subscriptionScreen";
 import UploadedPhotoScreen from "./screens/uploadedPhotoScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Provider, useDispatch } from "react-redux";
-import { configureStore } from "@reduxjs/toolkit";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import users, { loadStoredData, loadStoredGuestCoins } from "./reducers/users";
-import filters from "./reducers/filters";
-import badges from "./reducers/badges";
-import records from "./reducers/records";
-import SubscriptionScreen from "./screens/subscriptionScreen";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./store";
 import DashboardStack from "./screens/dashboardStack";
 import EndCreditScreen from "./screens/endCreditScreen";
 import PhotosAlbumScreen from "./screens/photosAlbumScreen";
 import BadgeUnlocker from "./components/BadgeUnlocker";
 
+const FontAwesome = _FontAwesome as React.ElementType;
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
-const store = configureStore({
-  reducer: { users, filters, badges, records },
-});
-
-// Composant pour charger les données sauvegardées
-const AppContent = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const loadStoredUserData = async () => {
-      try {
-        const storedEmail = await AsyncStorage.getItem("userEmail");
-        const storedToken = await AsyncStorage.getItem("userToken");
-        const storedGuestCoins = await AsyncStorage.getItem("guestCoins");
-
-        if (storedGuestCoins !== null) {
-          dispatch(loadStoredGuestCoins(parseInt(storedGuestCoins, 10)));
-        }
-        if (storedEmail && storedToken) {
-          dispatch(
-            loadStoredData({
-              email: storedEmail,
-              token: storedToken,
-            })
-          );
-        }
-      } catch (error) {
-        console.error("Erreur lors du chargement des données:", error);
-      }
-    };
-
-    loadStoredUserData();
-  }, []);
-
-  return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Snap"
-          component={SnapScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="TakePic"
-          component={TakePicScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="UploadedPhoto"
-          component={UploadedPhotoScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="EndCreditScreen"
-          component={EndCreditScreen}
-          options={{ header: () => <Header /> }}
-        />
-
-        <Stack.Screen
-          name="TabNavigator"
-          component={TabNavigator}
-          options={{ headerShown: false }}
-        />
-        {/* <Stack.Screen
-          name="Home"
-          component={DashboardScreen}
-          options={{ headerShown: false }}
-        /> */}
-        <Stack.Screen
-          name="subscribe"
-          component={SubscriptionScreen}
-          options={{ header: () => <Header /> }}
-        />
-        <Stack.Screen
-          name="Infos"
-          component={InfosScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Payment"
-          component={PaymentScreen}
-          options={{ headerShown: false }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-};
-
-const TabNavigator = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        tabBarActiveTintColor: "#2196f3",
-        tabBarInactiveTintColor: "#ffffff",
-        tabBarStyle: {
-          backgroundColor: "#2a2e30",
-          borderTopWidth: 0,
-          elevation: 0,
-          shadowColor: "transparent",
-        },
+const TabNavigator = () => (
+  <Tab.Navigator
+    screenOptions={{
+      tabBarActiveTintColor: "#2196f3",
+      tabBarInactiveTintColor: "#ffffff",
+      tabBarStyle: {
+        backgroundColor: "#2a2e30",
+        borderTopWidth: 0,
+        elevation: 0,
+        shadowColor: "transparent",
+      },
+    }}
+  >
+    <Tab.Screen
+      name="Home"
+      component={DashboardStack}
+      options={{
+        header: () => <Header />,
+        tabBarIcon: ({ color, size }) => (
+          <FontAwesome name="home" size={size} color={color} />
+        ),
       }}
-    >
-      <Tab.Screen
-        name="Home"
-        component={DashboardStack}
-        options={{
-          header: () => <Header />,
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="home" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Take Picture"
-        component={TakePicScreen}
-        options={{
-          header: () => <Header />,
-          tabBarIcon: ({ color, size }) => (
-            <LinearGradient
-              colors={gradientColors}
-              style={[
-                styles.iconPic,
-                { borderWidth: 2, borderColor: gradientColors2[0] },
-              ]}
-            >
-              <FontAwesome name="camera" size={size} color={color} />
-            </LinearGradient>
-          ),
-          tabBarLabel: () => null,
-        }}
-      />
-      <Tab.Screen
-        name="Infos"
-        component={InfosScreen}
-        options={{
-          headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="user" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
+    />
+    <Tab.Screen
+      name="Take Picture"
+      component={TakePicScreen}
+      options={{
+        header: () => <Header />,
+        tabBarIcon: ({ color, size }) => (
+          <LinearGradient
+            colors={gradientColors}
+            style={[styles.iconPic, { borderWidth: 2, borderColor: gradientColors2[0] }]}
+          >
+            <FontAwesome name="camera" size={size} color={color} />
+          </LinearGradient>
+        ),
+        tabBarLabel: () => null,
+      }}
+    />
+    <Tab.Screen
+      name="Infos"
+      component={InfosScreen}
+      options={{
+        headerShown: false,
+        tabBarIcon: ({ color, size }) => (
+          <FontAwesome name="user" size={size} color={color} />
+        ),
+      }}
+    />
+  </Tab.Navigator>
+);
+
+const AppContent = () => (
+  <NavigationContainer>
+    <Stack.Navigator>
+      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Snap" component={SnapScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="TakePic" component={TakePicScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="UploadedPhoto" component={UploadedPhotoScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="EndCreditScreen" component={EndCreditScreen} options={{ header: () => <Header /> }} />
+      <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
+      <Stack.Screen name="subscribe" component={SubscriptionScreen} options={{ header: () => <Header /> }} />
+      <Stack.Screen name="Infos" component={InfosScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="Payment" component={PaymentScreen} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  </NavigationContainer>
+);
 
 export default function App() {
   return (
     <Provider store={store}>
-      <AppContent />
-      <BadgeUnlocker />
+      <PersistGate loading={null} persistor={persistor}>
+        <AppContent />
+        <BadgeUnlocker />
+      </PersistGate>
     </Provider>
   );
 }
-//all colors
+
 const backgroundColor = "#2a2e30";
 const textColor = "#ffffff";
-
-//linear gradient colors
 const gradientColors: [string, string] = ["#8b43f1", "#d395ff"];
 const gradientColors2: [string, string] = ["#eeeaec", "#ff0084"];
 
@@ -209,7 +122,6 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "#333",
   },
-
   iconPic: {
     borderRadius: 50,
     padding: 15,
@@ -220,5 +132,3 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
-
-export type RootState = ReturnType<typeof store.getState>;

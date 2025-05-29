@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   button: {
     maxHeight: 100,
     width: 150,
-    maxWidth:180,
+    maxWidth: 180,
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,

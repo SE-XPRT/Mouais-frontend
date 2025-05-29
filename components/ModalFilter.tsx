@@ -4,42 +4,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { toggleZone, setTone } from "../reducers/filters";
 import Constants from "expo-constants";
 import Slider from "@react-native-community/slider";
-import type { RootState } from "../App"; // Type global du store Redux
+import type { RootState } from "../store";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
-// pour aller chercher l'info dans le fichier app.config.js qui elle va chercher la variable d'environnement.
 
 type FilterModalProps = {
-  // Création du type FilterModalProps avec 2 props
-  visible: boolean; // Pour afficher ou cacher la modale
-  onClose: () => void; // Fonction qui ne prend rien en paramètre et ne retourne rien (à appeler quand on veut fermer la modale)
+  visible: boolean;
+  onClose: () => void;
   token: string;
   photoId: string;
 };
 
-const FilterModal = ({
-  visible,
-  onClose,
-  token,
-  photoId,
-}: FilterModalProps) => {
+const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => {
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.filters);
-
-  // Récupération de la liste des zones à partir de l'état Redux,
-  // en forçant TypeScript à comprendre que ce sont les clés de filters.zones
-  const zonesList = Object.keys(filters.zones) as Array<
-    keyof typeof filters.zones
-  >;
-
-  // État local pour afficher/cacher la liste des zones à filtrer
+  const zonesList = Object.keys(filters.zones) as Array<keyof typeof filters.zones>;
   const [zonesOpen, setZonesOpen] = React.useState(false);
 
-  // Fonction qui envoie les filtres au backend via POST
   const handleAnalyze = async () => {
-    console.log("Bouton Appliquer cliqué");
     try {
-      console.log(API_URL);
       const response = await fetch(`${API_URL}/photos/analyze`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -52,14 +35,11 @@ const FilterModal = ({
           },
         }),
       });
-
-      const data = await response.json();
-      console.log("Réponse backend :", data);
+      await response.json();
     } catch (error) {
       console.error("Erreur lors de l'analyse :", error);
     } finally {
-      console.log("onClose called");
-      onClose(); // Toujours fermer la modale, succès ou échec
+      onClose();
     }
   };
 
@@ -71,24 +51,17 @@ const FilterModal = ({
             <Text style={styles.closeButtonText}>×</Text>
           </TouchableOpacity>
           <Text style={styles.title}>Filtres</Text>
-          {/* Dans le rendu, on affiche un toggle pour afficher ou non les zones */}
           <Text style={styles.label} onPress={() => setZonesOpen(!zonesOpen)}>
             Que veux-tu qu’on juge ? {zonesOpen ? "▲" : "▼"}
           </Text>
-          {/* Si zonesOpen est true, on map sur toutes les zones,
-    et pour chacune, on affiche un checkbox "customisé" */}
           {zonesOpen && (
             <View style={styles.zonesList}>
               {zonesList.map((zone) => (
                 <View key={zone} style={styles.checkboxContainer}>
                   <TouchableOpacity
-                    style={[
-                      styles.neumorphicCheckbox,
-                      filters.zones[zone] && { backgroundColor: "#8B43F1" },
-                    ]}
-                    onPress={() => dispatch(toggleZone(zone))} // toggle dans Redux
+                    style={[styles.neumorphicCheckbox, filters.zones[zone] && { backgroundColor: "#8B43F1" }]}
+                    onPress={() => dispatch(toggleZone(zone))}
                   >
-                    {/* Si la zone est sélectionnée, afficher un ✔ */}
                     {filters.zones[zone] && (
                       <Text style={{ color: "#fff" }}>✔</Text>
                     )}
@@ -111,8 +84,6 @@ const FilterModal = ({
                 step={1}
                 value={filters.tone}
                 onValueChange={(value) => dispatch(setTone(value))}
-                // Quand le user bouge le slider, on envoie l'info à Redux via l'action setTone.
-                // On dispatche dans dans Redux pour stocker ça et l'envoyer au backend
                 minimumTrackTintColor="#8B43F1"
                 maximumTrackTintColor="#555"
                 thumbTintColor="#fff"
@@ -143,16 +114,16 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     padding: 24,
     shadowColor: "#000",
-    shadowOffset: { width: -6, height: -6 }, // L'ombre se projette vers le haut et la gauche
+    shadowOffset: { width: -6, height: -6 },
     shadowOpacity: 0.6,
-    shadowRadius: 10, // Flou de l'ombre
-    elevation: 10, // Effet d'élévation (pour Android uniquement)
+    shadowRadius: 10,
+    elevation: 10,
   },
   closeButton: {
     position: "absolute",
     top: 10,
     right: 10,
-    zIndex: 1, // Comme des calques : le plus élevé passe sur les autres éléments
+    zIndex: 1,
     width: 32,
     height: 32,
     alignItems: "center",
@@ -161,7 +132,7 @@ const styles = StyleSheet.create({
   closeButtonText: {
     color: "#fff",
     fontSize: 24,
-    lineHeight: 24, // Définit la hauteur entre les lignes du texte
+    lineHeight: 24,
   },
   title: {
     fontSize: 26,
@@ -189,18 +160,6 @@ const styles = StyleSheet.create({
     marginLeft: 8,
     fontSize: 16,
   },
-  zoneItem: {
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: "#444",
-  },
-  zoneSelected: {
-    backgroundColor: "#8a2be2",
-  },
-  zoneText: {
-    color: "#fff",
-    fontSize: 16,
-  },
   neumorphicCheckbox: {
     width: 36,
     height: 36,
@@ -215,7 +174,6 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 4,
   },
-
   sliderContainer: {
     width: 160,
     height: 50,
