@@ -54,12 +54,36 @@ export default function ModalRating({
   );
   const isGuest = email === "";
   const currentCoins = isGuest ? guestCoins : coins;
-  
+
   const [analysis, setAnalysis] = useState<any>(null);
 
   useEffect(() => {
     if (visible && imageUri && token) {
       dispatch(updateCoins(-1));
+
+      if (email !== "") {
+        const updateCoinsInDB = async () => {
+          try {
+            const response = await fetch(`${API_URL}/users/updateCoins`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ token, coins: coins - 1 }),
+            });
+
+            const data = await response.json();
+            if (!data.result) {
+              console.warn(
+                "Erreur mise à jour coins :",
+                data.error
+              );
+            }
+          } catch (error) {
+            console.error("Erreur fetch updateCoins :", error);
+          }
+        };
+
+        updateCoinsInDB();
+      }
     }
   }, [visible]);
 
@@ -151,7 +175,9 @@ export default function ModalRating({
 
                 <View style={styles.coinsLeft}>
                   <FontAwesomeIcon icon={faCoins} size={30} color="#000" />
-                  <Text style={styles.coinsLeftText}>Il te reste {currentCoins} {isGuest ? "/ 3" : ""} coins</Text>
+                  <Text style={styles.coinsLeftText}>
+                    Il te reste {currentCoins} {isGuest ? "/ 3" : ""} coins
+                  </Text>
                 </View>
 
                 <View style={styles.adviceContainer}>
