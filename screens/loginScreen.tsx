@@ -22,6 +22,7 @@ import {
   logout,
   actualizeCoins,
   UserState,
+  updatePseudo,
 } from "../reducers/users";
 import { useSelector } from "react-redux";
 type RootStackParamList = {
@@ -136,6 +137,7 @@ const LoginScreen: React.FC = () => {
         dispatch(updateToken(data.token));
         dispatch(updateEmail(email));
         dispatch(actualizeCoins(data.coins));
+        dispatch(updatePseudo(data.pseudo || "Anonyme"))
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigator" }],

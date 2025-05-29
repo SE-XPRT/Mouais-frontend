@@ -23,13 +23,12 @@ import { UserState } from "../reducers/users";
 type RootStackParamList = {
   Dashboard: { token: string };
   subscribe: undefined;
-  endCredit: undefined; // à supprimer plus tard
 };
 
 type DashboardParams = {
   Dashboard: { token: string };
 };
-const API_URL = Constants.expoConfig?.extra?.API_URL ?? ""; // pour aller chercher l'info dans le fichier app.config.js qui elle va chercher la variable d'environnement.
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
 export default function DashboardScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -138,7 +137,6 @@ export default function DashboardScreen() {
         </Pressable>
 
         <Pressable
-          onPress={() => navigation.navigate("endCredit")}
           style={({ pressed }) => [
             styles.coinInfo,
             pressed && styles.buttonPressed,

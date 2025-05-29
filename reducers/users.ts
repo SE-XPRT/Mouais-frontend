@@ -41,11 +41,14 @@ export const usersSlice = createSlice({
         token: "",
         pseudo: "",
         coins: 0,
-        guestCoins: 3,
+        guestCoins: state.value.guestCoins,
         badges: [],
       };
     },
-    loadStoredData: (state, action: PayloadAction<Partial<UserState["value"]>>) => {
+    loadStoredData: (
+      state,
+      action: PayloadAction<Partial<UserState["value"]>>
+    ) => {
       state.value.email = action.payload.email ?? "";
       state.value.token = action.payload.token ?? "";
       state.value.pseudo = action.payload.pseudo ?? "";
