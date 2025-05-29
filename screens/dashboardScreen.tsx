@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Pressable,
+  Image,
+} from "react-native";
 import {
   useRoute,
   RouteProp,
@@ -108,24 +115,39 @@ export default function DashboardScreen() {
           </View>
         </View>
 
-        <TouchableOpacity style={styles.pinkButton}>
-          <Text style={styles.buttonText}>Gagne des coins</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={styles.greenButton}
-          onPress={() => navigation.navigate("subscribe")} //  redirige vers l'écran subscription pour test
+        <Pressable
+          onPress={() => {
+            // Action à définir ici si besoin
+          }}
+          style={({ pressed }) => [
+            styles.pinkButton,
+            pressed && styles.buttonPressed,
+          ]}
         >
-          <Text style={styles.buttonText}>BUY PREMIUM</Text>
-        </TouchableOpacity>
+          <Text style={styles.buttonText}>GAGNE DES COINS</Text>
+        </Pressable>
 
-        <TouchableOpacity
-          onPress={() => navigation.navigate("endCredit")} //bouton temporaire test vers endCredit page
+        <Pressable
+          onPress={() => navigation.navigate("subscribe")}
+          style={({ pressed }) => [
+            styles.greenButton,
+            pressed && styles.buttonPressed,
+          ]}
         >
-          <Text style={styles.coinInfo}>
+          <Text style={styles.buttonText}> BUY PREMIUM </Text>
+        </Pressable>
+
+        <Pressable
+          onPress={() => navigation.navigate("endCredit")}
+          style={({ pressed }) => [
+            styles.coinInfo,
+            pressed && styles.buttonPressed,
+          ]}
+        >
+          <Text style={styles.buttonText2}>
             Il te reste {currentCoins} {isGuest ? "/ 3 " : ""}coins
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </View>
     </View>
   );
@@ -157,23 +179,17 @@ const styles = StyleSheet.create({
     fontFamily: "Fredoka One",
   },
   cardGrid: {
-    backgroundColor: colors.specific.white,
-    borderRadius: 20,
+    backgroundColor: "#1e1e1e",
+    borderRadius: 24,
     paddingVertical: 30,
     paddingHorizontal: 20,
     width: "90%",
     alignItems: "center",
-    shadowColor: colors.specific.black,
-    shadowOpacity: 0.1,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    shadowColor: "#000",
+    shadowOffset: { width: -6, height: -6 },
+    shadowOpacity: 0.6,
     shadowRadius: 10,
-    elevation: 0,
-    borderBottomWidth: 4,
-    borderRightWidth: 4,
-    borderColor: colors.specific.gray.light,
+    elevation: 10,
   },
   cardWrapper: {
     flexDirection: "row",
@@ -183,24 +199,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   card: {
-    backgroundColor: colors.specific.white,
+    backgroundColor: colors.specific.gray.dark,
     width: "48%",
     height: 120,
     marginBottom: 15,
-    borderRadius: 20,
+    borderRadius: 24,
     justifyContent: "center",
     alignItems: "center",
-    shadowColor: colors.specific.black,
+    shadowColor: "#000",
+    shadowOffset: { width: -4, height: -4 },
     shadowOpacity: 0.4,
-    shadowRadius: 6,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    elevation: 2,
+    shadowRadius: 8,
+    elevation: 8,
   },
   cardText: {
-    color: colors.text.dark,
+    color: "#ffffff",
     fontSize: 14,
     marginTop: 10,
     textAlign: "center",
@@ -213,43 +226,61 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   pinkButton: {
-    backgroundColor: colors.specific.pink,
-    paddingVertical: 10,
-    paddingHorizontal: 50,
+    backgroundColor: "#29ffc6",
+    paddingVertical: 12,
+    paddingHorizontal: 40,
     borderRadius: 10,
-    marginTop: 20,
-    borderBottomWidth: 4,
-    borderRightWidth: 4,
-    borderColor: colors.action.danger,
+    alignSelf: "center",
+    marginVertical: 10,
   },
   greenButton: {
-    backgroundColor: colors.action.success,
-    paddingVertical: 10,
-    paddingHorizontal: 50,
+    backgroundColor: "#29ffc6",
+    paddingVertical: 12,
+    paddingHorizontal: 40,
     borderRadius: 10,
-    marginTop: 10,
-    borderBottomWidth: 4,
-    borderRightWidth: 4,
-    borderColor: colors.specific.green,
+    alignSelf: "center",
+    marginVertical: 10,
   },
   buttonText: {
-    color: colors.text.dark,
+    color: "#2a2e30",
+    fontWeight: "bold",
+    fontFamily: "Playpen Sans",
+  },
+  buttonText2: {
+    color: colors.primary.light,
     fontWeight: "bold",
     fontFamily: "Playpen Sans",
   },
   coinInfo: {
     marginTop: 20,
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 50,
-    backgroundColor: colors.specific.white,
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 9999,
+    backgroundColor: "#2a2a2a",
     fontFamily: "Playpen Sans",
-    color: colors.specific.gray.dark,
+    color: "#8b43f1", // même violet que les autres boutons
     textAlign: "center",
-    shadowColor: colors.specific.black,
-    shadowOffset: { width: -2, height: -2 },
-    shadowOpacity: 0.1,
+    fontWeight: "bold",
+    shadowColor: "#000",
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+
+  greetings: {
+    color: "#ffffff",
+    fontSize: 22,
+    fontFamily: "Fredoka One",
+    marginBottom: 30,
+    textAlign: "center",
+    paddingHorizontal: 20,
+  },
+  buttonPressed: {
+    transform: [{ translateY: 2 }],
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.2,
     shadowRadius: 4,
-    elevation: 4,
+    elevation: 2,
   },
 });
