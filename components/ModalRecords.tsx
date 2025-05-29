@@ -10,7 +10,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { setRecords, setLoading, setError } from "../reducers/records";
 import Constants from "expo-constants";
-import type { RootState } from "../App"; // Type global du store Redux
+import type { RootState } from "../store";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
