@@ -14,6 +14,7 @@ import {
 import Constants from "expo-constants";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
+import { useSelector } from "react-redux";
 
 const FontAwesome = _FontAwesome as React.ElementType;
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
@@ -23,12 +24,11 @@ export default function PhotosAlbumScreen() {
   const [photos, setPhotos] = useState<any[]>([]);
   const [selectedPhoto, setSelectedPhoto] = useState<string | null>(null);
   const [analysisToShow, setAnalysisToShow] = useState<any | null>(null);
+  const token = useSelector((state: any) => state.users.value.token);
 
   useEffect(() => {
     const fetchPhotos = async () => {
       try {
-        const token = await AsyncStorage.getItem("userToken");
-
         if (!token) {
           Alert.alert("Erreur", "Utilisateur non connecté");
           return;
@@ -50,7 +50,7 @@ export default function PhotosAlbumScreen() {
     };
 
     fetchPhotos();
-  }, []);
+  }, [token]); 
 
   const handleShowAnalysis = (photo: any) => {
     if (photo.analyse && photo.analyse.length > 0) {
@@ -89,13 +89,23 @@ export default function PhotosAlbumScreen() {
       />
       <View style={styles.iconRow}>
         <TouchableOpacity onPress={() => handleShowAnalysis(item)}>
-          <FontAwesome name="file-text" size={24} color="#fff" style={styles.icon} />
+          <FontAwesome
+            name="file-text"
+            size={24}
+            color="#fff"
+            style={styles.icon}
+          />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setSelectedPhoto(item.imageUrl)}>
           <FontAwesome name="eye" size={24} color="#fff" style={styles.icon} />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => handleDelete(item._id)}>
-          <FontAwesome name="trash" size={24} color="#fff" style={styles.icon} />
+          <FontAwesome
+            name="trash"
+            size={24}
+            color="#fff"
+            style={styles.icon}
+          />
         </TouchableOpacity>
       </View>
     </View>
@@ -140,21 +150,43 @@ export default function PhotosAlbumScreen() {
               <Text style={styles.analysisTitle}>Analyse de la photo</Text>
               {analysisToShow && (
                 <>
-                  <Text style={styles.analysisText}>💬 Ton : {analysisToShow.tone}</Text>
-                  <Text style={styles.analysisText}>⭐ Score : {analysisToShow.score}</Text>
+                  <Text style={styles.analysisText}>
+                    💬 Ton : {analysisToShow.tone}
+                  </Text>
+                  <Text style={styles.analysisText}>
+                    ⭐ Score : {analysisToShow.score}
+                  </Text>
                   <Text style={styles.analysisText}>🧠 Critères :</Text>
-                  <Text style={styles.analysisText}>• Cheveux : {analysisToShow.criteria.cheveux}</Text>
-                  <Text style={styles.analysisText}>• Sourire : {analysisToShow.criteria.smile}</Text>
-                  <Text style={styles.analysisText}>• Maquillage : {analysisToShow.criteria.makeup}</Text>
-                  <Text style={styles.analysisText}>• Tenue : {analysisToShow.criteria.outfit}</Text>
+                  <Text style={styles.analysisText}>
+                    • Cheveux : {analysisToShow.criteria.cheveux}
+                  </Text>
+                  <Text style={styles.analysisText}>
+                    • Sourire : {analysisToShow.criteria.smile}
+                  </Text>
+                  <Text style={styles.analysisText}>
+                    • Maquillage : {analysisToShow.criteria.makeup}
+                  </Text>
+                  <Text style={styles.analysisText}>
+                    • Tenue : {analysisToShow.criteria.outfit}
+                  </Text>
                   <Text style={styles.analysisText}>💡 Commentaires :</Text>
-                  <Text style={styles.analysisText}>• {analysisToShow.comment.cheveux}</Text>
-                  <Text style={styles.analysisText}>• {analysisToShow.comment.smile}</Text>
-                  <Text style={styles.analysisText}>• {analysisToShow.comment.makeup}</Text>
-                  <Text style={styles.analysisText}>• {analysisToShow.comment.outfit}</Text>
+                  <Text style={styles.analysisText}>
+                    • {analysisToShow.comment.cheveux}
+                  </Text>
+                  <Text style={styles.analysisText}>
+                    • {analysisToShow.comment.smile}
+                  </Text>
+                  <Text style={styles.analysisText}>
+                    • {analysisToShow.comment.makeup}
+                  </Text>
+                  <Text style={styles.analysisText}>
+                    • {analysisToShow.comment.outfit}
+                  </Text>
                 </>
               )}
-              <Text style={styles.analysisClose}>Appuie n'importe où pour fermer</Text>
+              <Text style={styles.analysisClose}>
+                Appuie n'importe où pour fermer
+              </Text>
             </View>
           </View>
         </TouchableWithoutFeedback>
