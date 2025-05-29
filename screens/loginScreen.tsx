@@ -277,7 +277,7 @@ const LoginScreen: React.FC = () => {
         </View>
       </View>
 
-      {/* Social Icons */}
+      {/* Social Icons 1 */}
       <View style={styles.socialRow}>
         <View style={styles.iconCircle}>
           <FontAwesome name="apple" size={24} color="#40a0ed" />
