@@ -10,6 +10,7 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
+import * as ImagePicker from "expo-image-picker";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { useSelector, useDispatch } from "react-redux";
 import Constants from "expo-constants";
@@ -38,6 +39,7 @@ type RootStackParamList = {
 };
 
 export default function InfosScreen() {
+  const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
   const email = useSelector(
@@ -207,9 +209,30 @@ export default function InfosScreen() {
       ]
     );
   };
-  const editPhoto = () => {
-    alert("Fonctionnalité à venir !");
-    //prendre une photo ou choisir une image de la galerie
+  const editPhoto = async () => {
+    // Demande la permission d’accéder à la galerie
+    const permissionResult =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permissionResult.granted) {
+      Alert.alert(
+        "Permission refusée",
+        "Autorisez l'accès à la galerie pour changer la photo."
+      );
+      return;
+    }
+
+    // Ouvre la galerie pour choisir une image
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      setAvatarUri(result.assets[0].uri);
+      // Ici tu peux aussi envoyer la photo au backend si besoin
+    }
   };
   return (
     <ScrollView
@@ -239,7 +262,9 @@ export default function InfosScreen() {
                 onPress={editPhoto}
               />
               <Image
-                source={require("../assets/user.png")}
+                source={
+                  avatarUri ? { uri: avatarUri } : require("../assets/user.png")
+                }
                 style={styles.userIcon}
               />
             </LinearGradient>

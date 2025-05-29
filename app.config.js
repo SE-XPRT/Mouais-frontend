@@ -1,5 +1,5 @@
-import 'dotenv/config';
-import appJson from './app.json';
+import "dotenv/config";
+import appJson from "./app.json";
 
 export default ({ config }) => {
   return {
@@ -7,7 +7,7 @@ export default ({ config }) => {
     ...appJson.expo,
     extra: {
       ...appJson.expo.extra,
-      API_URL: process.env.API_URL ?? 'http://localhost:3000',
+      API_URL: process.env.API_URL ?? "http://192.168.1.117:3000",
     },
   };
 };

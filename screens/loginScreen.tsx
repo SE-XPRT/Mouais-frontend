@@ -10,30 +10,39 @@ import {
   SafeAreaView,
   Alert,
   Button,
+  //Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
-
+//test modal import à supprimer
+//import ModalBadge from "../components/ModalBadge";
 import { useDispatch } from "react-redux";
-import { updateToken, updateEmail, logout, actualizeCoins, UserState } from "../reducers/users";
+import {
+  updateToken,
+  updateEmail,
+  logout,
+  actualizeCoins,
+  UserState,
+} from "../reducers/users";
 import { useSelector } from "react-redux";
-import { colors } from "../theme/colors";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 type RootStackParamList = {
   TabNavigator: undefined;
-  // ajoutez ici d'autres navigation si nécessaire
+  // ajoutez ici d'autres routes si nécessaire
 };
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
+console.log(API_URL);
 
 const FontAwesome = _FontAwesome as React.ElementType;
 
 //Définition du composant principal
 const LoginScreen: React.FC = () => {
   const dispatch = useDispatch();
-
+  //test modal à supprimer
+  //const [modalVisible, setModalVisible] = useState(false);
+  // Replace 'RootState' with the actual type of your Redux root state if different
   interface RootState {
     users: {
       email: {
@@ -41,7 +50,9 @@ const LoginScreen: React.FC = () => {
       };
     };
   }
-  const coins = useSelector((state: {users: UserState}) => state.users.value.coins);
+  const coins = useSelector(
+    (state: { users: UserState }) => state.users.value.coins
+  );
   const emailData = useSelector((state: any) => state.users.value.email);
   const tokenData = useSelector((state: any) => state.users.value.token);
   const [email, setEmail] = useState("");
@@ -94,6 +105,32 @@ const LoginScreen: React.FC = () => {
 
   const token = useSelector((state: any) => state.users.value.token);
 
+  // Fonction de déconnexion
+  const handleLogout = async () => {
+    try {
+      // Appeler le backend pour la déconnexion si nécessaire
+      if (token) {
+        await fetch(`${API_URL}/users/logout`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token }),
+        });
+      }
+    } catch (error) {
+      console.error("Erreur lors de la déconnexion:", error);
+    } finally {
+      // Nettoyer le store Redux et AsyncStorage
+      dispatch(logout());
+      // Réinitialiser les états locaux
+      setEmail("");
+      setPassword("");
+      setEmailError("");
+      setPasswordError("");
+    }
+  };
+
   // Rediriger vers TabNavigator si l'utilisateur est déjà connecté
   useEffect(() => {
     if (token) {
@@ -133,11 +170,9 @@ const LoginScreen: React.FC = () => {
       const data = await response.json();
 
       if (data.result) {
-        console.log("Connexion réussie :", data);
         dispatch(updateToken(data.token));
-        await AsyncStorage.setItem("token", data.token)
         dispatch(updateEmail(email));
-        dispatch(actualizeCoins(data.coins)); 
+        dispatch(actualizeCoins(data.coins));
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigator" }],
@@ -263,7 +298,7 @@ const LoginScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background.main,
+    backgroundColor: "#2a2e30",
     paddingHorizontal: 20,
     justifyContent: "center",
   },
@@ -282,6 +317,7 @@ const styles = StyleSheet.create({
   logoCircle: {
     width: 100,
     height: 100,
+
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 10,
@@ -292,7 +328,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   title: {
-    color: colors.text.primary,
+    color: "#fff",
     fontWeight: "bold",
     fontSize: 25,
   },
@@ -301,10 +337,10 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     marginVertical: 20,
     paddingHorizontal: 20,
-    backgroundColor: colors.specific.white,
+    backgroundColor: "#ffffff",
     padding: 10,
     borderRadius: 10,
-    shadowColor: colors.specific.white,
+    shadowColor: "#ffffff",
     shadowOpacity: 0.25,
     shadowOffset: {
       width: 0,
@@ -313,7 +349,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     textAlign: "center",
-    color: colors.text.primary,
+    color: "#ffffff",
     fontSize: 14,
     marginBottom: 10,
   },
@@ -321,14 +357,15 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   input: {
-    backgroundColor: colors.specific.gray.light,
+    backgroundColor: "#e5e2e2", //#e5e2e2
     borderRadius: 5,
     marginBottom: 10,
+
     marginTop: 10,
     paddingVertical: 12,
     paddingHorizontal: 15,
     fontSize: 16,
-    shadowColor: colors.specific.black,
+    shadowColor: "#000",
     shadowOpacity: 0.4,
     shadowRadius: 6,
     shadowOffset: {
@@ -338,13 +375,13 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   loginButton: {
-    backgroundColor: colors.action.warning,
+    backgroundColor: "#ffac25",
     paddingVertical: 12,
     borderRadius: 5,
     alignItems: "center",
   },
   loginButtonText: {
-    color: colors.text.primary,
+    color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
   },
@@ -352,16 +389,16 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 10,
     textDecorationLine: "underline",
-    color: colors.text.primary,
+    color: "#ffffff",
   },
   signupButton: {
-    backgroundColor: colors.primary.light,
+    backgroundColor: "#d395ff",
     paddingVertical: 10,
     borderRadius: 5,
     marginTop: 10,
   },
   signupButtonText: {
-    color: colors.text.primary,
+    color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
     fontSize: 13,
@@ -370,36 +407,36 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 15,
     fontStyle: "italic",
-    color: colors.text.primary,
+    color: "#ffffff",
   },
   inputError: {
-    borderColor: colors.action.danger,
+    borderColor: "#ff4757",
     borderWidth: 1,
   },
   errorText: {
-    color: colors.action.danger,
+    color: "#ff4757",
     fontSize: 12,
     marginTop: 4,
     marginLeft: 4,
   },
   logoutButton: {
-    backgroundColor: colors.action.danger,
+    backgroundColor: "#ff4757",
     paddingVertical: 12,
     borderRadius: 5,
     alignItems: "center",
     marginTop: 10,
   },
   logoutButtonText: {
-    color: colors.text.primary,
+    color: "#fff",
     fontWeight: "bold",
     fontSize: 16,
   },
   modalButtonText: {
-    color: colors.text.primary,
+    color: "#fff",
     textAlign: "center",
     marginTop: 20,
     padding: 10,
-    backgroundColor: colors.primary.main,
+    backgroundColor: "#8b43f1",
     borderRadius: 8,
   },
 });
