@@ -30,31 +30,29 @@ const allBadges: Badge[] = [
 ];
 
 const ModalBadges: React.FC<ModalBadgesProps> = ({ visible, onClose }) => {
-  const userBadges: number[] = useSelector(
-    (state: any) => state.users?.value?.badges ?? []
-  );
+  const userBadges = [1, 2]; // badges débloqués pour test
 
   const renderBadge = ({ item }: { item: Badge }) => {
     const isUnlocked = userBadges.includes(item.id);
     return (
       <View style={styles.badgeContainer}>
-        <FontAwesome
-          name={item.iconName}
-          size={60}
-          color={isUnlocked ? "#8b43f1" : "#ccc"}
-          style={!isUnlocked ? styles.lockedBadge : undefined}
-        />
+        <View
+          style={[styles.iconWrapper, !isUnlocked && styles.iconWrapperLocked]}
+        >
+          <FontAwesome
+            name={item.iconName}
+            size={60}
+            color={isUnlocked ? "#8b43f1" : "#ccc"}
+          />
+          {!isUnlocked && (
+            <View style={styles.lockOverlay}>
+              <FontAwesome name="lock" size={20} color="#999" />
+            </View>
+          )}
+        </View>
         <Text style={[styles.badgeTitle, !isUnlocked && styles.lockedText]}>
           {item.title}
         </Text>
-        {!isUnlocked && (
-          <FontAwesome
-            name="lock"
-            size={18}
-            color="#999"
-            style={styles.lockIcon}
-          />
-        )}
       </View>
     );
   };
@@ -89,10 +87,14 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "90%",
-    backgroundColor: "#fff",
+    backgroundColor: "#e0e0e0",
     padding: 20,
     borderRadius: 16,
     maxHeight: "85%",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
   },
   title: {
     fontSize: 22,
@@ -106,19 +108,47 @@ const styles = StyleSheet.create({
     margin: 10,
     width: "45%",
   },
-  lockedBadge: {
-    opacity: 0.4,
+  iconWrapper: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: "#e0e0e0",
+    justifyContent: "center",
+    alignItems: "center",
+    // Ombres pour l'effet "surélevé"
+    shadowColor: "#fff",
+    shadowOffset: { width: -6, height: -6 },
+    shadowOpacity: 1,
+    shadowRadius: 6,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: "#d1d9e6",
+  },
+  iconWrapperLocked: {
+    backgroundColor: "#d3d3d3",
+    shadowColor: "#a3a3a3",
+    shadowOffset: { width: 6, height: 6 },
+    shadowOpacity: 1,
+    shadowRadius: 6,
+    elevation: 6,
+    borderColor: "#a1a1a1",
+  },
+  lockOverlay: {
+    position: "absolute",
+    top: 6,
+    right: 6,
+    backgroundColor: "rgba(255,255,255,0.7)",
+    borderRadius: 10,
+    padding: 2,
   },
   badgeTitle: {
     fontSize: 14,
     color: "#333",
     textAlign: "center",
+    marginTop: 8,
   },
   lockedText: {
-    color: "#aaa",
-  },
-  lockIcon: {
-    marginTop: 4,
+    color: "#888",
   },
   closeButton: {
     marginTop: 16,

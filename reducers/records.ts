@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-// State initial
 const initialState = {
   photosTaken: 0,
   averageRate: 0,
@@ -9,7 +8,6 @@ const initialState = {
   error: null as string | null,
 };
 
-// Typage automatique basé sur initialState
 export type RecordsState = typeof initialState;
 
 const recordsSlice = createSlice({

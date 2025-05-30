@@ -17,14 +17,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../theme/colors";
 
-// Types de navigation pour le stack Dashboard
 export type DashboardStackParamList = {
   DashboardHome: undefined;
   subscribe: undefined;
   payment: { subscriptionLabel: string };
 };
 
-// Types de navigation pour le stack principal
 export type RootStackParamList = {
   payment: { subscriptionLabel: string };
 };
@@ -98,7 +96,7 @@ const PaymentScreen = () => {
       </View>
       {/* Bouton retour */}
       <TouchableOpacity
-        style={styles.validateButton}
+        style={styles.goBackButton}
         onPress={() => navigation.goBack()}
         accessibilityLabel="Retour"
       >
@@ -108,7 +106,6 @@ const PaymentScreen = () => {
   );
 };
 
-// Styles de l'écran de paiement
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -119,7 +116,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold",
     color: "#ffffff",
-    marginBottom: 20,
+    marginBottom: 30,
     textAlign: "center",
     textShadowColor: "#000",
     textShadowOffset: { width: 1, height: 1 },
@@ -128,7 +125,7 @@ const styles = StyleSheet.create({
   paymentRow: {
     flexDirection: "row",
     justifyContent: "space-around",
-    marginBottom: 20,
+    marginBottom: 40,
   },
   paymentMethod: {
     backgroundColor: colors.background.card,
@@ -145,7 +142,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   cardInputRow: {
-    marginBottom: 20,
+    marginBottom: 30,
   },
   input: {
     backgroundColor: colors.specific.white,
@@ -154,7 +151,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 10,
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 20,
   },
   subInputRow: {
     flexDirection: "row",
@@ -172,6 +169,7 @@ const styles = StyleSheet.create({
   subtitle: {
     color: "#ffffff",
     marginBottom: 10,
+    marginTop: 30,
     fontSize: 16,
   },
   gradientBox: {
@@ -179,6 +177,7 @@ const styles = StyleSheet.create({
     padding: 15,
     alignItems: "center",
     marginBottom: 20,
+    marginTop: 20,
   },
   gradientText: {
     color: "#2a2e30",
@@ -190,12 +189,21 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 20,
   },
   validateButtonText: {
     color: "#2a2e30",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  goBackButton: {
+    backgroundColor: "#d395ff",
+    paddingVertical: 10,
+    paddingHorizontal: 80,
+    borderRadius: 10,
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 10,
   },
 });
 

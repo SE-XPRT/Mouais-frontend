@@ -10,7 +10,6 @@ const initialState = {
   tone: 50,
 };
 
-// Création d'un TypeScript basé sur la structure de la variable initalState
 export type FiltersState = typeof initialState;
 
 const filtersSlice = createSlice({

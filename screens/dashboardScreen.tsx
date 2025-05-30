@@ -23,13 +23,12 @@ import { UserState } from "../reducers/users";
 type RootStackParamList = {
   Dashboard: { token: string };
   subscribe: undefined;
-  endCredit: undefined; // à supprimer plus tard
 };
 
 type DashboardParams = {
   Dashboard: { token: string };
 };
-const API_URL = Constants.expoConfig?.extra?.API_URL ?? ""; // pour aller chercher l'info dans le fichier app.config.js qui elle va chercher la variable d'environnement.
+const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
 export default function DashboardScreen() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -42,10 +41,9 @@ export default function DashboardScreen() {
   const currentCoins = isGuest ? guestCoins : coins;
   // Récupérer le pseudo depuis le store Redux
   const storedPseudo = useSelector(
-    (state: { users: { value: { pseudo: string } } }) =>
-      state.users.value.pseudo
+    (state: { users: UserState }) => state.users.value.pseudo
   );
-
+  console.log(storedPseudo);
   const [averageScore, setAverageScore] = useState<number | null>(null);
   const [bestScore, setBestScore] = useState<number | null>(null);
   const [badgeNames, setBadgeNames] = useState<string[]>([]);
@@ -66,26 +64,20 @@ export default function DashboardScreen() {
       .catch((err) => console.error("Erreur dashboard:", err));
   }, [token]);
 
-  // fetch(`${API_URL}/photos/${token}`)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     if (data.result && data.photo?.url) {
-  //       setPhoto(data.photo.url);
-  //     }
-  //   });
-
   return (
     <View style={styles.container}>
       <Text style={styles.greetings}>
-        Salut <Text style={styles.userName}>{storedPseudo || "toi"}</Text>, prêt
-        à tester ton <Text style={styles.aura}>aura</Text> ?
+        Salut <Text style={styles.userName}>{storedPseudo || "BG"}</Text>,
+        prêt.e à tester ton <Text style={styles.aura}>aura</Text> ?
       </Text>
 
       <View style={styles.cardGrid}>
         <View style={styles.cardWrapper}>
           <View style={styles.card}>
             <FontAwesome name="trophy" size={40} color="#29ffc6" />
-            <Text style={styles.cardText}>Tes badges {badgeNames.length}</Text>
+            <Text style={styles.cardText}>
+              Tes badges {badgeNames.length > 0 ? badgeNames.length : ""}
+            </Text>
           </View>
 
           <View style={styles.card}>
@@ -99,11 +91,7 @@ export default function DashboardScreen() {
           <View style={styles.card}>
             <FontAwesome name="image" size={40} color="#8b43f1" />
             <Text style={styles.cardText}>Ta best photo</Text>
-            {photo ? (
-              <Image source={{ uri: photo }} style={styles.image} />
-            ) : (
-              <Text style={styles.cardText}>Chargement de la photo...</Text>
-            )}
+            {photo && <Image source={{ uri: photo }} style={styles.image} />}
           </View>
 
           <View style={styles.card}>
@@ -117,7 +105,6 @@ export default function DashboardScreen() {
 
         <Pressable
           onPress={() => {
-            // Action à définir ici si besoin
           }}
           style={({ pressed }) => [
             styles.pinkButton,
@@ -138,7 +125,7 @@ export default function DashboardScreen() {
         </Pressable>
 
         <Pressable
-          onPress={() => navigation.navigate("endCredit")}
+          onPress={() => console.log(storedPseudo)}
           style={({ pressed }) => [
             styles.coinInfo,
             pressed && styles.buttonPressed,
@@ -206,11 +193,13 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#1c1c1c",
     shadowColor: "#000",
-    shadowOffset: { width: -4, height: -4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
+    elevation: 6,
   },
   cardText: {
     color: "#ffffff",
@@ -226,20 +215,22 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   pinkButton: {
-    backgroundColor: "#29ffc6",
+    width: "80%",
+    backgroundColor: "#d395ff",
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
-    alignSelf: "center",
     marginVertical: 10,
+    alignItems: "center",
   },
   greenButton: {
+    width: "80%",
     backgroundColor: "#29ffc6",
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
-    alignSelf: "center",
     marginVertical: 10,
+    alignItems: "center",
   },
   buttonText: {
     color: "#2a2e30",
@@ -247,7 +238,7 @@ const styles = StyleSheet.create({
     fontFamily: "Playpen Sans",
   },
   buttonText2: {
-    color: colors.primary.light,
+    color: "#d3d3d3",
     fontWeight: "bold",
     fontFamily: "Playpen Sans",
   },
@@ -261,10 +252,12 @@ const styles = StyleSheet.create({
     color: "#8b43f1", // même violet que les autres boutons
     textAlign: "center",
     fontWeight: "bold",
+    borderWidth: 1,
+    borderColor: "#1c1c1c",
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
     elevation: 6,
   },
 

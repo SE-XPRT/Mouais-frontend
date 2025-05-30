@@ -15,7 +15,7 @@ const initialState: UserState = {
   value: {
     email: "",
     token: "",
-    pseudo: "",
+    pseudo: "BG",
     coins: 0,
     guestCoins: 3,
     badges: [],
@@ -41,11 +41,14 @@ export const usersSlice = createSlice({
         token: "",
         pseudo: "",
         coins: 0,
-        guestCoins: 3,
+        guestCoins: state.value.guestCoins,
         badges: [],
       };
     },
-    loadStoredData: (state, action: PayloadAction<Partial<UserState["value"]>>) => {
+    loadStoredData: (
+      state,
+      action: PayloadAction<Partial<UserState["value"]>>
+    ) => {
       state.value.email = action.payload.email ?? "";
       state.value.token = action.payload.token ?? "";
       state.value.pseudo = action.payload.pseudo ?? "";
@@ -62,7 +65,11 @@ export const usersSlice = createSlice({
       }
     },
     actualizeCoins: (state, action: PayloadAction<number>) => {
-      state.value.coins = action.payload;
+      if (state.value.token) {
+        state.value.coins = action.payload;
+      } else {
+        state.value.guestCoins = action.payload;
+      }
     },
   },
 });

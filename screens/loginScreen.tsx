@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { Animated, Easing } from "react-native";
+import { useRef } from "react";
+import { LinearGradient } from "expo-linear-gradient";
 
 import {
   View,
@@ -10,14 +13,11 @@ import {
   SafeAreaView,
   Alert,
   Button,
-  //Modal,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import Constants from "expo-constants";
-//test modal import à supprimer
-//import ModalBadge from "../components/ModalBadge";
 import { useDispatch } from "react-redux";
 import {
   updateToken,
@@ -25,11 +25,11 @@ import {
   logout,
   actualizeCoins,
   UserState,
+  updatePseudo,
 } from "../reducers/users";
 import { useSelector } from "react-redux";
 type RootStackParamList = {
   TabNavigator: undefined;
-  // ajoutez ici d'autres routes si nécessaire
 };
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
@@ -37,12 +37,33 @@ console.log(API_URL);
 
 const FontAwesome = _FontAwesome as React.ElementType;
 
-//Définition du composant principal
 const LoginScreen: React.FC = () => {
+  const titleAnim = useRef(new Animated.Value(0)).current;
+  const glowAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(titleAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(glowAnim, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: false,
+        }),
+        Animated.timing(glowAnim, {
+          toValue: 0,
+          duration: 800,
+          useNativeDriver: false,
+        }),
+      ])
+    ).start();
+  }, []);
+
   const dispatch = useDispatch();
-  //test modal à supprimer
-  //const [modalVisible, setModalVisible] = useState(false);
-  // Replace 'RootState' with the actual type of your Redux root state if different
   interface RootState {
     users: {
       email: {
@@ -62,8 +83,59 @@ const LoginScreen: React.FC = () => {
   const [signinOrSignup, setSigninOrSignup] = useState<"signin" | "signup">(
     "signin"
   );
+  const pressAnim = useRef(new Animated.Value(1)).current;
+  const switchAnim = useRef(new Animated.Value(1)).current;
+  const guestAnim = useRef(new Animated.Value(1)).current;
 
-  // Regex pour la validation
+  const [loading, setLoading] = useState(false);
+
+  const animatePressIn = () => {
+    Animated.spring(pressAnim, {
+      toValue: 0.95, 
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const animatePressOut = () => {
+    Animated.spring(pressAnim, {
+      toValue: 1, 
+      friction: 3, 
+      tension: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+  const animateSwitchPressIn = () => {
+    Animated.spring(switchAnim, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const animateSwitchPressOut = () => {
+    Animated.spring(switchAnim, {
+      toValue: 1,
+      friction: 3,
+      tension: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const animateGuestPressIn = () => {
+    Animated.spring(guestAnim, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const animateGuestPressOut = () => {
+    Animated.spring(guestAnim, {
+      toValue: 1,
+      friction: 3,
+      tension: 100,
+      useNativeDriver: true,
+    }).start();
+  };
+
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passwordRegex = /^.{5,}$/;
 
@@ -95,7 +167,6 @@ const LoginScreen: React.FC = () => {
 
   const changeAuthentification = () => {
     setSigninOrSignup(signinOrSignup === "signin" ? "signup" : "signin");
-    // Réinitialiser les erreurs lors du changement de mode
     setEmailError("");
     setPasswordError("");
   };
@@ -104,32 +175,6 @@ const LoginScreen: React.FC = () => {
     useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const token = useSelector((state: any) => state.users.value.token);
-
-  // Fonction de déconnexion
-  const handleLogout = async () => {
-    try {
-      // Appeler le backend pour la déconnexion si nécessaire
-      if (token) {
-        await fetch(`${API_URL}/users/logout`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ token }),
-        });
-      }
-    } catch (error) {
-      console.error("Erreur lors de la déconnexion:", error);
-    } finally {
-      // Nettoyer le store Redux et AsyncStorage
-      dispatch(logout());
-      // Réinitialiser les états locaux
-      setEmail("");
-      setPassword("");
-      setEmailError("");
-      setPasswordError("");
-    }
-  };
 
   // Rediriger vers TabNavigator si l'utilisateur est déjà connecté
   useEffect(() => {
@@ -142,7 +187,6 @@ const LoginScreen: React.FC = () => {
   }, [token]);
 
   const handleSignin = async () => {
-    // Valider les champs avant l'envoi
     const isEmailValid = validateEmail(email);
     const isPasswordValid = validatePassword(password);
 
@@ -173,10 +217,12 @@ const LoginScreen: React.FC = () => {
         dispatch(updateToken(data.token));
         dispatch(updateEmail(email));
         dispatch(actualizeCoins(data.coins));
+        dispatch(updatePseudo(data.pseudo || "BG"));
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigator" }],
         });
+        console.log("Réponse du backend :", data)
       } else {
         setEmail("");
         setPassword("");
@@ -191,36 +237,80 @@ const LoginScreen: React.FC = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <LinearGradient
+      colors={["#171717", "#242424"]}
+      style={styles.container}
+      start={{ x: 0.1, y: 0.1 }}
+      end={{ x: 1, y: 1 }}
+    >
       {/* Logo */}
       <View style={styles.logoContainer}>
         <Text style={styles.logoText}>
           <Image style={styles.logo} source={require("../assets/logo.png")} />
         </Text>
-
-        <Text style={styles.title}>Connecte-toi !</Text>
+        <View
+          style={{
+            position: "relative",
+            alignItems: "center",
+            overflow: "visible",
+          }}
+        >
+          <Animated.Text
+            style={[
+              styles.title,
+              {
+                position: "relative",
+                zIndex: 10,
+                paddingHorizontal: 12,
+                textShadowRadius: glowAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [40, 60],
+                }),
+                textShadowColor: glowAnim.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: ["#29ffc666", "#29ffc6ff"],
+                }),
+              },
+            ]}
+          >
+            {"\u2003\u2003\u2003Connecte-toi viiite !\u2003\u2003\u2003"}
+          </Animated.Text>
+        </View>
       </View>
 
-      {/* Social Icons */}
+      {/* Social Icons 1 */}
       <View style={styles.socialRow}>
-        <FontAwesome name="apple" size={28} color="#40a0ed" />
-        <FontAwesome name="google" size={28} color="#e34133" />
-        <FontAwesome name="instagram" size={28} color="#7864cc" />
-        <FontAwesome name="windows" size={28} color="#40a0ed" />
-        <FontAwesome name="facebook" size={28} color="#3d4eaf" />
+        <View style={styles.iconCircle}>
+          <FontAwesome name="apple" size={24} color="#40a0ed" />
+        </View>
+        <View style={styles.iconCircle}>
+          <FontAwesome name="google" size={24} color="#e34133" />
+        </View>
+        <View style={styles.iconCircle}>
+          <FontAwesome name="instagram" size={24} color="#7864cc" />
+        </View>
+        <View style={styles.iconCircle}>
+          <FontAwesome name="facebook" size={24} color="#3d4eaf" />
+        </View>
       </View>
 
       <Text style={styles.subtitle}>
         {signinOrSignup === "signin"
-          ? "Connecte-toi avec ton email !"
+          ? "Ou avec ton email si tu préfères !"
           : "Crée ton compte avec ton email !"}
       </Text>
 
       <View style={styles.form}>
-        <View>
+        <View style={styles.inputWrapper}>
+          <FontAwesome
+            name="envelope"
+            size={18}
+            color="#aaa"
+            style={styles.inputIcon}
+          />
           <TextInput
             placeholder="Entrez votre email"
-            placeholderTextColor="#333"
+            placeholderTextColor="#999999"
             style={[styles.input, emailError ? styles.inputError : null]}
             value={email}
             onChangeText={(text) => {
@@ -235,10 +325,16 @@ const LoginScreen: React.FC = () => {
           ) : null}
         </View>
 
-        <View>
+        <View style={styles.inputWrapper}>
+          <FontAwesome
+            name="lock"
+            size={24}
+            color="#aaa"
+            style={styles.inputIcon}
+          />
           <TextInput
             placeholder="Entrez votre mot de passe"
-            placeholderTextColor="#333"
+            placeholderTextColor="#999999"
             secureTextEntry
             style={[styles.input, passwordError ? styles.inputError : null]}
             value={password}
@@ -253,45 +349,76 @@ const LoginScreen: React.FC = () => {
         </View>
 
         <View style={{ marginTop: 10 }}>
-          <TouchableOpacity style={styles.loginButton} onPress={handleSignin}>
-            <Text style={styles.loginButtonText}>
-              {signinOrSignup === "signin" ? "Se connecter" : "S'inscrire"} ➤
-            </Text>
-          </TouchableOpacity>
+          <Animated.View style={{ transform: [{ scale: pressAnim }] }}>
+            <TouchableOpacity
+              style={styles.loginButton}
+              onPressIn={animatePressIn}
+              onPressOut={() => {
+                animatePressOut();
+                handleSignin();
+              }}
+              activeOpacity={1}
+            >
+              {loading ? (
+                <Text style={styles.loginButtonText}>⏳</Text>
+              ) : (
+                <Text style={styles.loginButtonText}>
+                  {signinOrSignup === "signin" ? "Se connecter" : "S'inscrire"}{" "}
+                  ➤
+                </Text>
+              )}
+            </TouchableOpacity>
+          </Animated.View>
         </View>
 
-        <TouchableOpacity
-          style={styles.signupButton}
-          onPress={changeAuthentification}
-        >
-          <Text style={styles.signupButtonText}>
-            {signinOrSignup === "signin"
-              ? "Pas encore de compte ? Crée-en un !"
-              : "Déjà un compte ? Connecte-toi !"}
-          </Text>
-        </TouchableOpacity>
-        {/* test modal à supprimer 
-        <ModalBadge
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-        />*/}
+        <Animated.View style={{ transform: [{ scale: switchAnim }] }}>
+          <TouchableOpacity
+            style={styles.signupButton}
+            onPressIn={animateSwitchPressIn}
+            onPressOut={() => {
+              animateSwitchPressOut();
+              changeAuthentification();
+            }}
+            activeOpacity={1}
+          >
+            <Text style={styles.signupButtonText}>
+              {signinOrSignup === "signin"
+                ? "Pas encore de compte ? Crée-en un !"
+                : "Déjà un compte ? Connecte-toi !"}
+            </Text>
+          </TouchableOpacity>
+        </Animated.View>
       </View>
-      <Text
-        style={styles.guestMode}
-        onPress={() => {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: "TabNavigator" }],
-          });
-        }}
-      >
-        Commencer en mode invité
-      </Text>
-      {/* test modal à supprimer 
-      <TouchableOpacity onPress={() => setModalVisible(true)}>
-        <Text>Ouvrir la modale</Text>
-      </TouchableOpacity>*/}
-    </SafeAreaView>
+      <Animated.View style={{ transform: [{ scale: guestAnim }] }}>
+        <TouchableOpacity
+          onPressIn={animateGuestPressIn}
+          onPressOut={() => {
+            animateGuestPressOut();
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "TabNavigator" }],
+            });
+          }}
+          activeOpacity={1}
+        >
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <FontAwesome
+              name="user"
+              size={16}
+              color="#ffffff"
+              style={{ marginRight: 6, marginTop: 15 }}
+            />
+            <Text style={styles.guestMode}>Ou commence en mode Incognito</Text>
+          </View>
+        </TouchableOpacity>
+      </Animated.View>
+    </LinearGradient>
   );
 };
 
@@ -328,25 +455,19 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   title: {
-    color: "#fff",
     fontWeight: "bold",
-    fontSize: 25,
+    fontSize: 28,
+    color: "#ffffff",
+    textAlign: "center",
+    marginBottom: 32,
+
+    textShadowColor: "#ffffff",
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: 12,
+    marginTop: 16,
+    overflow: "visible",
   },
-  socialRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 20,
-    paddingHorizontal: 20,
-    backgroundColor: "#ffffff",
-    padding: 10,
-    borderRadius: 10,
-    shadowColor: "#ffffff",
-    shadowOpacity: 0.25,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-  },
+
   subtitle: {
     textAlign: "center",
     color: "#ffffff",
@@ -357,34 +478,36 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   input: {
-    backgroundColor: "#e5e2e2", //#e5e2e2
-    borderRadius: 5,
-    marginBottom: 10,
-
-    marginTop: 10,
-    paddingVertical: 12,
+    color: "#ffffff",
+    borderRadius: 12,
+    paddingVertical: 6,
     paddingHorizontal: 15,
     fontSize: 16,
-    shadowColor: "#000",
-    shadowOpacity: 0.4,
-    shadowRadius: 6,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    elevation: 6,
+    width: "100%",
+    height: 50,
   },
   loginButton: {
-    backgroundColor: "#ffac25",
+    backgroundColor: "#29ffc6",
     paddingVertical: 12,
-    borderRadius: 5,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    alignSelf: "center",
+    marginTop: 20,
+    minWidth: "95%",
+    maxWidth: "95%",
     alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
   },
   loginButtonText: {
-    color: "#fff",
+    color: "#2a2e30",
     fontWeight: "bold",
     fontSize: 16,
   },
+
   forgotPassword: {
     textAlign: "center",
     marginVertical: 10,
@@ -393,15 +516,24 @@ const styles = StyleSheet.create({
   },
   signupButton: {
     backgroundColor: "#d395ff",
-    paddingVertical: 10,
-    borderRadius: 5,
-    marginTop: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderRadius: 10,
+    minWidth: "95%",
+    maxWidth: "95%",
+    alignSelf: "center",
+    textAlign: "center",
+    marginTop: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 4,
   },
   signupButtonText: {
     color: "#fff",
     fontWeight: "bold",
-    textAlign: "center",
-    fontSize: 13,
+    fontSize: 16,
   },
   guestMode: {
     textAlign: "center",
@@ -438,6 +570,42 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#8b43f1",
     borderRadius: 8,
+  },
+  iconCircle: {
+    backgroundColor: "#2a2e30",
+    borderRadius: 40,
+    width: 55,
+    height: 55,
+    alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
+    elevation: 8,
+  },
+  socialRow: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    marginVertical: 20,
+  },
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#2a2e30",
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    paddingVertical: 6,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+    elevation: 6,
+  },
+  inputIcon: {
+    marginLeft: 10,
   },
 });
 

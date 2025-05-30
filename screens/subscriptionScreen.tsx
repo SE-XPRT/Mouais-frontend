@@ -1,4 +1,3 @@
-// screens/subscriptionScreen.tsx
 import React, { useState } from "react";
 import {
   View,
@@ -11,9 +10,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { DashboardStackParamList } from "./paymentScreen"; // Import des types de routes
+import { DashboardStackParamList } from "./paymentScreen"; 
 import { colors } from "../theme/colors";
-// Liste des abonnements disponibles
+
 const options = [
   { label: "10 coins - 0,99 €", icon: "child" },
   { label: "20 coins - 1,99 €", icon: "heart" },
@@ -25,7 +24,7 @@ const SubscriptionScreen = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // Suivi de l'option choisie
   const navigation = useNavigation<NavigationProp<DashboardStackParamList>>(); // Accès à la navigation typée
 
-  // Fonction déclenchée lors du clic sur "Appliquer"
+  
   const handleApply = () => {
     if (selectedIndex !== null) {
       const selected = options[selectedIndex];
@@ -36,6 +35,11 @@ const SubscriptionScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
+        <View style={styles.closeButtonContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <FontAwesome name="arrow-left" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.title}>Choisis ta formule</Text>
 
         {/* Liste des options d'abonnement */}
@@ -99,7 +103,6 @@ const SubscriptionScreen = () => {
   );
 };
 
-// Styles de la page
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40,
@@ -109,11 +112,17 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "flex-start",
   },
+  closeButtonContainer: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    zIndex: 1,
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#ffffff",
-    marginBottom: 20,
+    marginBottom: 60,
   },
   optionList: {
     paddingBottom: 30,

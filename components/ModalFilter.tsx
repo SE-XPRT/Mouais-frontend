@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleZone, setTone } from "../reducers/filters";
 import Constants from "expo-constants";
 import Slider from "@react-native-community/slider";
+import ModalBadge from "./ModalBadgeWin";
 import type { RootState } from "../store";
+import { Button } from "react-native";
+import { setHasWonFilterBadge } from "../reducers/badges";
 
 const API_URL = Constants.expoConfig?.extra?.API_URL ?? "";
 
@@ -15,12 +18,34 @@ type FilterModalProps = {
   photoId: string;
 };
 
-const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => {
+const FilterModal = ({
+  visible,
+  onClose,
+  token,
+  photoId,
+}: FilterModalProps) => {
   const dispatch = useDispatch();
   const filters = useSelector((state: RootState) => state.filters);
-  const zonesList = Object.keys(filters.zones) as Array<keyof typeof filters.zones>;
+  const hasWonFilterBadge = useSelector(
+    (state: RootState) => state.badges.hasWonFilterBadge
+  );
+
+  const [badge, setBadge] = React.useState<null | {
+    name: string;
+    iconName: string;
+  }>(null);
+  const [badgeModalVisible, setBadgeModalVisible] = React.useState(false);
+  // État local pour afficher/cacher la liste des zones à filtrer
   const [zonesOpen, setZonesOpen] = React.useState(false);
 
+  const alreadyClickedRef = useRef(false);
+
+  // Récupération de la liste des zones à partir de l'état Redux,
+  const zonesList = Object.keys(filters.zones) as Array<
+    keyof typeof filters.zones
+  >;
+
+  // Fonction qui envoie les filtres au backend via POST
   const handleAnalyze = async () => {
     try {
       const response = await fetch(`${API_URL}/photos/analyze`, {
@@ -35,10 +60,30 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
           },
         }),
       });
-      await response.json();
+
+      const data = await response.json();
+      console.log("Réponse backend :", data);
+
+      if (!alreadyClickedRef.current && !hasWonFilterBadge) {
+        alreadyClickedRef.current = true;
+
+        setBadge({
+          name: "Filtre Queen",
+          iconName: "fire",
+        });
+
+        setBadgeModalVisible(true);
+        dispatch(setHasWonFilterBadge(true));
+
+        setTimeout(() => {
+          setBadgeModalVisible(false); // Ferme d’abord la modal badge
+          setTimeout(onClose, 500); // Puis ferme la modal principale après un petit délai
+        }, 5500);
+      } else {
+        onClose();
+      }
     } catch (error) {
       console.error("Erreur lors de l'analyse :", error);
-    } finally {
       onClose();
     }
   };
@@ -46,20 +91,33 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
   return (
     <Modal visible={visible} animationType="slide" transparent>
       <View style={styles.overlay}>
+        {/* WRAPPER DU BOUTON DE TEST */}
+        <View style={{ marginTop: 40, alignItems: "center" }}>
+          <Button
+            title="Reset Badge Test"
+            onPress={() => {
+              dispatch(setHasWonFilterBadge(false));
+              alert("Redux badge reset !");
+            }}
+          />
+        </View>
         <View style={styles.modalContainer}>
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>×</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>Filtres</Text>
+          <Text style={styles.title}>💜 Mes filtres</Text>
           <Text style={styles.label} onPress={() => setZonesOpen(!zonesOpen)}>
-            Que veux-tu qu’on juge ? {zonesOpen ? "▲" : "▼"}
+            👉 Que veux-tu qu’on juge ? {zonesOpen ? "▲" : "▼"}
           </Text>
           {zonesOpen && (
             <View style={styles.zonesList}>
               {zonesList.map((zone) => (
                 <View key={zone} style={styles.checkboxContainer}>
                   <TouchableOpacity
-                    style={[styles.neumorphicCheckbox, filters.zones[zone] && { backgroundColor: "#8B43F1" }]}
+                    style={[
+                      styles.neumorphicCheckbox,
+                      filters.zones[zone] && { backgroundColor: "#8B43F1" },
+                    ]}
                     onPress={() => dispatch(toggleZone(zone))}
                   >
                     {filters.zones[zone] && (
@@ -73,7 +131,7 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
               ))}
             </View>
           )}
-          <Text style={styles.label}>Degré de gentillesse</Text>
+          <Text style={styles.label}>👉 Degré de gentillesse</Text>
           <View style={styles.sliderWrapper}>
             <Text style={styles.sliderLabel}>Sois cash</Text>
             <View style={styles.sliderContainer}>
@@ -86,7 +144,7 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
                 onValueChange={(value) => dispatch(setTone(value))}
                 minimumTrackTintColor="#8B43F1"
                 maximumTrackTintColor="#555"
-                thumbTintColor="#fff"
+                thumbTintColor="#8B43F1"
               />
             </View>
             <Text style={styles.sliderLabel}>Sois gentil steuplé !</Text>
@@ -96,6 +154,13 @@ const FilterModal = ({ visible, onClose, token, photoId }: FilterModalProps) => 
           </TouchableOpacity>
         </View>
       </View>
+      {badgeModalVisible && (
+        <ModalBadge
+          visible={badgeModalVisible}
+          onClose={() => setBadgeModalVisible(false)}
+          badge={badge}
+        />
+      )}
     </Modal>
   );
 };
@@ -144,8 +209,8 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     color: "#fff",
-    marginTop: 10,
-    marginBottom: 6,
+    marginTop: 30,
+    marginBottom: 20,
   },
   zonesList: {
     marginBottom: 10,
@@ -204,7 +269,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   applyButton: {
-    backgroundColor: "#2a2a2a",
+    backgroundColor: "#8B43F1",
     borderRadius: 20,
     marginTop: 20,
     paddingVertical: 12,

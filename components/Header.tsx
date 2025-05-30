@@ -12,7 +12,7 @@ import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";
-import { updateToken, updateEmail } from "../reducers/users";
+import { updateToken, updateEmail, logout } from "../reducers/users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import FilterModal from "./ModalFilter";
 
@@ -81,6 +81,7 @@ const Header: React.FC = () => {
           <TouchableOpacity
             style={styles.Button}
             onPress={() => {
+              setShowPersonalize(false);
               navigation.navigate("Infos");
             }}
           >
@@ -93,10 +94,7 @@ const Header: React.FC = () => {
               Mes notifications
             </Text>
           </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.Button}
-            onPress={openFilters} // Ouverture de la modal Filters
-          >
+          <TouchableOpacity style={styles.Button} onPress={openFilters}>
             <Text style={{ color: colors.text.primary, fontSize: 16 }}>
               Mes filtres & favoris
             </Text>
@@ -104,6 +102,7 @@ const Header: React.FC = () => {
           <TouchableOpacity
             style={styles.Button}
             onPress={() => {
+              setShowPersonalize(false);
               navigation.navigate("PhotosAlbum");
             }}
           >
@@ -113,7 +112,10 @@ const Header: React.FC = () => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => setShowBadgesModal(true)}
+            onPress={() => {
+              setShowPersonalize(false);
+              setShowBadgesModal(true);
+            }}
           >
             <Text style={{ color: colors.text.primary, fontSize: 16 }}>
               Mes badges
@@ -122,7 +124,10 @@ const Header: React.FC = () => {
 
           <TouchableOpacity
             style={styles.Button}
-            onPress={() => setShowRecordsModal(true)} // Ouverture de la modal Records
+            onPress={() => {
+              setShowPersonalize(false);
+              setShowRecordsModal(true);
+            }}
           >
             <Text style={{ color: colors.text.primary, fontSize: 16 }}>
               Mes stats perso
@@ -133,12 +138,7 @@ const Header: React.FC = () => {
             onPress={() => {
               dispatch(updateToken(""));
               dispatch(updateEmail(""));
-              AsyncStorage.multiRemove([
-                "userEmail",
-                "userToken",
-                "userCoins",
-                "userPseudo",
-              ]);
+              dispatch(logout());
               navigation.navigate("Login");
             }}
           >
