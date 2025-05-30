@@ -4,11 +4,13 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { FontAwesome } from "@expo/vector-icons";
 import { colors } from "../theme/colors";
 import { useSelector } from "react-redux";
+import { CommonActions } from "@react-navigation/native";
 
 type DashboardStackParamList = {
   subscribe: undefined;
   endCredit: undefined;
   Login: undefined;
+  TabNavigator: undefined;
 };
 
 const EndCreditScreen = () => {
@@ -46,7 +48,14 @@ const EndCreditScreen = () => {
         )}
         <TouchableOpacity
           style={styles.validateButton}
-          onPress={() => navigation.goBack()}
+          onPress={() =>
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 0,
+                routes: [{ name: "TabNavigator" }],
+              })
+            )
+          }
           accessibilityLabel="Retour"
         >
           <Text style={styles.gradientText}>Retour</Text>
