@@ -80,11 +80,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   container: {
-    width: "95%", // Avant : "90%"
-    height: "75%", // Ajouté pour donner plus de hauteur
-    backgroundColor: "#f7a3cc", // (à supprimer si tu utilises le LinearGradient)
-    borderRadius: 30, // Plus de courbure pour l’esthétique
-    padding: 30, // Un peu plus d’espace intérieur
+    width: "95%",
+    height: "75%",
+    backgroundColor: "#f7a3cc",
+    borderRadius: 30,
+    padding: 30,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     right: 10,
-    zIndex: 1, // pour qu’il reste cliquable au-dessus de l'image
+    zIndex: 1,
   },
   closeText: {
     fontSize: 24,
@@ -140,9 +140,9 @@ const styles = StyleSheet.create({
   },
   lipsImage: {
     position: "absolute",
-    top: 40, // descend un peu pour libérer le bouton ✕
+    top: 40,
     right: 10,
-    width: 140, // un peu plus large
+    width: 140,
     height: 140,
     resizeMode: "contain",
   },
@@ -172,7 +172,7 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 22,
     backgroundColor: "rgba(255,255,255,0.8)",
-    transform: [{ rotate: "-15deg" }], // barre oblique gauche à droite
+    transform: [{ rotate: "-15deg" }],
     borderRadius: 3,
     zIndex: 100,
   },

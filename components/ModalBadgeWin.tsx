@@ -69,7 +69,7 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
         tension: 100,
       }).start();
 
-      playSound(); // 🔊 Joue le son
+      playSound(); // Joue le son
     } else {
       // Animation de zoom arrière
       Animated.spring(scaleAnim, {
@@ -160,7 +160,6 @@ const styles = StyleSheet.create({
     padding: 25,
     alignItems: "center",
     position: "relative",
-    // Neumorphisme light shadow
     shadowColor: "#ffffff",
     shadowOffset: { width: -6, height: -6 },
     shadowOpacity: 1,
@@ -171,7 +170,6 @@ const styles = StyleSheet.create({
     top: 15,
     right: 15,
     zIndex: 1,
-    // Neumorphisme button shadows
     shadowColor: "#ffffff",
     shadowOffset: { width: -3, height: -3 },
     shadowOpacity: 1,
@@ -192,8 +190,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     borderRadius: 40,
     padding: 15,
-
-    // Neumorphisme icon wrapper shadows
     shadowColor: "#ffffff",
     shadowOffset: { width: -5, height: -5 },
     shadowOpacity: 1,

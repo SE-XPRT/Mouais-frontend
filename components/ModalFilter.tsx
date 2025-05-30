@@ -5,7 +5,7 @@ import { toggleZone, setTone } from "../reducers/filters";
 import Constants from "expo-constants";
 import Slider from "@react-native-community/slider";
 import ModalBadge from "./ModalBadgeWin";
-import type { RootState } from "../store"; // Type global du store Redux
+import type { RootState } from "../store";
 import { Button } from "react-native";
 import { setHasWonFilterBadge } from "../reducers/badges";
 
@@ -41,7 +41,6 @@ const FilterModal = ({
   const alreadyClickedRef = useRef(false);
 
   // Récupération de la liste des zones à partir de l'état Redux,
-  // en forçant TypeScript à comprendre que ce sont les clés de filters.zones
   const zonesList = Object.keys(filters.zones) as Array<
     keyof typeof filters.zones
   >;
@@ -79,7 +78,7 @@ const FilterModal = ({
         setTimeout(() => {
           setBadgeModalVisible(false); // Ferme d’abord la modal badge
           setTimeout(onClose, 500); // Puis ferme la modal principale après un petit délai
-        }, 3500);
+        }, 5500);
       } else {
         onClose();
       }

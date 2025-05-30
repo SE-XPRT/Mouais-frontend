@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     width: "90%",
-    backgroundColor: "#e0e0e0", // gris clair pour mieux faire ressortir le neumorphisme
+    backgroundColor: "#e0e0e0",
     padding: 20,
     borderRadius: 16,
     maxHeight: "85%",
@@ -121,13 +121,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 1,
     shadowRadius: 6,
     elevation: 6,
-    // Ombre plus sombre en bas droite
     borderWidth: 1,
     borderColor: "#d1d9e6",
   },
   iconWrapperLocked: {
     backgroundColor: "#d3d3d3",
-    // Ombres pour effet "enfoncé"
     shadowColor: "#a3a3a3",
     shadowOffset: { width: 6, height: 6 },
     shadowOpacity: 1,
