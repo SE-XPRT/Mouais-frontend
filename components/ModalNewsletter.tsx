@@ -162,7 +162,7 @@ const styles = StyleSheet.create({
   nudesText: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#ff0084",
   },
 
   strike: {
@@ -170,9 +170,10 @@ const styles = StyleSheet.create({
     top: 5,
     left: 0,
     width: "100%",
-    height: 22, // plus épais
-    backgroundColor: "rgba(255,255,255,0.7)",
+    height: 22,
+    backgroundColor: "rgba(255,255,255,0.8)",
     transform: [{ rotate: "-15deg" }], // barre oblique gauche à droite
-    borderRadius: 5,
+    borderRadius: 3,
+    zIndex: 100,
   },
 });
