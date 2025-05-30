@@ -13,7 +13,6 @@ import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { useDispatch } from "react-redux";
 import { updateToken, updateEmail, logout } from "../reducers/users";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import FilterModal from "./ModalFilter";
 
 import { colors } from "../theme/colors";
@@ -25,7 +24,6 @@ type RootStackParamList = {
   Login: undefined;
   PhotosAlbum: undefined;
   Infos: undefined;
-  // Ajoutez ici d'autres routes si nécessaire
 };
 const screenHeight = Dimensions.get("window").height;
 const FontAwesome = _FontAwesome as React.ElementType;
@@ -37,7 +35,6 @@ const Header: React.FC = () => {
   const [showRecordsModal, setShowRecordsModal] = useState(false);
 
   const openMenu = () => {
-    // Handle menu opening
     console.log("Menu opened");
     setShowPersonalize((prev) => !prev);
   };
