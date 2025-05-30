@@ -370,6 +370,7 @@ export default function InfosScreen() {
               title="Modifier mon mot de passe"
               onPress={() => {}}
               style={styles.actionButton}
+              color="#d395ff"
               textStyle={styles.actionButtonText}
             />
 
@@ -377,6 +378,7 @@ export default function InfosScreen() {
               title="Newsletter"
               onPress={() => setShowNewsletter(true)}
               style={styles.actionButton}
+              color="#27ffc6"
               textStyle={styles.actionButtonText}
             />
           </View>
@@ -533,9 +535,9 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   actionButtonText: {
-    color: colors.text.primary,
+    color: "black",
     fontSize: 16,
-    fontWeight: "600",
+    fontWeight: "400",
   },
   editButtonsContainer: {
     flexDirection: "row",
