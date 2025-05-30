@@ -509,7 +509,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   ButtonContainer: {
-    width: "100%",
+    width: Dimensions.get("window").width - 40,
     gap: 16,
 
     alignItems: "center",
