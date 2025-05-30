@@ -33,18 +33,23 @@ const NewsletterModal: React.FC<Props> = ({ visible, onClose }) => {
           </TouchableOpacity>
 
           {/* Title */}
-          <Text style={styles.title}>
-            GET SOME
-            {"\n"}
-            <Text style={styles.strikeThrough}>NUDES</Text>
-            <Text> NEWS</Text>
-          </Text>
+          <View style={styles.titleWrapper}>
+            <Text style={styles.title}>GET SOME</Text>
+
+            <View style={styles.nudesWrapper}>
+              <Text style={styles.nudesText}>NUDES</Text>
+              <View style={styles.strike}></View>
+            </View>
+
+            <Text style={styles.title}> NEWS</Text>
+          </View>
 
           {/* Subtitle */}
           <Text style={styles.subtitle}>
-            Stay tuned! Pour être dans toutes les confidences de ta Squadra
+            Stay tuned! Pour être dans toutes les confidences de ton app
             préférée, c’est par ici ! Promis, on ne va pas te harceler mais
-            simplement te partager nos meilleures actus.
+            simplement te partager nos meilleures actus pour être BG ! Mouais,
+            convaincu.e ?
           </Text>
 
           {/* Email input */}
@@ -94,11 +99,11 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   title: {
-    textAlign: "center",
     fontSize: 28,
     fontWeight: "bold",
     color: "#fff",
-    marginBottom: 20,
+    textAlign: "center",
+    marginBottom: 10,
     lineHeight: 32,
   },
   strikeThrough: {
@@ -106,10 +111,10 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 20,
     color: "#fff",
     textAlign: "center",
-    marginBottom: 20,
+    marginBottom: 50,
   },
   inputRow: {
     flexDirection: "row",
@@ -141,5 +146,32 @@ const styles = StyleSheet.create({
     height: 140,
     resizeMode: "contain",
     zIndex: 0, // 👈 derrière les éléments interactifs
+  },
+  titleWrapper: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
+  nudesWrapper: {
+    position: "relative",
+    marginHorizontal: 5,
+  },
+
+  nudesText: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#fff",
+  },
+
+  strike: {
+    position: "absolute",
+    top: 11,
+    left: 0,
+    width: "100%",
+    height: 22, // plus épais
+    backgroundColor: "rgba(255,255,255,0.6)", // blanc transparent
   },
 });

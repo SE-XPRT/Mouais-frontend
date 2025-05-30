@@ -70,7 +70,7 @@ const TabNavigator = () => (
       }}
     />
     <Tab.Screen
-      name="Infos"
+      name="Profil"
       component={InfosScreen}
       options={{
         headerShown: false,
