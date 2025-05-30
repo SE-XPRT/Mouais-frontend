@@ -38,6 +38,47 @@ type RootStackParamList = {
   Login: undefined;
 };
 
+/**
+ * Composant InfosScreen : affiche et permet la modification des informations du profil utilisateur.
+ *
+ * Fonctionnalités :
+ * - Affiche l’avatar, le pseudo et l’email de l’utilisateur.
+ * - Permet la modification du pseudo avec validation et mise à jour côté backend.
+ * - Supporte le changement d’avatar via la galerie (avec gestion des permissions).
+ * - Propose la suppression du compte avec confirmation et appel backend.
+ * - Charge les données utilisateur depuis le store Redux ou le backend si nécessaire.
+ * - Affiche un état de chargement lors de la récupération des données.
+ * - Inclut des boutons pour modifier le mot de passe et gérer la newsletter.
+ * - Utilise Redux pour la gestion d’état et la navigation pour les transitions d’écran.
+ *
+ * États :
+ * - avatarUri : URI de l’avatar utilisateur.
+ * - editMode : mode édition du pseudo.
+ * - userData : objet contenant l’email et le pseudo.
+ * - tempPseudo : valeur temporaire du pseudo lors de l’édition.
+ * - isLoading : état de chargement des données.
+ * - showNewsletter : contrôle la visibilité du modal newsletter.
+ *
+ * Effets de bord :
+ * - Met à jour l’état local quand le pseudo Redux change.
+ * - Charge les données utilisateur depuis le backend si non présentes dans Redux.
+ *
+ * Méthodes :
+ * - loadUserData : récupère les données utilisateur depuis le backend si besoin.
+ * - saveUserData : met à jour le pseudo côté backend et dans Redux.
+ * - cancelEdit : annule l’édition du pseudo et restaure la valeur précédente.
+ * - editTextInput : active/désactive le mode édition du pseudo.
+ * - handleDelete : gère la suppression du compte avec confirmation et appel backend.
+ * - editPhoto : gère le changement d’avatar via la galerie.
+ *
+ * UI :
+ * - Utilise LinearGradient pour le fond et l’avatar.
+ * - Affiche un TextInput éditable pour le pseudo et en lecture seule pour l’email.
+ * - Affiche les boutons d’édition et de suppression avec les actions associées.
+ * - Intègre les composants personnalisés AppButton et ModalNewsletter.
+ *
+ * @component
+ */
 export default function InfosScreen() {
   const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
