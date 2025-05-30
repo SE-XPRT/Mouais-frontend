@@ -49,7 +49,6 @@ export default function ModalRecords({ visible, onClose }: ModalRecordsProps) {
     if (visible) fetchData();
   }, [visible, token]);
 
-  // ✨ Gestion des valeurs 0 avec emojis
   const displayValue = (value: number, emoji: string) => {
     return value > 0 ? `${value}` : emoji;
   };
@@ -99,7 +98,7 @@ export default function ModalRecords({ visible, onClose }: ModalRecordsProps) {
             onPressIn={() => setIsPressed(true)}
             onPressOut={() => {
               setIsPressed(false);
-              onClose(); // Appelle la fermeture après le relâchement
+              onClose();
             }}
             activeOpacity={1}
           >

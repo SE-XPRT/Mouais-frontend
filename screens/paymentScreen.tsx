@@ -17,14 +17,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "../theme/colors";
 
-// Types de navigation pour le stack Dashboard
 export type DashboardStackParamList = {
   DashboardHome: undefined;
   subscribe: undefined;
   payment: { subscriptionLabel: string };
 };
 
-// Types de navigation pour le stack principal
 export type RootStackParamList = {
   payment: { subscriptionLabel: string };
 };
@@ -108,7 +106,6 @@ const PaymentScreen = () => {
   );
 };
 
-// Styles de l'écran de paiement
 const styles = StyleSheet.create({
   container: {
     flex: 1,

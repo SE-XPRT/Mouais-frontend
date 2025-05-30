@@ -126,7 +126,6 @@ export default function InfosScreen() {
         const data = await response.json();
 
         if (data.result) {
-          // Mettre à jour le pseudo dans le store Redux (qui le sauvegarde dans AsyncStorage)
           dispatch(updatePseudo(tempPseudo.trim()));
           setEditMode(false);
           Alert.alert("Succès", "Pseudo mis à jour avec succès");
@@ -185,9 +184,7 @@ export default function InfosScreen() {
               const data = await response.json();
 
               if (data.result) {
-                // Nettoyer le store Redux et AsyncStorage
                 dispatch(logout());
-                // Rediriger vers la page de login
                 navigation.reset({
                   index: 0,
                   routes: [{ name: "Login" }],
@@ -232,7 +229,6 @@ export default function InfosScreen() {
 
     if (!result.canceled && result.assets && result.assets.length > 0) {
       setAvatarUri(result.assets[0].uri);
-      // Ici tu peux aussi envoyer la photo au backend si besoin
     }
   };
   return (

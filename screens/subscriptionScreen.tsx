@@ -1,4 +1,3 @@
-// screens/subscriptionScreen.tsx
 import React, { useState } from "react";
 import {
   View,
@@ -104,7 +103,6 @@ const SubscriptionScreen = () => {
   );
 };
 
-// Styles de la page
 const styles = StyleSheet.create({
   container: {
     paddingTop: 40,

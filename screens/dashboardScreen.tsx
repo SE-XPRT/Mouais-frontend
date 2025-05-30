@@ -105,7 +105,6 @@ export default function DashboardScreen() {
 
         <Pressable
           onPress={() => {
-            // Action à définir ici si besoin
           }}
           style={({ pressed }) => [
             styles.pinkButton,

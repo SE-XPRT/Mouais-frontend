@@ -91,15 +91,15 @@ const LoginScreen: React.FC = () => {
 
   const animatePressIn = () => {
     Animated.spring(pressAnim, {
-      toValue: 0.95, // bouton légèrement plus petit
+      toValue: 0.95, 
       useNativeDriver: true,
     }).start();
   };
 
   const animatePressOut = () => {
     Animated.spring(pressAnim, {
-      toValue: 1, // retour à la taille normale
-      friction: 3, // rebond plus ou moins souple
+      toValue: 1, 
+      friction: 3, 
       tension: 100,
       useNativeDriver: true,
     }).start();
