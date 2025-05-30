@@ -36,6 +36,11 @@ const SubscriptionScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.container}>
+        <View style={styles.closeButtonContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <FontAwesome name="times" size={24} color="#fff" />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.title}>Choisis ta formule</Text>
 
         {/* Liste des options d'abonnement */}
@@ -109,11 +114,17 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "flex-start",
   },
+  closeButtonContainer: {
+    position: "absolute",
+    top: 40,
+    right: 20,
+    zIndex: 1,
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#ffffff",
-    marginBottom: 20,
+    marginBottom: 60,
   },
   optionList: {
     paddingBottom: 30,
