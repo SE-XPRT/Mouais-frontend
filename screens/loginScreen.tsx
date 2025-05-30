@@ -217,11 +217,12 @@ const LoginScreen: React.FC = () => {
         dispatch(updateToken(data.token));
         dispatch(updateEmail(email));
         dispatch(actualizeCoins(data.coins));
-        dispatch(updatePseudo(data.pseudo || "Anonyme"));
+        dispatch(updatePseudo(data.pseudo || "BG"));
         navigation.reset({
           index: 0,
           routes: [{ name: "TabNavigator" }],
         });
+        console.log("Réponse du backend :", data)
       } else {
         setEmail("");
         setPassword("");
@@ -463,8 +464,8 @@ const styles = StyleSheet.create({
     textShadowColor: "#ffffff",
     textShadowOffset: { width: 0, height: 0 },
     textShadowRadius: 12,
-    marginTop: 16, 
-    overflow: "visible", 
+    marginTop: 16,
+    overflow: "visible",
   },
 
   subtitle: {

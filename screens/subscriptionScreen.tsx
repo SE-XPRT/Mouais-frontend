@@ -11,9 +11,9 @@ import { FontAwesome } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { DashboardStackParamList } from "./paymentScreen"; // Import des types de routes
+import { DashboardStackParamList } from "./paymentScreen"; 
 import { colors } from "../theme/colors";
-// Liste des abonnements disponibles
+
 const options = [
   { label: "10 coins - 0,99 €", icon: "child" },
   { label: "20 coins - 1,99 €", icon: "heart" },
@@ -25,7 +25,7 @@ const SubscriptionScreen = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // Suivi de l'option choisie
   const navigation = useNavigation<NavigationProp<DashboardStackParamList>>(); // Accès à la navigation typée
 
-  // Fonction déclenchée lors du clic sur "Appliquer"
+  
   const handleApply = () => {
     if (selectedIndex !== null) {
       const selected = options[selectedIndex];
@@ -38,7 +38,7 @@ const SubscriptionScreen = () => {
       <View style={styles.container}>
         <View style={styles.closeButtonContainer}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
-            <FontAwesome name="times" size={24} color="#fff" />
+            <FontAwesome name="arrow-left" size={24} color="#fff" />
           </TouchableOpacity>
         </View>
         <Text style={styles.title}>Choisis ta formule</Text>

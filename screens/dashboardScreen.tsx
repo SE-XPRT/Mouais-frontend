@@ -41,10 +41,9 @@ export default function DashboardScreen() {
   const currentCoins = isGuest ? guestCoins : coins;
   // Récupérer le pseudo depuis le store Redux
   const storedPseudo = useSelector(
-    (state: { users: { value: { pseudo: string } } }) =>
-      state.users.value.pseudo
+    (state: { users: UserState }) => state.users.value.pseudo
   );
-
+  console.log(storedPseudo);
   const [averageScore, setAverageScore] = useState<number | null>(null);
   const [bestScore, setBestScore] = useState<number | null>(null);
   const [badgeNames, setBadgeNames] = useState<string[]>([]);
@@ -76,8 +75,8 @@ export default function DashboardScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.greetings}>
-        Salut <Text style={styles.userName}>{storedPseudo || "BG"}</Text>,
-        prêt.e à tester ton <Text style={styles.aura}>aura</Text> ?
+        Salut <Text style={styles.userName}>{storedPseudo || "BG"}</Text>, prêt.e à
+        tester ton <Text style={styles.aura}>aura</Text> ?
       </Text>
 
       <View style={styles.cardGrid}>
@@ -135,6 +134,7 @@ export default function DashboardScreen() {
         </Pressable>
 
         <Pressable
+        onPress={() => console.log(storedPseudo)}
           style={({ pressed }) => [
             styles.coinInfo,
             pressed && styles.buttonPressed,
