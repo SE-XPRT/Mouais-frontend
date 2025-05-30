@@ -65,7 +65,11 @@ export const usersSlice = createSlice({
       }
     },
     actualizeCoins: (state, action: PayloadAction<number>) => {
-      state.value.coins = action.payload;
+      if (state.value.token) {
+        state.value.coins = action.payload;
+      } else {
+        state.value.guestCoins = action.payload;
+      }
     },
   },
 });

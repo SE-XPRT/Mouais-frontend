@@ -4,7 +4,7 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import * as ImagePicker from "expo-image-picker";
 import { useSelector } from "react-redux";
-import { updateCoins, UserState } from "../reducers/users";
+import { actualizeCoins, updateCoins, UserState } from "../reducers/users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useDispatch } from "react-redux";
 const FontAwesome = _FontAwesome as React.ElementType;
@@ -90,7 +90,7 @@ export default function TakePicScreen() {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => dispatch(updateCoins(3))}
+        onPress={() => dispatch(actualizeCoins(3))}
         style={{
           marginTop: 20,
           backgroundColor: "black",
