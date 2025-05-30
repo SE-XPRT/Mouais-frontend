@@ -162,18 +162,17 @@ const styles = StyleSheet.create({
   nudesText: {
     fontSize: 28,
     fontWeight: "bold",
-    color: "#ff0084",
+    color: "#fff",
   },
 
   strike: {
     position: "absolute",
-    top: 5,
-    left: 0,
-    width: "100%",
-    height: 22,
-    backgroundColor: "rgba(255,255,255,0.8)",
-    transform: [{ rotate: "-15deg" }],
-    borderRadius: 3,
-    zIndex: 100,
+    top: 17,
+    left: -4,
+    width: "110%",
+    height: 7,
+    backgroundColor: "#DE7AB8",
+    transform: [{ rotate: "10deg" }], 
+    borderRadius: 5,
   },
 });
