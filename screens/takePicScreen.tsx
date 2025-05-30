@@ -1,13 +1,12 @@
 import React from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 import * as ImagePicker from "expo-image-picker";
 import { useSelector } from "react-redux";
-import { UserState } from "../reducers/users";
+import { updateCoins, UserState } from "../reducers/users";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { useDispatch } from "react-redux";
 const FontAwesome = _FontAwesome as React.ElementType;
 
 type RootStackParamList = {
@@ -19,6 +18,7 @@ type RootStackParamList = {
 };
 
 export default function TakePicScreen() {
+  const dispatch = useDispatch();
   const { email, coins, guestCoins } = useSelector(
     (state: { users: UserState & { value: any } }) => state.users.value
   );
@@ -90,7 +90,7 @@ export default function TakePicScreen() {
         </Text>
       </TouchableOpacity>
       <TouchableOpacity
-        onPress={() => AsyncStorage.setItem("guestCoins", "3")}
+        onPress={() => dispatch(updateCoins(3))}
         style={{
           marginTop: 20,
           backgroundColor: "black",
