@@ -145,7 +145,6 @@ const styles = StyleSheet.create({
     width: 140, // un peu plus large
     height: 140,
     resizeMode: "contain",
-    zIndex: -1, // derrière les éléments interactifs
   },
   titleWrapper: {
     flexDirection: "row",
@@ -168,10 +167,12 @@ const styles = StyleSheet.create({
 
   strike: {
     position: "absolute",
-    top: 13,
+    top: 5,
     left: 0,
     width: "100%",
     height: 22, // plus épais
-    backgroundColor: "rgba(255,255,255,0.6)", // blanc transparent
+    backgroundColor: "rgba(255,255,255,0.7)",
+    transform: [{ rotate: "-15deg" }], // barre oblique gauche à droite
+    borderRadius: 5,
   },
 });
