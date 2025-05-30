@@ -126,7 +126,7 @@ const AppContent = () => (
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="Payment"
+        name="payment"
         component={PaymentScreen}
         options={{ headerShown: false }}
       />
