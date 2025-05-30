@@ -64,19 +64,11 @@ export default function DashboardScreen() {
       .catch((err) => console.error("Erreur dashboard:", err));
   }, [token]);
 
-  // fetch(`${API_URL}/photos/${token}`)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     if (data.result && data.photo?.url) {
-  //       setPhoto(data.photo.url);
-  //     }
-  //   });
-
   return (
     <View style={styles.container}>
       <Text style={styles.greetings}>
-        Salut <Text style={styles.userName}>{storedPseudo || "BG"}</Text>, prêt.e à
-        tester ton <Text style={styles.aura}>aura</Text> ?
+        Salut <Text style={styles.userName}>{storedPseudo || "BG"}</Text>,
+        prêt.e à tester ton <Text style={styles.aura}>aura</Text> ?
       </Text>
 
       <View style={styles.cardGrid}>
@@ -134,7 +126,7 @@ export default function DashboardScreen() {
         </Pressable>
 
         <Pressable
-        onPress={() => console.log(storedPseudo)}
+          onPress={() => console.log(storedPseudo)}
           style={({ pressed }) => [
             styles.coinInfo,
             pressed && styles.buttonPressed,
