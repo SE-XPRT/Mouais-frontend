@@ -79,7 +79,7 @@ const FilterModal = ({
         setTimeout(() => {
           setBadgeModalVisible(false); // Ferme d’abord la modal badge
           setTimeout(onClose, 500); // Puis ferme la modal principale après un petit délai
-        }, 2500);
+        }, 3500);
       } else {
         onClose();
       }
@@ -106,9 +106,9 @@ const FilterModal = ({
           <TouchableOpacity style={styles.closeButton} onPress={onClose}>
             <Text style={styles.closeButtonText}>×</Text>
           </TouchableOpacity>
-          <Text style={styles.title}>Filtres</Text>
+          <Text style={styles.title}>💜 Mes filtres</Text>
           <Text style={styles.label} onPress={() => setZonesOpen(!zonesOpen)}>
-            Que veux-tu qu’on juge ? {zonesOpen ? "▲" : "▼"}
+            👉 Que veux-tu qu’on juge ? {zonesOpen ? "▲" : "▼"}
           </Text>
           {zonesOpen && (
             <View style={styles.zonesList}>
@@ -132,7 +132,7 @@ const FilterModal = ({
               ))}
             </View>
           )}
-          <Text style={styles.label}>Degré de gentillesse</Text>
+          <Text style={styles.label}>👉 Degré de gentillesse</Text>
           <View style={styles.sliderWrapper}>
             <Text style={styles.sliderLabel}>Sois cash</Text>
             <View style={styles.sliderContainer}>
@@ -145,7 +145,7 @@ const FilterModal = ({
                 onValueChange={(value) => dispatch(setTone(value))}
                 minimumTrackTintColor="#8B43F1"
                 maximumTrackTintColor="#555"
-                thumbTintColor="#fff"
+                thumbTintColor="#8B43F1"
               />
             </View>
             <Text style={styles.sliderLabel}>Sois gentil steuplé !</Text>
@@ -210,8 +210,8 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     color: "#fff",
-    marginTop: 10,
-    marginBottom: 6,
+    marginTop: 30,
+    marginBottom: 20,
   },
   zonesList: {
     marginBottom: 10,
@@ -270,7 +270,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   applyButton: {
-    backgroundColor: "#2a2a2a",
+    backgroundColor: "#8B43F1",
     borderRadius: 20,
     marginTop: 20,
     paddingVertical: 12,

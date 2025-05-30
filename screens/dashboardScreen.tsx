@@ -76,15 +76,17 @@ export default function DashboardScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.greetings}>
-        Salut <Text style={styles.userName}>{storedPseudo || "toi"}</Text>, prêt
-        à tester ton <Text style={styles.aura}>aura</Text> ?
+        Salut <Text style={styles.userName}>{storedPseudo || "BG"}</Text>,
+        prêt.e à tester ton <Text style={styles.aura}>aura</Text> ?
       </Text>
 
       <View style={styles.cardGrid}>
         <View style={styles.cardWrapper}>
           <View style={styles.card}>
             <FontAwesome name="trophy" size={40} color="#29ffc6" />
-            <Text style={styles.cardText}>Tes badges {badgeNames.length}</Text>
+            <Text style={styles.cardText}>
+              Tes badges {badgeNames.length > 0 ? badgeNames.length : ""}
+            </Text>
           </View>
 
           <View style={styles.card}>
@@ -98,11 +100,7 @@ export default function DashboardScreen() {
           <View style={styles.card}>
             <FontAwesome name="image" size={40} color="#8b43f1" />
             <Text style={styles.cardText}>Ta best photo</Text>
-            {photo ? (
-              <Image source={{ uri: photo }} style={styles.image} />
-            ) : (
-              <Text style={styles.cardText}>Chargement de la photo...</Text>
-            )}
+            {photo && <Image source={{ uri: photo }} style={styles.image} />}
           </View>
 
           <View style={styles.card}>
@@ -204,11 +202,13 @@ const styles = StyleSheet.create({
     borderRadius: 24,
     justifyContent: "center",
     alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#1c1c1c",
     shadowColor: "#000",
-    shadowOffset: { width: -4, height: -4 },
-    shadowOpacity: 0.4,
-    shadowRadius: 8,
-    elevation: 8,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
+    elevation: 6,
   },
   cardText: {
     color: "#ffffff",
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   },
   pinkButton: {
     width: "80%",
-    backgroundColor: "#29ffc6",
+    backgroundColor: "#d395ff",
     paddingVertical: 12,
     paddingHorizontal: 40,
     borderRadius: 10,
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     fontFamily: "Playpen Sans",
   },
   buttonText2: {
-    color: colors.primary.light,
+    color: "#d3d3d3",
     fontWeight: "bold",
     fontFamily: "Playpen Sans",
   },
@@ -261,10 +261,12 @@ const styles = StyleSheet.create({
     color: "#8b43f1", // même violet que les autres boutons
     textAlign: "center",
     fontWeight: "bold",
+    borderWidth: 1,
+    borderColor: "#1c1c1c",
     shadowColor: "#000",
     shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOpacity: 0.6,
+    shadowRadius: 6,
     elevation: 6,
   },
 

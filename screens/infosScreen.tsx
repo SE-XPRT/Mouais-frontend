@@ -27,6 +27,7 @@ const backgroundColor = "#1a1a1f";
 const textColor = "#fff";
 const accentColor = "#8b43f1";
 const accentGradient: [string, string] = ["#8b43f1", "#d395ff"];
+
 const cardBg = "#2a2a30";
 const cardBorder = "#3a3a40";
 const labelColor = "#a0a0a0";
@@ -269,7 +270,7 @@ export default function InfosScreen() {
               />
             </LinearGradient>
             <Text style={styles.username}>
-              {isLoading ? "Chargement..." : userData.pseudo || "Anonyme"}
+              {isLoading ? "Chargement..." : userData.pseudo || "BG incognito"}
             </Text>
           </View>
 

@@ -98,7 +98,7 @@ const PaymentScreen = () => {
       </View>
       {/* Bouton retour */}
       <TouchableOpacity
-        style={styles.validateButton}
+        style={styles.goBackButton}
         onPress={() => navigation.goBack()}
         accessibilityLabel="Retour"
       >
@@ -196,6 +196,15 @@ const styles = StyleSheet.create({
     color: "#2a2e30",
     fontWeight: "bold",
     fontSize: 16,
+  },
+  goBackButton: {
+    backgroundColor: "#d395ff",
+    paddingVertical: 10,
+    paddingHorizontal: 80,
+    borderRadius: 10,
+    alignItems: "center",
+    alignSelf: "center",
+    marginTop: 10,
   },
 });
 

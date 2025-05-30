@@ -30,7 +30,7 @@ const Tab = createBottomTabNavigator();
 const TabNavigator = () => (
   <Tab.Navigator
     screenOptions={{
-      tabBarActiveTintColor: "#2196f3",
+      tabBarActiveTintColor: "#93EDC7",
       tabBarInactiveTintColor: "#ffffff",
       tabBarStyle: {
         backgroundColor: "#2a2e30",
@@ -58,7 +58,10 @@ const TabNavigator = () => (
         tabBarIcon: ({ color, size }) => (
           <LinearGradient
             colors={gradientColors}
-            style={[styles.iconPic, { borderWidth: 2, borderColor: gradientColors2[0] }]}
+            style={[
+              styles.iconPic,
+              { borderWidth: 2, borderColor: gradientColors2[0] },
+            ]}
           >
             <FontAwesome name="camera" size={size} color={color} />
           </LinearGradient>
@@ -82,15 +85,51 @@ const TabNavigator = () => (
 const AppContent = () => (
   <NavigationContainer>
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Snap" component={SnapScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="TakePic" component={TakePicScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="UploadedPhoto" component={UploadedPhotoScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="EndCreditScreen" component={EndCreditScreen} options={{ header: () => <Header /> }} />
-      <Stack.Screen name="TabNavigator" component={TabNavigator} options={{ headerShown: false }} />
-      <Stack.Screen name="subscribe" component={SubscriptionScreen} options={{ header: () => <Header /> }} />
-      <Stack.Screen name="Infos" component={InfosScreen} options={{ headerShown: false }} />
-      <Stack.Screen name="Payment" component={PaymentScreen} options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Login"
+        component={LoginScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Snap"
+        component={SnapScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="TakePic"
+        component={TakePicScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="UploadedPhoto"
+        component={UploadedPhotoScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="EndCreditScreen"
+        component={EndCreditScreen}
+        options={{ header: () => <Header /> }}
+      />
+      <Stack.Screen
+        name="TabNavigator"
+        component={TabNavigator}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="subscribe"
+        component={SubscriptionScreen}
+        options={{ header: () => <Header /> }}
+      />
+      <Stack.Screen
+        name="Infos"
+        component={InfosScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Payment"
+        component={PaymentScreen}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   </NavigationContainer>
 );
