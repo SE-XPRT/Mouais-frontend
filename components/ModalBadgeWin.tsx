@@ -12,6 +12,8 @@ import { Audio } from "expo-av";
 import _FontAwesome from "@react-native-vector-icons/fontawesome";
 const FontAwesome = _FontAwesome as React.ElementType;
 
+import ModalBadges from "./ModalBadges";
+
 type SimpleModalProps = {
   visible: boolean;
   onClose: () => void;
@@ -37,6 +39,10 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
   const scaleAnim = useRef(new Animated.Value(0)).current; // Valeur animée pour effet scale
   const [showModal, setShowModal] = useState(visible); // État interne pour l'affichage réel
   const [confettiShot, setConfettiShot] = useState(false); // Contrôle des confettis (1 seule fois)
+
+  // Nouvel état pour afficher la modale des badges
+  const [showBadgesModal, setShowBadgesModal] = useState(false);
+
   useEffect(() => {
     // Fonction pour jouer un son lors de l'ouverture
     console.log("MODAL VISIBLE :", visible);
@@ -81,53 +87,62 @@ const ModalBadge: React.FC<ModalBadgeProps> = ({
     return null;
   }
   return (
-    <Modal transparent animationType="fade" visible={showModal}>
-      <View style={styles.overlay}>
-        {!confettiShot && (
-          <ConfettiCannon
-            count={80}
-            origin={{ x: 200, y: 0 }}
-            fadeOut
-            explosionSpeed={300}
-            onAnimationEnd={() => setConfettiShot(true)}
-          />
-        )}
+    <>
+      <Modal transparent animationType="fade" visible={showModal}>
+        <View style={styles.overlay}>
+          {!confettiShot && (
+            <ConfettiCannon
+              count={80}
+              origin={{ x: 200, y: 0 }}
+              fadeOut
+              explosionSpeed={300}
+              onAnimationEnd={() => setConfettiShot(true)}
+            />
+          )}
 
-        <Animated.View
-          style={[styles.modalContainer, { transform: [{ scale: scaleAnim }] }]}
-        >
-          {/* Bouton de fermeture */}
-          <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-            <FontAwesome name="close" size={20} color="#8b43f1" />
-          </TouchableOpacity>
+          <Animated.View
+            style={[
+              styles.modalContainer,
+              { transform: [{ scale: scaleAnim }] },
+            ]}
+          >
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <FontAwesome name="close" size={20} color="#8b43f1" />
+            </TouchableOpacity>
 
-          {/* Titre principal */}
-          <Text style={styles.title}>Bravo BG !</Text>
+            <Text style={styles.title}>Bravo BG !</Text>
 
-          {/* Icône trophée */}
-          <FontAwesome
-            name={badge?.iconName || "trophy"}
-            size={40}
-            color="#29ffc6"
-            style={styles.icon}
-          />
+            <FontAwesome
+              name={badge?.iconName || "trophy"}
+              size={40}
+              color="#29ffc6"
+              style={styles.icon}
+            />
 
-          {/* Message badge */}
-          <Text style={styles.description}>
-            GG tu viens de débloquer le badge {"\n"}
-            {badge ? `"${badge.name}"` : "Glow Babe"}
-          </Text>
+            <Text style={styles.description}>
+              GG tu viens de débloquer le badge {"\n"}
+              {badge ? `"${badge.name}"` : "Glow Babe"}
+            </Text>
 
-          {/* Lien vers badges */}
-          <Text style={styles.link}>Voir tous mes badges</Text>
+            <TouchableOpacity onPress={() => setShowBadgesModal(true)}>
+              <Text style={styles.link}>Voir tous mes badges</Text>
+            </TouchableOpacity>
 
-          {/* Bouton œil */}
-          <TouchableOpacity style={styles.eyeButton}>
-            <FontAwesome name="eye" size={28} color="#ff0084" />
-          </TouchableOpacity>
-        </Animated.View>
-      </View>
-    </Modal>
+            <TouchableOpacity
+              style={styles.eyeButton}
+              onPress={() => setShowBadgesModal(true)}
+            >
+              <FontAwesome name="eye" size={28} color="#ff0084" />
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </Modal>
+
+      <ModalBadges
+        visible={showBadgesModal}
+        onClose={() => setShowBadgesModal(false)}
+      />
+    </>
   );
 };
 
@@ -145,18 +160,47 @@ const styles = StyleSheet.create({
     padding: 25,
     alignItems: "center",
     position: "relative",
+    // Neumorphisme light shadow
+    shadowColor: "#ffffff",
+    shadowOffset: { width: -6, height: -6 },
+    shadowOpacity: 1,
+    shadowRadius: 6,
   },
   closeButton: {
     position: "absolute",
     top: 15,
     right: 15,
     zIndex: 1,
+    // Neumorphisme button shadows
+    shadowColor: "#ffffff",
+    shadowOffset: { width: -3, height: -3 },
+    shadowOpacity: 1,
+    shadowRadius: 3,
+
+    elevation: 5,
+
+    padding: 8,
+    borderRadius: 30,
   },
   title: {
     fontSize: 20,
     fontWeight: "bold",
     color: "#2a2e30",
     marginBottom: 15,
+  },
+  iconWrapper: {
+    backgroundColor: "#e0e0e0",
+    borderRadius: 40,
+    padding: 15,
+
+    // Neumorphisme icon wrapper shadows
+    shadowColor: "#ffffff",
+    shadowOffset: { width: -5, height: -5 },
+    shadowOpacity: 1,
+    shadowRadius: 6,
+
+    elevation: 8,
+    marginBottom: 20,
   },
   icon: {
     marginBottom: 15,
@@ -170,11 +214,11 @@ const styles = StyleSheet.create({
   link: {
     fontStyle: "italic",
     color: "#2a2e30",
-    marginTop: 5,
-    marginBottom: 20,
+    marginTop: 20,
+    marginBottom: 5,
   },
   eyeButton: {
-    marginTop: 10,
+    marginTop: 5,
   },
 });
 

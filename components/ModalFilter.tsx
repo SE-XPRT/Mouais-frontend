@@ -70,7 +70,7 @@ const FilterModal = ({
 
         setBadge({
           name: "Filtre Queen",
-          iconName: "filter",
+          iconName: "fire",
         });
 
         setBadgeModalVisible(true);
