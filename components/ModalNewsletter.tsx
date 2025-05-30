@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 10,
     right: 10,
-    zIndex: 1, // ✅ pour qu’il reste cliquable au-dessus de l'image
+    zIndex: 1, // pour qu’il reste cliquable au-dessus de l'image
   },
   closeText: {
     fontSize: 24,
@@ -140,12 +140,12 @@ const styles = StyleSheet.create({
   },
   lipsImage: {
     position: "absolute",
-    top: 40, // 🔽 descend un peu pour libérer le bouton ✕
+    top: 40, // descend un peu pour libérer le bouton ✕
     right: 10,
-    width: 140, // 🔍 un peu plus large
+    width: 140, // un peu plus large
     height: 140,
     resizeMode: "contain",
-    zIndex: 0, // 👈 derrière les éléments interactifs
+    zIndex: -1, // derrière les éléments interactifs
   },
   titleWrapper: {
     flexDirection: "row",
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
 
   strike: {
     position: "absolute",
-    top: 11,
+    top: 13,
     left: 0,
     width: "100%",
     height: 22, // plus épais
